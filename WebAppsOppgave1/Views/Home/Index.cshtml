@@ -3,52 +3,46 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Bestill flytur</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Fra</th>
-            <th>Til</th>
-        </tr>
-    </thead>
-    <tr>
-        <td>
-            <select name="fraDestinasjon">
-                <option value=""></option>
-                <option value="Oslo">Oslo</option>
-                <option value="Torp">Torp</option>
-                <option value="Stockholm">Stockholm</option>
-                <option value="København">København</option>
-            </select>
-        </td>
-        <td>
-            <select name="fraDestinasjon">
-                <option value=""></option>
-                <option value="Oslo">Oslo</option>
-                <option value="Torp">Torp</option>
-                <option value="Stockholm">Stockholm</option>
-                <option value="København">København</option>
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <input type="date" name="fraDato" />
-        </td>
-        <td>
-            <input type="date" name="tilDato" />
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <input type="time" name="fraTid" />
-        </td>
-        <td>
-            <input type="time" name="tilTid" />
-        </td>
-    </tr>
+<div class="row">
+<form action="/home/register" method="post">
 
+    <div class="col-sm-6">
+    <fieldset>
+        <legend>Fly fra:</legend>
+        Destinasjon:<br />
+        <select name="fromDestination">
+            <option value=""></option>
+            <option value="Oslo">Oslo</option>
+            <option value="Torp">Torp</option>
+            <option value="Stockholm">Stockholm</option>
+            <option value="København">København</option>
+        </select><br />
+        Dato:<br />
+        <input type="date" name="fromDate" /><br />
+        Tid:<br />
+        <input type="time" name="fromTime" />
+    </fieldset>
+    <br /><input type="submit" value="Bestill tur" name="orderButton" />
+    </div>
 
-</table>
-<input type="submit" name="sendBestilling" value="Bestill" />
+    <div class="col-sm-6">
+    <fieldset>
+        <legend>Fly til:</legend>
+        Destinasjon:<br />
+        <select name="toDestination">
+            <option value=""></option>
+            <option value="Oslo">Oslo</option>
+            <option value="Torp">Torp</option>
+            <option value="Stockholm">Stockholm</option>
+            <option value="København">København</option>
+        </select><br />
+        Dato:<br />
+        <input type="date" name="toDate" /><br />
+        Tid:<br />
+        <input type="time" name="toTime" />
+    </fieldset>        
+    </div>    
+</form>
+</div>
