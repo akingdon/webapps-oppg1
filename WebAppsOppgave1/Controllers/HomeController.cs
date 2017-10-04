@@ -17,19 +17,36 @@ namespace WebAppsOppgave1.Controllers
         [HttpPost]
         public ActionResult Register(Models.Booking booking)
         {
-            using (var Db = new Models.DB())
+
+            var bookingLogic = new Models.BookingLogic();
+            bool hasValidatedCorrectly = false;
+
+            if (bookingLogic.DestinationsAreSet(booking) && bookingLogic.DestinationsAreDifferent(booking) && bookingLogic.DepartureDateIsBeforeReturnDate(booking) && !bookingLogic.DepartureDateIsBeforeToday(booking))
             {
-                try
-                {
-                    Db.Booking.Add(booking);
-                    Db.SaveChanges();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Feil under skriving til DB. Lær deg hvordan du håndterer exceptions");
-                }
+                hasValidatedCorrectly = true;
             }
-            return RedirectToAction("Orders");
+
+            if (hasValidatedCorrectly)
+            {
+                using (var Db = new Models.DB())
+                {
+                    try
+                    {
+                        Db.Booking.Add(booking);
+                        Db.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Feil under skriving til DB. Lær deg hvordan du håndterer exceptions");
+                    }
+                }
+                return RedirectToAction("Orders");
+            }
+            else
+            {
+                return View("ValidationFailed");
+            }
+            
         }
 
         public ActionResult Orders()
