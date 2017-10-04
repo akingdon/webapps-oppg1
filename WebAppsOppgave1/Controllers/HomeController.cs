@@ -21,7 +21,10 @@ namespace WebAppsOppgave1.Controllers
             var bookingLogic = new Models.BookingLogic();
             bool hasValidatedCorrectly = false;
 
-            if (bookingLogic.DestinationsAreSet(booking) && bookingLogic.DestinationsAreDifferent(booking) && bookingLogic.DepartureDateIsBeforeReturnDate(booking) && !bookingLogic.DepartureDateIsBeforeToday(booking))
+            if (bookingLogic.DestinationsAreSet(booking) && 
+                bookingLogic.DestinationsAreDifferent(booking) && 
+                bookingLogic.DepartureDateIsBeforeReturnDate(booking) && 
+                !bookingLogic.DepartureDateIsBeforeToday(booking))
             {
                 hasValidatedCorrectly = true;
             }
