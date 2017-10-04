@@ -7,8 +7,6 @@ namespace WebAppsOppgave1.Models
 {
     public class BookingLogic
     {
-        private Booking Booking { get; set; }
-
         public Boolean DestinationsAreSet(Booking booking)
         {
             return !string.IsNullOrWhiteSpace(booking.FromDestination) && !string.IsNullOrWhiteSpace(booking.ToDestination);
