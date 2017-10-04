@@ -6,21 +6,26 @@
 <h2>Bestill flytur</h2>
 
 <div class="row">
-<form action="/home/register" method="post">
+<form action="/home/register" method="post" onsubmit="return validateFields()" name="registrationForm">
 
     <div class="col-sm-6">
     <fieldset>
         <legend>Fly fra:</legend>
-        Destinasjon:<br />
+        Destinasjon:
+        <br />
         <select name="fromDestination">
             <option value=""></option>
             <option value="Oslo">Oslo</option>
             <option value="Torp">Torp</option>
             <option value="Stockholm">Stockholm</option>
             <option value="København">København</option>
-        </select><br />
+        </select>
+        &nbsp;<span class="label label-warning" id="fromDestinationWarning" style="display:none">Må fylles ut</span>
+        <br />
         Avreise:<br />
-        <input type="date" name="fromDate" /><br />
+        <input type="date" name="fromDate" />
+        &nbsp;<span class="label label-warning" id="fromDateWarning" style="display:none">Må fylles ut</span>
+        <br />
     </fieldset>
     <br /><input type="submit" value="Bestill tur" name="orderButton" />
     </div>
@@ -35,10 +40,86 @@
             <option value="Torp">Torp</option>
             <option value="Stockholm">Stockholm</option>
             <option value="København">København</option>
-        </select><br />
+        </select>
+        &nbsp;<span class="label label-warning" id="toDestinationWarning" style="display:none">Må fylles ut</span>
+        <br />
         Hjemreise:<br />
-        <input type="date" name="toDate" /><br />
+        <input type="date" name="toDate" />
+        &nbsp;<span class="label label-warning" id="toDateWarning" style="display:none">Må fylles ut</span>
+        <br />
     </fieldset>        
-    </div>    
+    </div>
 </form>
 </div>
+
+<script>
+    function validateFields() {
+        var validateFromDestination = document.forms["registrationForm"]["fromDestination"].value;
+        var validateFromDate = document.forms["registrationForm"]["fromDate"].value;
+        var validateToDestination = document.forms["registrationForm"]["toDestination"].value;
+        var validateToDate = document.forms["registrationForm"]["toDate"].value;
+
+        if (validateFromDate > validateToDate) {
+            hideWarnings();
+
+            document.getElementById("toDateWarning").innerHTML = "Dato må være etter avreise";
+            document.getElementById("toDateWarning").style.display = "inline";
+            return false;
+        } else {
+            document.getElementById("toDateWarning").style.display = "none";
+        }
+
+        if (validateFromDestination == validateToDestination && validateFromDestination != "") {
+            hideWarnings();
+
+            document.getElementById("toDestinationWarning").innerHTML = "Du kan ikke reise til og fra samme sted";
+            document.getElementById("toDestinationWarning").style.display = "inline";
+            return false;
+        } else {
+            document.getElementById("toDestinationWarning").style.display = "none";
+        }
+
+        if (validateFromDestination == "") {
+            hideWarnings();
+            document.getElementById("fromDestinationWarning").innerHTML = "Må fylles ut";
+            document.getElementById("fromDestinationWarning").style.display = "inline";
+            return false;
+        } else {
+            document.getElementById("fromDestinationWarning").style.display = "none";
+        }
+
+        if (validateFromDate == "") {
+            hideWarnings();
+
+            document.getElementById("fromDateWarning").style.display = "inline";
+            return false;
+        } else {
+            document.getElementById("fromDateWarning").style.display = "none";
+        }
+
+        if (validateToDestination == "") {
+            hideWarnings();
+            document.getElementById("toDestinationWarning").innerHTML = "Må fylles ut";
+            document.getElementById("toDestinationWarning").style.display = "inline";
+            return false;
+        } else {
+            document.getElementById("toDestinationWarning").style.display = "none";
+        }
+
+        if (validateToDate == "") {
+            hideWarnings();
+
+            document.getElementById("toDateWarning").style.display = "inline";
+            return false;
+        } else {
+            document.getElementById("toDateWarning").style.display = "none";
+        }
+    }
+
+    function hideWarnings() {
+        document.getElementById("fromDestinationWarning").style.display = "none";
+        document.getElementById("fromDateWarning").style.display = "none";
+        document.getElementById("toDestinationWarning").style.display = "none";
+        document.getElementById("toDateWarning").style.display = "none";
+    }
+</script>
