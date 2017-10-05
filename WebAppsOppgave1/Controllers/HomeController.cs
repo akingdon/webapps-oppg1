@@ -43,7 +43,7 @@ namespace WebAppsOppgave1.Controllers
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("Feil under skriving til DB. Lær deg hvordan du håndterer exceptions");
+                        Console.WriteLine("Feil under skriving til DB. Lær deg hvordan du håndterer exceptions"+e.Message);
                     }
                 }
                 return RedirectToAction("Orders");
@@ -76,7 +76,7 @@ namespace WebAppsOppgave1.Controllers
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Feil under sletting av ordre. Lær deg hvordan du håndterer exceptions");
+                    Console.WriteLine("Feil under sletting av ordre. Lær deg hvordan du håndterer exceptions"+e.Message);
                 }
             }
             return RedirectToAction("Orders");
