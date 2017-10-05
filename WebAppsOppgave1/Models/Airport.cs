@@ -5,11 +5,9 @@ using System.Web;
 
 namespace WebAppsOppgave1.Models
 {
-    public class Booking
+    public class Airport
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
-        public Flight Flight { get; set; }
-        public byte Amount { get; set; }
+        public String Name { get; set; }
     }
 }

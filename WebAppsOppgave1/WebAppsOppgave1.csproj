@@ -95,6 +95,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\BookingDatabase.mdf" />
+    <Content Include="App_Data\BookingDatabase_log.ldf">
+      <DependentUpon>BookingDatabase.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
@@ -116,6 +120,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BookingLogic.cs" />
+    <Compile Include="Models\Airport.cs" />
+    <Compile Include="Models\DBInit.cs" />
+    <Compile Include="Models\Flight.cs" />
     <Compile Include="Models\DB.cs" />
     <Compile Include="Models\Booking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -139,9 +146,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

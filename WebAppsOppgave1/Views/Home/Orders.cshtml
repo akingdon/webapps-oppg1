@@ -9,20 +9,20 @@
     <table class="table">
         <thead>
             <tr>
+                <th>KundeID</th>
                 <th>Fra</th>
-                <th>Dato</th>
                 <th>Til</th>
                 <th>Dato</th>
             </tr>
         </thead>
         
-        @foreach (var item in Model)
+        @foreach (var booking in Model)
         {
             <tr>
-                <td>@item.FromDestination</td>
-                <td>@item.FromDate</td>
-                <td>@item.ToDestination</td>
-                <td>@item.ToDate</td>
+                <td>@booking.CustomerId</td>
+                <td>@booking.Flight.FromAirport.Name</td>
+                <td>@booking.Flight.ToAirport.Name</td>
+                <td>@booking.Flight.Departure</td>
             </tr>
         }
     </table>
