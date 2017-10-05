@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace WebAppsOppgave1.Controllers
 {
@@ -58,8 +59,8 @@ namespace WebAppsOppgave1.Controllers
         {
             using (var Db = new Models.DB())
             {
-                List<Models.Booking> Orders = Db.Booking.ToList();
-                return View(Orders);
+                List<Models.Flight> Flights = Db.Flight.Include(c => c.FromAirport).Include(c => c.ToAirport).ToList();
+                return View(Flights);
             }
         }
 

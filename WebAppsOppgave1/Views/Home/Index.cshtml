@@ -22,7 +22,7 @@
                         <option value=""></option>
                         @foreach (var a in Model)
                         {
-                            <option value="@a">@a.Name</option>
+                            <option value="@a.Id">@a.Name</option>
                         }
                     </select>
                     &nbsp;<span class="label label-warning" id="fromDestinationWarning" style="display:none">Må fylles ut</span>
@@ -43,7 +43,7 @@
                         <option value=""></option>
                         @foreach (var a in Model)
                         {
-                            <option value="@a">@a.Name</option>
+                            <option value="@a.Id">@a.Name</option>
                         }
                     </select>
                     &nbsp;<span class="label label-warning" id="toDestinationWarning" style="display:none">Må fylles ut</span>
