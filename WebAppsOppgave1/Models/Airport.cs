@@ -9,5 +9,6 @@ namespace WebAppsOppgave1.Models
     {
         public int Id { get; set; }
         public String Name { get; set; }
+        public virtual Flight Flight {get; set; }
     }
 }

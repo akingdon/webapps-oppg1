@@ -49,11 +49,8 @@ namespace WebAppsOppgave1.Models
             db.Airport.Add(airport2);
             db.Airport.Add(airport3);
             db.Airport.Add(airport4);
-
             db.Flight.Add(flight1);
-
             db.Booking.Add(booking1);
-
             base.Seed(db);
         }
     }
