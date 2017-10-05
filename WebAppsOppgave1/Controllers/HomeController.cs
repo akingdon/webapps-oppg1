@@ -11,7 +11,9 @@ namespace WebAppsOppgave1.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            return View();
+            var db = new Models.DB();
+            IEnumerable<Models.Airport> airports = db.Airport;
+            return View(airports);
         }
 
         [HttpPost]
