@@ -2,124 +2,131 @@
 @{
     ViewBag.Title = "Index";
 }
+@model IEnumerable<WebAppsOppgave1.Models.Airport>
+<head>
+    <script src="~/Scripts/jquery-­‐1.7.1.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-­‐ajax.js"></script>
+</head>
+<body>
+    <h2>Bestill flytur</h2>
 
-<h2>Bestill flytur</h2>
+    <div class="row">
+        <form action="/home/register" method="post" onsubmit="return validateFields()" name="registrationForm">
 
-<div class="row">
-<form action="/home/register" method="post" onsubmit="return validateFields()" name="registrationForm">
+            <div class="col-sm-6">
+                <fieldset>
+                    <legend>Fly fra:</legend>
+                    Destinasjon:
+                    <br />
+                    <select name="fromDestination">
+                        <option value=""></option>
+                        @foreach (var a in Model)
+                        {
+                            <option value="@a.Id">@a.Name</option>
+                        }
+                    </select>
+                    &nbsp;<span class="label label-warning" id="fromDestinationWarning" style="display:none">Må fylles ut</span>
+                    <br />
+                    Avreise:<br />
+                    <input type="date" name="fromDate" />
+                    &nbsp;<span class="label label-warning" id="fromDateWarning" style="display:none">Må fylles ut</span>
+                    <br />
+                </fieldset>
+                <br /><input type="submit" value="Bestill tur" name="orderButton" />
+            </div>
 
-    <div class="col-sm-6">
-    <fieldset>
-        <legend>Fly fra:</legend>
-        Destinasjon:
-        <br />
-        <select name="fromDestination">
-            <option value=""></option>
-            <option value="Oslo">Oslo</option>
-            <option value="Torp">Torp</option>
-            <option value="Stockholm">Stockholm</option>
-            <option value="København">København</option>
-        </select>
-        &nbsp;<span class="label label-warning" id="fromDestinationWarning" style="display:none">Må fylles ut</span>
-        <br />
-        Avreise:<br />
-        <input type="date" name="fromDate" />
-        &nbsp;<span class="label label-warning" id="fromDateWarning" style="display:none">Må fylles ut</span>
-        <br />
-    </fieldset>
-    <br /><input type="submit" value="Bestill tur" name="orderButton" />
+            <div class="col-sm-6">
+                <fieldset>
+                    <legend>Fly til:</legend>
+                    Destinasjon:<br />
+                    <select name="toDestination">
+                        <option value=""></option>
+                        @foreach (var a in Model)
+                        {
+                            <option value="@a.Id">@a.Name</option>
+                        }
+                    </select>
+                    &nbsp;<span class="label label-warning" id="toDestinationWarning" style="display:none">Må fylles ut</span>
+                    <br />
+                    Hjemreise:<br />
+                    <input type="date" name="toDate" />
+                    &nbsp;<span class="label label-warning" id="toDateWarning" style="display:none">Må fylles ut</span>
+                    <br />
+                </fieldset>
+            </div>
+        </form>
     </div>
 
-    <div class="col-sm-6">
-    <fieldset>
-        <legend>Fly til:</legend>
-        Destinasjon:<br />
-        <select name="toDestination">
-            <option value=""></option>
-            <option value="Oslo">Oslo</option>
-            <option value="Torp">Torp</option>
-            <option value="Stockholm">Stockholm</option>
-            <option value="København">København</option>
-        </select>
-        &nbsp;<span class="label label-warning" id="toDestinationWarning" style="display:none">Må fylles ut</span>
-        <br />
-        Hjemreise:<br />
-        <input type="date" name="toDate" />
-        &nbsp;<span class="label label-warning" id="toDateWarning" style="display:none">Må fylles ut</span>
-        <br />
-    </fieldset>        
-    </div>
-</form>
-</div>
+    <script>
+        function validateFields() {
+            var validateFromDestination = document.forms["registrationForm"]["fromDestination"].value;
+            var validateFromDate = document.forms["registrationForm"]["fromDate"].value;
+            var validateToDestination = document.forms["registrationForm"]["toDestination"].value;
+            var validateToDate = document.forms["registrationForm"]["toDate"].value;
 
-<script>
-    function validateFields() {
-        var validateFromDestination = document.forms["registrationForm"]["fromDestination"].value;
-        var validateFromDate = document.forms["registrationForm"]["fromDate"].value;
-        var validateToDestination = document.forms["registrationForm"]["toDestination"].value;
-        var validateToDate = document.forms["registrationForm"]["toDate"].value;
+            if (validateFromDate > validateToDate) {
+                hideWarnings();
 
-        if (validateFromDate > validateToDate) {
-            hideWarnings();
+                document.getElementById("toDateWarning").innerHTML = "Dato må være etter avreise";
+                document.getElementById("toDateWarning").style.display = "inline";
+                return false;
+            } else {
+                document.getElementById("toDateWarning").style.display = "none";
+            }
 
-            document.getElementById("toDateWarning").innerHTML = "Dato må være etter avreise";
-            document.getElementById("toDateWarning").style.display = "inline";
-            return false;
-        } else {
-            document.getElementById("toDateWarning").style.display = "none";
+            if (validateFromDestination == validateToDestination && validateFromDestination != "") {
+                hideWarnings();
+
+                document.getElementById("toDestinationWarning").innerHTML = "Du kan ikke reise til og fra samme sted";
+                document.getElementById("toDestinationWarning").style.display = "inline";
+                return false;
+            } else {
+                document.getElementById("toDestinationWarning").style.display = "none";
+            }
+
+            if (validateFromDestination == "") {
+                hideWarnings();
+                document.getElementById("fromDestinationWarning").innerHTML = "Må fylles ut";
+                document.getElementById("fromDestinationWarning").style.display = "inline";
+                return false;
+            } else {
+                document.getElementById("fromDestinationWarning").style.display = "none";
+            }
+
+            if (validateFromDate == "") {
+                hideWarnings();
+
+                document.getElementById("fromDateWarning").style.display = "inline";
+                return false;
+            } else {
+                document.getElementById("fromDateWarning").style.display = "none";
+            }
+
+            if (validateToDestination == "") {
+                hideWarnings();
+                document.getElementById("toDestinationWarning").innerHTML = "Må fylles ut";
+                document.getElementById("toDestinationWarning").style.display = "inline";
+                return false;
+            } else {
+                document.getElementById("toDestinationWarning").style.display = "none";
+            }
+
+            if (validateToDate == "") {
+                hideWarnings();
+
+                document.getElementById("toDateWarning").style.display = "inline";
+                return false;
+            } else {
+                document.getElementById("toDateWarning").style.display = "none";
+            }
         }
 
-        if (validateFromDestination == validateToDestination && validateFromDestination != "") {
-            hideWarnings();
-
-            document.getElementById("toDestinationWarning").innerHTML = "Du kan ikke reise til og fra samme sted";
-            document.getElementById("toDestinationWarning").style.display = "inline";
-            return false;
-        } else {
-            document.getElementById("toDestinationWarning").style.display = "none";
-        }
-
-        if (validateFromDestination == "") {
-            hideWarnings();
-            document.getElementById("fromDestinationWarning").innerHTML = "Må fylles ut";
-            document.getElementById("fromDestinationWarning").style.display = "inline";
-            return false;
-        } else {
+        function hideWarnings() {
             document.getElementById("fromDestinationWarning").style.display = "none";
-        }
-
-        if (validateFromDate == "") {
-            hideWarnings();
-
-            document.getElementById("fromDateWarning").style.display = "inline";
-            return false;
-        } else {
             document.getElementById("fromDateWarning").style.display = "none";
-        }
-
-        if (validateToDestination == "") {
-            hideWarnings();
-            document.getElementById("toDestinationWarning").innerHTML = "Må fylles ut";
-            document.getElementById("toDestinationWarning").style.display = "inline";
-            return false;
-        } else {
             document.getElementById("toDestinationWarning").style.display = "none";
-        }
-
-        if (validateToDate == "") {
-            hideWarnings();
-
-            document.getElementById("toDateWarning").style.display = "inline";
-            return false;
-        } else {
             document.getElementById("toDateWarning").style.display = "none";
         }
-    }
+    </script>
+</body>
 
-    function hideWarnings() {
-        document.getElementById("fromDestinationWarning").style.display = "none";
-        document.getElementById("fromDateWarning").style.display = "none";
-        document.getElementById("toDestinationWarning").style.display = "none";
-        document.getElementById("toDateWarning").style.display = "none";
-    }
-</script>

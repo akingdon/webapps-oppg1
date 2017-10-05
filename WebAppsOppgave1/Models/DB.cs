@@ -12,8 +12,11 @@ namespace WebAppsOppgave1.Models
             : base("name=Booking")
         {
             Database.CreateIfNotExists();
+            Database.SetInitializer(new DBInit());
         }
 
         public DbSet<Booking> Booking { get; set; }
+        public DbSet<Flight> Flight { get; set; }
+        public DbSet<Airport> Airport { get; set; }
     }
 }

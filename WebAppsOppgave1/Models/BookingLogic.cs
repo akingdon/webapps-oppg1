@@ -6,7 +6,7 @@ using System.Web;
 namespace WebAppsOppgave1.Models
 {
     public class BookingLogic
-    {
+    {/*
         public Boolean DestinationsAreSet(Booking booking)
         {
             return !string.IsNullOrWhiteSpace(booking.FromDestination) && !string.IsNullOrWhiteSpace(booking.ToDestination);
@@ -26,5 +26,5 @@ namespace WebAppsOppgave1.Models
         {
             return booking.FromDate < DateTime.Today;
         }
-    }
+    */}
 }

@@ -7,12 +7,12 @@ using System.Web;
 
 namespace WebAppsOppgave1.Models
 {
-    public class Booking
+    public class Flight
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
-        [Required]
-        public Flight Flight { get; set; }
-        public byte Amount { get; set; }
+        public virtual Airport FromAirport { get; set; }
+        public virtual Airport ToAirport { get; set; }
+        public DateTime Departure { get; set; }
+        public virtual Booking Booking { get; set; }
     }
 }
