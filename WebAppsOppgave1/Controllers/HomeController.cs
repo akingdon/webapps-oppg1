@@ -100,6 +100,15 @@ namespace WebAppsOppgave1.Controllers
             }
         }
 
+        public ActionResult Bookings()
+        {
+            using (var Db = new DB())
+            {
+                List<Booking> Bookings = Db.Booking.ToList();
+                return View(Bookings);
+            }
+        }
+
         public ActionResult Delete(int id)
         {
             using (var Db = new DB())
