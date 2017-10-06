@@ -45,11 +45,31 @@
                         alert(x + '\n' + y + '\n' + z);
                     }
                 });
+
+                var returnDate = $("#return").val();
+                if (returnDate != "") {
+                    var from = $("#toAirport").val();
+                    var to = $("#fromAirport").val();
+
+                    $.ajax({
+                        url: '/Home/getFlights',
+                        type: 'POST',
+                        contentType: "application/json:charset=utf-8",
+                        data: JSON.stringify({ from: from, to: to, date: returnDate }),
+                        dataType: 'json',
+                        success: function (jsFlights) {
+                            DisplayMatchingReturnFlights(jsFlights);
+                        },
+                        error: function (x, y, z) {
+                            alert(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
             });
 
             $("#book").click(function () {
-                var flight = $("input[name=id]:checked").val();
-                var amount = $("input[name=amount" + flight + "]").val();
+                var flight = $("input[name=idToDestination]:checked").val();
+                var amount = $("input[name=amountToDestination" + flight + "]").val();
 
                 $.ajax({
                     url: '/Home/Register',
@@ -58,13 +78,34 @@
                     data: JSON.stringify({ flight: flight, amount: amount }),
                     dataType: 'json',
                     success: function (string) {
-                        alert(string);
-                        window.location.href = "/Home/Bookings/";
+                        // Do nothing, have to check if return flight is ordered first.
                     },
                     error: function (x, y, z) {
                         alert(x + '\n' + y + '\n' + z);
                     }
                 });
+
+                var returnDate = $("#return").val();
+                if (returnDate != "") {
+                    var flight = $("input[name=idFromDestination]:checked").val();
+                    var amount = $("input[name=amountFromDestination" + flight + "]").val();
+
+                    $.ajax({
+                        url: '/Home/Register',
+                        type: 'POST',
+                        contentType: "application/json:charset=utf-8",
+                        data: JSON.stringify({ flight: flight, amount: amount }),
+                        dataType: 'json',
+                        success: function (string) {
+                            window.location.href = "/Home/Bookings/";
+                        },
+                        error: function (x, y, z) {
+                            alert(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                } else {
+                    window.location.href = "/Home/Bookings/";
+                }
             });
         });
 
@@ -98,12 +139,40 @@
                         "<td>" + jsFlights[f].toAirport + "</td>" +
                         "<td>" + jsFlights[f].departure + "</td>" +
                         "<td>" + jsFlights[f].arrival + "</td>" +
-                        "<td><input type=\"radio\" name =\"id\" id=\"selectedFlight\" value=\"" + jsFlights[f].id + "\"></td>" +
-                        "<td><input type=\"number\" name=\"amount" + jsFlights[f].id +"\" max=\"10\" min=\"1\" />" +
+                        "<td><input type=\"radio\" name =\"idToDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
+                        "<td><input type=\"number\" name=\"amountToDestination" + jsFlights[f].id +"\" max=\"10\" min=\"1\" />" +
                     "</tr>";
             }
             result += "<tr><td></td></tr></table>";
             $("#displayFlights").html(result);
+        }
+
+        function DisplayMatchingReturnFlights(jsFlights) {
+            var result =
+                "<table class='table'>" +
+                "<thead>" +
+                "<tr>" +
+                "<th>Fra</th>" +
+                "<th>Til</th>" +
+                "<th>Avreise</th>" +
+                "<th>Ankomst</th>" +
+                "<th>Velg</th>" +
+                "<th>Antall</th>" +
+                "</tr>" +
+                "</thead >";
+            for (var f in jsFlights) {
+                result +=
+                    "<tr>" +
+                    "<td>" + jsFlights[f].fromAirport + "</td>" +
+                    "<td>" + jsFlights[f].toAirport + "</td>" +
+                    "<td>" + jsFlights[f].departure + "</td>" +
+                    "<td>" + jsFlights[f].arrival + "</td>" +
+                    "<td><input type=\"radio\" name =\"idFromDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
+                    "<td><input type=\"number\" name=\"amountFromDestination" + jsFlights[f].id + "\" max=\"10\" min=\"1\" />" +
+                    "</tr>";
+            }
+            result += "<tr><td></td></tr></table>";
+            $("#displayReturnFlights").html(result);
         }
 
     </script>
@@ -141,14 +210,15 @@
                 &nbsp;<span class="label label-warning" id="toDestinationWarning" style="display:none">Må fylles ut</span>
                 <br />
                 Hjemreise:<br />
-                <input type="date" name="toDate" />
+                <input type="date" id="return" />
                 &nbsp;<span class="label label-warning" id="toDateWarning" style="display:none">Må fylles ut</span>
                 <br />
             </fieldset>
         </div>
     </div>
-    <div id="displayFlights" class="col-sm-12"></div>
-    <div id="orderFlight" class="col-sm-12"><button id="book">Bestill</button></div>
+    <div id="displayFlights" class="col-sm-6"></div>
+    <div id="displayReturnFlights" class="col-sm-6"></div>
+    <br /><button id="book">Bestill</button>
 
     <script>
         function validateFields() {

@@ -78,6 +78,22 @@ namespace WebAppsOppgave1.Models
             };
 
 
+            var returnFlight1 = new Flight
+            {
+                FromAirport = airport2,
+                ToAirport = airport1,
+                Departure = new DateTime(2017, 10, 20, 12, 00, 00)
+            };
+            returnFlight1.Arrival = returnFlight1.Departure.AddHours(1);
+
+            var returnFlight2 = new Flight
+            {
+                FromAirport = airport2,
+                ToAirport = airport1,
+                Departure = new DateTime(2017, 10, 20, 14, 30, 00)
+            };
+            returnFlight2.Arrival = returnFlight2.Departure.AddHours(1);
+
             db.Airport.Add(airport1);
             db.Airport.Add(airport2);
             db.Airport.Add(airport3);
@@ -88,6 +104,10 @@ namespace WebAppsOppgave1.Models
             db.Flight.Add(flight4);
             db.Flight.Add(flight5);
             db.Booking.Add(booking1);
+
+            db.Flight.Add(returnFlight1);
+            db.Flight.Add(returnFlight2);
+
             base.Seed(db);
         }
     }
