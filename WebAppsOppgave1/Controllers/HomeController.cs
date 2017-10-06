@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
+using WebAppsOppgave1.Models;
+using System.Web.Script.Serialization;
 
 namespace WebAppsOppgave1.Controllers
 {
@@ -12,9 +14,37 @@ namespace WebAppsOppgave1.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            var db = new Models.DB();
-            IEnumerable<Models.Airport> airports = db.Airport;
-            return View(airports);
+            
+            return View();
+        }
+
+        public string getAirportNames()
+        {
+            
+            var Db = new BookingLogic();
+            List<jsAirport> airports = Db.getAllAirports();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(airports); 
+        }
+
+        public string getFlights(int from, int to, DateTime date)
+        {
+            var Db = new BookingLogic();
+            List<Flight> matchingFlights = Db.getMatchingflights(from, to, date);
+            var jsMatchingFlights = new List<jsFlight>();
+            foreach (Flight f in matchingFlights)
+            {
+                var aFlight = new jsFlight()
+                {
+                    id = f.Id,
+                    fromAirport = f.FromAirport.Name,
+                    toAirport = f.ToAirport.Name,
+                    departure = f.Departure.ToString()
+                };
+                jsMatchingFlights.Add(aFlight);
+            }
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(jsMatchingFlights);
         }
 
         [HttpPost]

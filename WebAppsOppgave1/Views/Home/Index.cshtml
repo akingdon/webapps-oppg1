@@ -2,59 +2,123 @@
 @{
     ViewBag.Title = "Index";
 }
-@model IEnumerable<WebAppsOppgave1.Models.Airport>
+
+<!DOCTYPE html>
+<html>
 <head>
-    <script src="~/Scripts/jquery-­‐1.7.1.js"></script>
-    <script src="~/Scripts/jquery.unobtrusive-­‐ajax.js"></script>
+    <script src="~/Scripts/jquery-3.2.1.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            // Get airport names and build dropdowns
+            $.ajax({
+                url: '/Home/getAirportNames',
+                type: 'GET',
+                dataType: 'json',
+                success: function (jsAirports) {
+                    PopulateAirportDropDowns(jsAirports);
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+
+            // Add event for search button click
+            $("#search").click(function () {
+                var from = $("#fromAirport").val();
+                var to = $("#toAirport").val();
+                var date = $("#departure").val();
+                $.ajax({
+                    url: '/Home/getFlights',
+                    type: 'POST',
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify({from: from, to: to, date: date}),
+                    dataType: 'json',
+                    success: function (jsFlights) {
+                        DisplayMatchingFlights(jsFlights);
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                })
+            })
+        })
+
+
+        function PopulateAirportDropDowns(jsAirports) {
+            var result = "";
+            for (var a in jsAirports) {
+                result += "<option value='" + jsAirports[a].id + "'>" + jsAirports[a].name + "</option>";
+            }
+            $("#fromAirport").append(result);
+            $("#toAirport").append(result);
+        }
+
+        function DisplayMatchingFlights(jsFlights) {
+            var result =
+                "<table class='table'>" +
+                    "<thead>" +
+                        "<tr>" +
+                            "<th>Fra</th>" +
+                            "<th>Til</th>" +
+                            "<th>Avreise</th>" +
+                        "</tr>" +
+                    "</thead >";
+            for (var f in jsFlights) {
+                result +=
+                    "<tr>" +
+                    "<td>" + jsFlights[f].fromAirport + "</td>" +
+                    "<td>" + jsFlights[f].toAirport + "</td>" +
+                    "<td>" + jsFlights[f].departure + "</td>" +
+                    "</tr>";
+            }
+            result += "<tr><td><button id='book'>Bestill</button></td></tr></table>";
+            $("#displayFlights").html(result);
+        }
+
+    </script>
 </head>
 <body>
     <h2>Bestill flytur</h2>
 
     <div class="row">
-        <form action="/home/register" method="post" onsubmit="return validateFields()" name="registrationForm">
+        <!-- husk å kjøre (og oppdatere) /home/register og validateFields()-->
+        <div class="col-sm-6">
+            <fieldset>
+                <legend>Fly fra:</legend>
+                Destinasjon:
+                <br />
+                <select id="fromAirport">
+                    <option value=""></option>
+                </select>
+                &nbsp;<span class="label label-warning" id="fromDestinationWarning" style="display:none">Må fylles ut</span>
+                <br />
+                Avreise:<br />
+                <input type="date" id="departure" />
+                &nbsp;<span class="label label-warning" id="fromDateWarning" style="display:none">Må fylles ut</span>
+                <br />
+            </fieldset>
+            <br /><button id="search">Søk</button><br/>
+        </div>
 
-            <div class="col-sm-6">
-                <fieldset>
-                    <legend>Fly fra:</legend>
-                    Destinasjon:
-                    <br />
-                    <select name="fromDestination">
-                        <option value=""></option>
-                        @foreach (var a in Model)
-                        {
-                            <option value="@a.Id">@a.Name</option>
-                        }
-                    </select>
-                    &nbsp;<span class="label label-warning" id="fromDestinationWarning" style="display:none">Må fylles ut</span>
-                    <br />
-                    Avreise:<br />
-                    <input type="date" name="fromDate" />
-                    &nbsp;<span class="label label-warning" id="fromDateWarning" style="display:none">Må fylles ut</span>
-                    <br />
-                </fieldset>
-                <br /><input type="submit" value="Bestill tur" name="orderButton" />
-            </div>
-
-            <div class="col-sm-6">
-                <fieldset>
-                    <legend>Fly til:</legend>
-                    Destinasjon:<br />
-                    <select name="toDestination">
-                        <option value=""></option>
-                        @foreach (var a in Model)
-                        {
-                            <option value="@a.Id">@a.Name</option>
-                        }
-                    </select>
-                    &nbsp;<span class="label label-warning" id="toDestinationWarning" style="display:none">Må fylles ut</span>
-                    <br />
-                    Hjemreise:<br />
-                    <input type="date" name="toDate" />
-                    &nbsp;<span class="label label-warning" id="toDateWarning" style="display:none">Må fylles ut</span>
-                    <br />
-                </fieldset>
-            </div>
-        </form>
+        <div class="col-sm-6">
+            <fieldset>
+                <legend>Fly til:</legend>
+                Destinasjon:<br />
+                <select id="toAirport">
+                    <option value=""></option>
+                </select>
+                &nbsp;<span class="label label-warning" id="toDestinationWarning" style="display:none">Må fylles ut</span>
+                <br />
+                Hjemreise:<br />
+                <input type="date" name="toDate" />
+                &nbsp;<span class="label label-warning" id="toDateWarning" style="display:none">Må fylles ut</span>
+                <br />
+            </fieldset>
+        </div>
+    </div>
+    <div id="displayFlights">
     </div>
 
     <script>
@@ -129,4 +193,5 @@
         }
     </script>
 </body>
+</html>
 
