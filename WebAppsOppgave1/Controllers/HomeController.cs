@@ -39,7 +39,7 @@ namespace WebAppsOppgave1.Controllers
                     id = f.Id,
                     fromAirport = f.FromAirport.Name,
                     toAirport = f.ToAirport.Name,
-                    departure = f.Departure.ToString()
+                    departure = f.Departure.ToString("dd.MM.yyyy HH:mm")
                 };
                 jsMatchingFlights.Add(aFlight);
             }

@@ -25,7 +25,7 @@ namespace WebAppsOppgave1.Models
         {
             List<Flight> matchingFlights =
                 Db.Flight.Where(a => a.FromAirport.Id == from &&
-                    a.ToAirport.Id == to).ToList();
+                    a.ToAirport.Id == to && DbFunctions.TruncateTime(a.Departure) == date.Date).ToList();
             return matchingFlights;
         }
         /*
