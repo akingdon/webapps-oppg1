@@ -63,6 +63,7 @@
                             "<th>Fra</th>" +
                             "<th>Til</th>" +
                             "<th>Avreise</th>" +
+                            "<th>Tid</th>" + 
                         "</tr>" +
                     "</thead >";
             for (var f in jsFlights) {
@@ -70,7 +71,8 @@
                     "<tr>" +
                     "<td>" + jsFlights[f].fromAirport + "</td>" +
                     "<td>" + jsFlights[f].toAirport + "</td>" +
-                    "<td>" + jsFlights[f].departure + "</td>" +
+                    "<td>" + jsFlights[f].departureDate + "</td>" +
+                    "<td>" + jsFlights[f].departureTime + "</td>" +
                     "</tr>";
             }
             result += "<tr><td><button id='book'>Bestill</button></td></tr></table>";

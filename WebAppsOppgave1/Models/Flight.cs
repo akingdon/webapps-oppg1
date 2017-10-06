@@ -12,7 +12,8 @@ namespace WebAppsOppgave1.Models
         public int Id { get; set; }
         public virtual Airport FromAirport { get; set; }
         public virtual Airport ToAirport { get; set; }
-        public DateTime Departure { get; set; }
+        public string DepartureDate { get; set; }
+        public string DepartureTime { get; set; }
         public virtual Booking Booking { get; set; }
     }
 }

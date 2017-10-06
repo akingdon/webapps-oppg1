@@ -27,7 +27,7 @@ namespace WebAppsOppgave1.Controllers
             return jsonSerializer.Serialize(airports); 
         }
 
-        public string getFlights(int from, int to, DateTime date)
+        public string getFlights(int from, int to, String date)
         {
             var Db = new BookingLogic();
             List<Flight> matchingFlights = Db.getMatchingflights(from, to, date);
@@ -39,7 +39,9 @@ namespace WebAppsOppgave1.Controllers
                     id = f.Id,
                     fromAirport = f.FromAirport.Name,
                     toAirport = f.ToAirport.Name,
-                    departure = f.Departure.ToString()
+                    departureDate = f.DepartureDate, 
+                    departureTime = f.DepartureTime
+
                 };
                 jsMatchingFlights.Add(aFlight);
             }
