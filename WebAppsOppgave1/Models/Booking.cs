@@ -12,7 +12,7 @@ namespace WebAppsOppgave1.Models
         public int Id { get; set; }
         public int CustomerId { get; set; }
         [Required]
-        public Flight Flight { get; set; }
-        public byte Amount { get; set; }
+        public int Flight { get; set; }
+        public int Amount { get; set; }
     }
 }

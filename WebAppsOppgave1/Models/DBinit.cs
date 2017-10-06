@@ -36,6 +36,7 @@ namespace WebAppsOppgave1.Models
                 ToAirport = airport2,
                 Departure = new DateTime(2017, 10, 10, 8, 30, 00)
             };
+            flight1.Arrival = flight1.Departure.AddHours(1);
 
             var flight2 = new Flight
             {
@@ -43,6 +44,7 @@ namespace WebAppsOppgave1.Models
                 ToAirport = airport2,
                 Departure = new DateTime(2017, 10, 11, 8, 30, 00)
             };
+            flight2.Arrival = flight2.Departure.AddHours(1);
 
             var flight3 = new Flight
             {
@@ -50,6 +52,7 @@ namespace WebAppsOppgave1.Models
                 ToAirport = airport2,
                 Departure = new DateTime(2017, 10, 11, 16, 00, 00)
             };
+            flight3.Arrival = flight3.Departure.AddHours(1);
 
             var flight4 = new Flight
             {
@@ -57,6 +60,7 @@ namespace WebAppsOppgave1.Models
                 ToAirport = airport2,
                 Departure = new DateTime(2017, 10, 11, 22, 30, 00)
             };
+            flight4.Arrival = flight4.Departure.AddHours(1);
 
             var flight5 = new Flight
             {
@@ -64,11 +68,12 @@ namespace WebAppsOppgave1.Models
                 ToAirport = airport2,
                 Departure = new DateTime(2017, 10, 12, 16, 00, 00)
             };
+            flight5.Arrival = flight5.Departure.AddHours(1);
 
             var booking1 = new Booking
             {
                 CustomerId = 1,
-                Flight = flight1,
+                Flight = flight1.Id,
                 Amount = 2
             };
 

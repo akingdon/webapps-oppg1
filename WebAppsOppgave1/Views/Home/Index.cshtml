@@ -11,6 +11,8 @@
     <script type="text/javascript">
         $(function () {
 
+            $("#book").hide();
+
             // Get airport names and build dropdowns
             $.ajax({
                 url: '/Home/getAirportNames',
@@ -26,6 +28,7 @@
 
             // Add event for search button click
             $("#search").click(function () {
+                $("#book").show();
                 var from = $("#fromAirport").val();
                 var to = $("#toAirport").val();
                 var date = $("#departure").val();
@@ -33,7 +36,7 @@
                     url: '/Home/getFlights',
                     type: 'POST',
                     contentType: "application/json;charset=utf-8",
-                    data: JSON.stringify({from: from, to: to, date: date}),
+                    data: JSON.stringify({ from: from, to: to, date: date }),
                     dataType: 'json',
                     success: function (jsFlights) {
                         DisplayMatchingFlights(jsFlights);
@@ -41,9 +44,28 @@
                     error: function (x, y, z) {
                         alert(x + '\n' + y + '\n' + z);
                     }
-                })
-            })
-        })
+                });
+            });
+
+            $("#book").click(function () {
+                var flight = $("input[name=id]:checked").val();
+                var amount = $("input[name=amount" + flight + "]").val();
+
+                $.ajax({
+                    url: '/Home/Register',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ flight: flight, amount: amount }),
+                    dataType: 'json',
+                    success: function (string) {
+                        alert(string);
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            });
+        });
 
 
         function PopulateAirportDropDowns(jsAirports) {
@@ -63,17 +85,23 @@
                             "<th>Fra</th>" +
                             "<th>Til</th>" +
                             "<th>Avreise</th>" +
+                            "<th>Ankomst</th>" +
+                            "<th>Velg</th>" +
+                            "<th>Antall</th>" +
                         "</tr>" +
                     "</thead >";
             for (var f in jsFlights) {
                 result +=
                     "<tr>" +
-                    "<td>" + jsFlights[f].fromAirport + "</td>" +
-                    "<td>" + jsFlights[f].toAirport + "</td>" +
-                    "<td>" + jsFlights[f].departure + "</td>" +
+                        "<td>" + jsFlights[f].fromAirport + "</td>" +
+                        "<td>" + jsFlights[f].toAirport + "</td>" +
+                        "<td>" + jsFlights[f].departure + "</td>" +
+                        "<td>" + jsFlights[f].arrival + "</td>" +
+                        "<td><input type=\"radio\" name =\"id\" id=\"selectedFlight\" value=\"" + jsFlights[f].id + "\"></td>" +
+                        "<td><input type=\"number\" name=\"amount" + jsFlights[f].id +"\" max=\"10\" min=\"1\" />" +
                     "</tr>";
             }
-            result += "<tr><td><button id='book'>Bestill</button></td></tr></table>";
+            result += "<tr><td></td></tr></table>";
             $("#displayFlights").html(result);
         }
 
@@ -81,7 +109,7 @@
 </head>
 <body>
     <h2>Bestill flytur</h2>
-
+    
     <div class="row">
         <!-- husk å kjøre (og oppdatere) /home/register og validateFields()-->
         <div class="col-sm-6">
@@ -118,8 +146,8 @@
             </fieldset>
         </div>
     </div>
-    <div id="displayFlights">
-    </div>
+    <div id="displayFlights" class="col-sm-12"></div>
+    <div id="orderFlight" class="col-sm-12"><button id="book">Bestill</button></div>
 
     <script>
         function validateFields() {

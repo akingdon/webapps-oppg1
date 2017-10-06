@@ -39,7 +39,8 @@ namespace WebAppsOppgave1.Controllers
                     id = f.Id,
                     fromAirport = f.FromAirport.Name,
                     toAirport = f.ToAirport.Name,
-                    departure = f.Departure.ToString("dd.MM.yyyy HH:mm")
+                    departure = f.Departure.ToString("dd.MM.yyyy HH:mm"), 
+                    arrival = f.Arrival.ToString("dd.MM.yyy HH:mm")
                 };
                 jsMatchingFlights.Add(aFlight);
             }
@@ -47,11 +48,14 @@ namespace WebAppsOppgave1.Controllers
             return jsonSerializer.Serialize(jsMatchingFlights);
         }
 
-        [HttpPost]
-        public ActionResult Register(Models.Booking booking)
+        public string Register(JsBooking jsBooking)
         {
+            var booking = new Booking
+            {
+                Flight = jsBooking.flight,
+                Amount = jsBooking.amount
+            };
 
-            var bookingLogic = new Models.BookingLogic();
             bool hasValidatedCorrectly = false;
 
          /*   if (bookingLogic.DestinationsAreSet(booking) && 
@@ -64,7 +68,7 @@ namespace WebAppsOppgave1.Controllers
 
             if (hasValidatedCorrectly)
             {
-                using (var Db = new Models.DB())
+                using (var Db = new DB())
                 {
                     try
                     {
@@ -76,27 +80,29 @@ namespace WebAppsOppgave1.Controllers
                         Console.WriteLine("Feil under skriving til DB. Lær deg hvordan du håndterer exceptions"+e.Message);
                     }
                 }
-                return RedirectToAction("Orders");
+                var jsonSerializer = new JavaScriptSerializer();
+                return jsonSerializer.Serialize("ok");
             }
             else
             {
-                return View("ValidationFailed");
+                var jsonSerializer = new JavaScriptSerializer();
+                return jsonSerializer.Serialize("failed");
             }
             
         }
 
         public ActionResult Orders()
         {
-            using (var Db = new Models.DB())
+            using (var Db = new DB())
             {
-                List<Models.Flight> Flights = Db.Flight.Include(c => c.FromAirport).Include(c => c.ToAirport).ToList();
+                List<Flight> Flights = Db.Flight.Include(c => c.FromAirport).Include(c => c.ToAirport).ToList();
                 return View(Flights);
             }
         }
 
         public ActionResult Delete(int id)
         {
-            using (var Db = new Models.DB())
+            using (var Db = new DB())
             {
                 try
                 {
