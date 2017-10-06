@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "Bookings";
+}
+
+<h2>Bookings</h2>
+
+@model List<WebAppsOppgave1.Models.Booking>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>Flight ID</td>
+            <td>Customer ID</td>
+            <td>Amount</td>
+        </tr>
+    </thead>
+
+    @foreach (var booking in Model)
+    {
+        <tr>
+            <td>@booking.Flight</td>
+            <td>@booking.CustomerId</td>
+            <td>@booking.Amount</td>
+        </tr>
+    }
+</table>

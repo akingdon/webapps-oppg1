@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
+using WebAppsOppgave1.Models;
+using System.Web.Script.Serialization;
 
 namespace WebAppsOppgave1.Controllers
 {
@@ -12,16 +14,48 @@ namespace WebAppsOppgave1.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            var db = new Models.DB();
-            IEnumerable<Models.Airport> airports = db.Airport;
-            return View(airports);
+            
+            return View();
         }
 
-        [HttpPost]
-        public ActionResult Register(Models.Booking booking)
+        public string getAirportNames()
         {
+            
+            var Db = new BookingLogic();
+            List<jsAirport> airports = Db.getAllAirports();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(airports); 
+        }
 
-            var bookingLogic = new Models.BookingLogic();
+        public string getFlights(int from, int to, DateTime date)
+        {
+            var Db = new BookingLogic();
+            List<Flight> matchingFlights = Db.getMatchingflights(from, to, date);
+            var jsMatchingFlights = new List<jsFlight>();
+            foreach (Flight f in matchingFlights)
+            {
+                var aFlight = new jsFlight()
+                {
+                    id = f.Id,
+                    fromAirport = f.FromAirport.Name,
+                    toAirport = f.ToAirport.Name,
+                    departure = f.Departure.ToString("dd.MM.yyyy HH:mm"), 
+                    arrival = f.Arrival.ToString("dd.MM.yyy HH:mm")
+                };
+                jsMatchingFlights.Add(aFlight);
+            }
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(jsMatchingFlights);
+        }
+
+        public string Register(JsBooking jsBooking)
+        {
+            var booking = new Booking
+            {
+                Flight = jsBooking.flight,
+                Amount = jsBooking.amount
+            };
+
             bool hasValidatedCorrectly = false;
 
          /*   if (bookingLogic.DestinationsAreSet(booking) && 
@@ -34,7 +68,7 @@ namespace WebAppsOppgave1.Controllers
 
             if (hasValidatedCorrectly)
             {
-                using (var Db = new Models.DB())
+                using (var Db = new DB())
                 {
                     try
                     {
@@ -43,30 +77,41 @@ namespace WebAppsOppgave1.Controllers
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("Feil under skriving til DB. Lær deg hvordan du håndterer exceptions");
+                        Console.WriteLine("Feil under skriving til DB. Lær deg hvordan du håndterer exceptions"+e.Message);
                     }
                 }
-                return RedirectToAction("Orders");
+                var jsonSerializer = new JavaScriptSerializer();
+                return jsonSerializer.Serialize("ok");
             }
             else
             {
-                return View("ValidationFailed");
+                var jsonSerializer = new JavaScriptSerializer();
+                return jsonSerializer.Serialize("failed");
             }
             
         }
 
         public ActionResult Orders()
         {
-            using (var Db = new Models.DB())
+            using (var Db = new DB())
             {
-                List<Models.Flight> Flights = Db.Flight.Include(c => c.FromAirport).Include(c => c.ToAirport).ToList();
+                List<Flight> Flights = Db.Flight.Include(c => c.FromAirport).Include(c => c.ToAirport).ToList();
                 return View(Flights);
+            }
+        }
+
+        public ActionResult Bookings()
+        {
+            using (var Db = new DB())
+            {
+                List<Booking> Bookings = Db.Booking.ToList();
+                return View(Bookings);
             }
         }
 
         public ActionResult Delete(int id)
         {
-            using (var Db = new Models.DB())
+            using (var Db = new DB())
             {
                 try
                 {
@@ -76,7 +121,7 @@ namespace WebAppsOppgave1.Controllers
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Feil under sletting av ordre. Lær deg hvordan du håndterer exceptions");
+                    Console.WriteLine("Feil under sletting av ordre. Lær deg hvordan du håndterer exceptions"+e.Message);
                 }
             }
             return RedirectToAction("Orders");
