@@ -3,9 +3,6 @@
     ViewBag.Title = "Index";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
     <script src="~/Scripts/jquery-3.2.1.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script type="text/javascript">
@@ -138,6 +135,7 @@
                     contentType: "application/json:charset=utf-8",
                     data: JSON.stringify({ flight: flight, amount: amount }),
                     dataType: 'json',
+                    async: false,
                     success: function (string) {
                         // Do nothing, have to check if return flight is ordered first.
                     },
@@ -157,6 +155,7 @@
                         contentType: "application/json:charset=utf-8",
                         data: JSON.stringify({ flight: flight, amount: amount }),
                         dataType: 'json',
+                        async: false,
                         success: function (string) {
                             window.location.href = "/Home/Bookings/";
                         },
@@ -243,8 +242,7 @@
         }
 
     </script>
-</head>
-<body>
+
     <h2>Bestill flytur</h2>
     
     <div class="row">
@@ -348,6 +346,3 @@
             document.getElementById("returnWarning").style.display = "none";
         }
     </script>
-</body>
-</html>
-
