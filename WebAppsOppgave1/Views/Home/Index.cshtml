@@ -26,6 +26,17 @@
                 }
             });
 
+            // Add event for returnFlightChosen checkbox to show/hide return input field
+            $("#returnFlightChosen").change(function () {
+                if ($(this).is(":checked")) {
+                    $("#returnLabel").show();
+                    $("#return").show();
+                } else {
+                    $("#returnLabel").hide();
+                    $("#return").hide();
+                }
+            });
+
             // Add event for search button click
             $("#search").click(function () {
                 if (validateFields()) {
@@ -47,26 +58,30 @@
                         }
                     });
 
-                    var returnDate = $("#return").val();
-                    if (returnDate != "") {
-                        var from = $("#toAirport").val();
-                        var to = $("#fromAirport").val();
+                    if ($("#returnFlightChosen").is(":checked")) {
+                        var returnDate = $("#return").val();
+                        if (returnDate != "") {
+                            var from = $("#toAirport").val();
+                            var to = $("#fromAirport").val();
 
-                        $.ajax({
-                            url: '/Home/getFlights',
-                            type: 'POST',
-                            contentType: "application/json:charset=utf-8",
-                            data: JSON.stringify({ from: from, to: to, date: returnDate }),
-                            dataType: 'json',
-                            success: function (jsFlights) {
-                                if (jsFlights != null) {
-                                    DisplayMatchingReturnFlights(jsFlights);
+                            $.ajax({
+                                url: '/Home/getFlights',
+                                type: 'POST',
+                                contentType: "application/json:charset=utf-8",
+                                data: JSON.stringify({ from: from, to: to, date: returnDate }),
+                                dataType: 'json',
+                                success: function (jsFlights) {
+                                    if (jsFlights != null) {
+                                        DisplayMatchingReturnFlights(jsFlights);
+                                    }
+                                },
+                                error: function (x, y, z) {
+                                    alert(x + '\n' + y + '\n' + z);
                                 }
-                            },
-                            error: function (x, y, z) {
-                                alert(x + '\n' + y + '\n' + z);
-                            }
-                        });
+                            });
+                        }
+                    } else {
+                        $("#displayReturnFlights").html("");
                     }
                 }
             });
@@ -195,17 +210,18 @@
         <div class="col-sm-6">
             <fieldset>
                 <legend>Fly fra:</legend>
-                Destinasjon:
+                <label>Destinasjon:</label>
                 <br />
                 <select id="fromAirport">
                     <option selected hidden value="">Choose airport</option>
                 </select>
                 &nbsp;<span class="label label-warning" id="fromAirportWarning" style="display:none">Må fylles ut</span>
                 <br />
-                Avreise:<br />
+                <label>Avreise:</label><br />
                 <input type="date" id="departure" />
                 &nbsp;<span class="label label-warning" id="departureWarning" style="display:none">Må fylles ut</span>
                 <br />
+                <input type="checkbox" id="returnFlightChosen" /> I want a return flight<br/>
             </fieldset>
             <br /><button id="search">Søk</button><br/>
         </div>
@@ -213,14 +229,14 @@
         <div class="col-sm-6">
             <fieldset>
                 <legend>Fly til:</legend>
-                Destinasjon:<br />
+                <label>Destinasjon:</label><br />
                 <select id="toAirport">
                     <option selected hidden value="">Choose airport</option>
                 </select>
                 &nbsp;<span class="label label-warning" id="toAirportWarning" style="display:none">Må fylles ut</span>
                 <br />
-                Hjemreise:<br />
-                <input type="date" id="return" />
+                <label id="returnLabel" style="display:none">Hjemreise:</label><br />
+                <input type="date" id="return" style="display:none"/>
                 &nbsp;<span class="label label-warning" id="returnWarning" style="display:none">Må fylles ut</span>
                 <br />
             </fieldset>
