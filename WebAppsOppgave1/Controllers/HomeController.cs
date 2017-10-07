@@ -27,42 +27,46 @@ namespace WebAppsOppgave1.Controllers
             return jsonSerializer.Serialize(airports); 
         }
 
-        public string getFlights(int from, int to, DateTime date)
+        public string getFlights(int from, int to)
         {
-
-            bool hasValidatedCorrectly = false;
-            /*   if (bookingLogic.DestinationsAreSet(booking) && 
-                   bookingLogic.DestinationsAreDifferent(booking) && 
-                   bookingLogic.DepartureDateIsBeforeReturnDate(booking) && 
-                   !bookingLogic.DepartureDateIsBeforeToday(booking))
-               {*/
-            hasValidatedCorrectly = true;
-            //}
-            if (hasValidatedCorrectly)
+            var Db = new BookingLogic();
+            List<Flight> matchingFlights = Db.getMatchingflights(from, to);
+            var jsMatchingFlights = new List<jsFlight>();
+            foreach (Flight f in matchingFlights)
             {
-                var Db = new BookingLogic();
-                List<Flight> matchingFlights = Db.getMatchingflights(from, to, date);
-                var jsMatchingFlights = new List<jsFlight>();
-                foreach (Flight f in matchingFlights)
+                var aFlight = new jsFlight()
                 {
-                    var aFlight = new jsFlight()
-                    {
-                        id = f.Id,
-                        fromAirport = f.FromAirport.Name,
-                        toAirport = f.ToAirport.Name,
-                        departure = f.Departure.ToString("dd.MM.yyyy HH:mm"), 
-                        arrival = f.Arrival.ToString("dd.MM.yyy HH:mm")
-                    };
-                    jsMatchingFlights.Add(aFlight);
-                }
-                var jsonSerializer = new JavaScriptSerializer();
-                return jsonSerializer.Serialize(jsMatchingFlights);
+                    id = f.Id,
+                    fromAirport = f.FromAirport.Name,
+                    toAirport = f.ToAirport.Name,
+                    departure = f.Departure.ToString("dd.MM.yyyy HH:mm"),
+                    arrival = f.Arrival.ToString("dd.MM.yyy HH:mm")
+                };
+                jsMatchingFlights.Add(aFlight);
             }
-            else
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(jsMatchingFlights);
+        }
+
+        public string getFlightsOnDate(int from, int to, DateTime date)
+        {
+            var Db = new BookingLogic();
+            List<Flight> matchingFlights = Db.getMatchingflightsOnDate(from, to, date);
+            var jsMatchingFlights = new List<jsFlight>();
+            foreach (Flight f in matchingFlights)
             {
-                return null;
+                var aFlight = new jsFlight()
+                {
+                    id = f.Id,
+                    fromAirport = f.FromAirport.Name,
+                    toAirport = f.ToAirport.Name,
+                    departure = f.Departure.ToString("dd.MM.yyyy HH:mm"), 
+                    arrival = f.Arrival.ToString("dd.MM.yyy HH:mm")
+                };
+                jsMatchingFlights.Add(aFlight);
             }
-            
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(jsMatchingFlights);
         }
 
         public string Register(JsBooking jsBooking)
