@@ -135,6 +135,7 @@
                     contentType: "application/json:charset=utf-8",
                     data: JSON.stringify({ flight: flight, amount: amount }),
                     dataType: 'json',
+                    async: false,
                     success: function (string) {
                         // Do nothing, have to check if return flight is ordered first.
                     },
@@ -154,15 +155,17 @@
                         contentType: "application/json:charset=utf-8",
                         data: JSON.stringify({ flight: flight, amount: amount }),
                         dataType: 'json',
+                        async: false,
                         success: function (string) {
-                            //window.location.href = "/Home/Bookings/";
+                            window.location.href = "/Home/Bookings/";
                         },
                         error: function (x, y, z) {
                             alert(x + '\n' + y + '\n' + z);
                         }
                     });
+                } else {
+                    window.location.href = "/Home/Bookings/";
                 }
-
             });
         });
 
