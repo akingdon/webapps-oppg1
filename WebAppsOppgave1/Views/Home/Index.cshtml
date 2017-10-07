@@ -28,8 +28,8 @@
 
             // Add event for search button click
             $("#search").click(function () {
-                validateFields();
-                if (validateFields()) {
+                var validated = validateFields();
+                if (validated) {
                     $("#book").show();
                     var from = $("#fromAirport").val();
                     var to = $("#toAirport").val();
@@ -193,7 +193,7 @@
                 Destinasjon:
                 <br />
                 <select id="fromAirport">
-                    <option selected disabled hidden value="">Choose airport</option>
+                    <option selected hidden value="">Choose airport</option>
                 </select>
                 &nbsp;<span class="label label-warning" id="fromAirportWarning" style="display:none">Må fylles ut</span>
                 <br />
@@ -210,7 +210,7 @@
                 <legend>Fly til:</legend>
                 Destinasjon:<br />
                 <select id="toAirport">
-                    <option selected disabled hidden value="">Choose airport</option>
+                    <option selected hidden value="">Choose airport</option>
                 </select>
                 &nbsp;<span class="label label-warning" id="toAirportWarning" style="display:none">Må fylles ut</span>
                 <br />
@@ -227,73 +227,78 @@
 
     <script>
         function validateFields() {
-
-            var validatefromAirport = $("#fromAirport").val();
+ 
+            var validateFromAirport = $("#fromAirport").val();
             var validateDeparture = $("#departure").val();
             var validateToAirport = $("#toAirport").val();
             var validateReturn = $("#return").val();
 
-            $("#displayFlights").html(validatefromAirport);
+            var validationOK = true;
+            hideWarnings();
 
-            if (validateDeparture > validateReturn) {
-                hideWarnings();
-                $("#returnWarning").innerHTML("Dato må være etter avreise");
-                $("#returnWarning").show();
-                return false;
+            if (validateDeparture > validateReturn && validateReturn != "") {
+                
+                document.getElementById("returnWarning").innerHTML = "Dato må være etter avreise";
+                document.getElementById("returnWarning").style.display = "inline";
+                validationOK = false;
             } else {
-                $("#returnWarning").hide();
+                document.getElementById("returnWarning").style.display = "none";
             }
 
             if (validateFromAirport == validateToAirport && validateFromAirport != "") {
-                hideWarnings();
-                $("#toAirportWarning").innerHTML("Du kan ikke reise til og fra samme sted");
-                $("#toAirportWarning").show();
-                return false;
+           
+                document.getElementById("toAirportWarning").innerHTML = "Du kan ikke reise til og fra samme sted";
+                document.getElementById("toAirportWarning").style.display = "inline";
+                validationOK = false;
             } else {
-                $("#toAirportWarning").hide();
+                document.getElementById("toAirportWarning").style.display = "none";
             }
 
             if (validateFromAirport == "") {
-                hideWarnings();
-                $("#fromAirportWarning").innerHTML("Må fylles ut");
-                $("#fromAirportWarning").show();
-                return false;
+             
+                document.getElementById("fromAirportWarning").innerHTML = "Må fylles ut";
+                document.getElementById("fromAirportWarning").style.display = "inline";
+                validationOK = false;
             } else {
-                $("#fromAirportWarning").hide();
-            }
-
-            if (validateDeparture == "") {
-                hideWarnings();
-                $("#departureWarning").show();
-                return false;
-            } else {
-                $("#departureWarning").hide();
+                document.getElementById("fromAirportWarning").style.display = "none";
             }
 
             if (validateToAirport == "") {
-                hideWarnings();
-                $("#toAirportWarning").innerHTML("Må fylles ut");
-                $("#toAirportWarning").show();
-                return false;
+             
+                document.getElementById("toAirportWarning").innerHTML = "Må fylles ut";
+                document.getElementById("toAirportWarning").style.display = "inline";
+                validationOK = false;
             } else {
-                $("#toAirportWarning").hide();
+                document.getElementById("toAirportWarning").style.display = "none";
             }
 
-            if (validateReturn == "") {
-                hideWarnings();
-                $("#returnWarning").show();
-                return false;
+            if (validateDeparture == "") {
+          
+                document.getElementById("departureWarning").style.display = "inline";
+                validationOK = false;
             } else {
-                $("#returnWarning").hide();
+                document.getElementById("departureWarning").style.display = "none";
             }
+
+            return validationOK;
+            
+          /*  if (validateReturn == "") {
+                hideWarnings();
+
+                document.getElementById("returnWarning").style.display = "inline";
+            } else {
+                document.getElementById("returnWarning").style.display = "none";
+            validationOK = true;
+            }*/
+
         }
 
         function hideWarnings() {
 
-            $("#fromAirportWarning").hide();
-            $("#departureWarning").hide();
-            $("#toAirportWarning").hide();
-            $("#returnWarning").hide();
+            document.getElementById("fromAirportWarning").style.display = "none";
+            document.getElementById("toAirportWarning").style.display = "none";
+            document.getElementById("departureWarning").style.display = "none";
+            document.getElementById("returnWarning").style.display = "none";
         }
     </script>
 </body>
