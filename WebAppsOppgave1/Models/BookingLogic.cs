@@ -28,10 +28,10 @@ namespace WebAppsOppgave1.Models
                     a.ToAirport.Id == to && DbFunctions.TruncateTime(a.Departure) == date.Date).ToList();
             return matchingFlights;
         }
-        /*
-        public Boolean DestinationsAreSet(Booking booking)
+    /*    
+        public Boolean DestinationsAreSet(int from, int to)
         {
-            return !string.IsNullOrWhiteSpace(booking.FromDestination) && !string.IsNullOrWhiteSpace(booking.ToDestination);
+            if (from!=null && )
         }
 
         public Boolean DestinationsAreDifferent(Booking booking)
@@ -47,6 +47,6 @@ namespace WebAppsOppgave1.Models
         public Boolean DepartureDateIsBeforeToday(Booking booking)
         {
             return booking.FromDate < DateTime.Today;
-        }
-    */}
+        }*/
+    }
 }

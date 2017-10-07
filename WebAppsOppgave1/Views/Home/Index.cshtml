@@ -28,8 +28,7 @@
 
             // Add event for search button click
             $("#search").click(function () {
-                var validated = validateFields();
-                if (validated) {
+                if (validateFields()) {
                     $("#book").show();
                     var from = $("#fromAirport").val();
                     var to = $("#toAirport").val();
