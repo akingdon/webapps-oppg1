@@ -26,50 +26,69 @@
                 }
             });
 
+            // Add event for returnFlightChosen checkbox to show/hide return input field
+            $("#returnFlightChosen").change(function () {
+                if ($(this).is(":checked")) {
+                    $("#returnLabel").show();
+                    $("#return").show();
+                } else {
+                    $("#returnLabel").hide();
+                    $("#return").hide();
+                }
+            });
+
             // Add event for search button click
             $("#search").click(function () {
-                $("#book").show();
-                var from = $("#fromAirport").val();
-                var to = $("#toAirport").val();
-                var date = $("#departure").val();
-                $.ajax({
-                    url: '/Home/getFlights',
-                    type: 'POST',
-                    contentType: "application/json;charset=utf-8",
-                    data: JSON.stringify({ from: from, to: to, date: date }),
-                    dataType: 'json',
-                    success: function (jsFlights) {
-                        DisplayMatchingFlights(jsFlights);
-                    },
-                    error: function (x, y, z) {
-                        alert(x + '\n' + y + '\n' + z);
-                    }
-                });
-
-                var returnDate = $("#return").val();
-                if (returnDate != "") {
-                    var from = $("#toAirport").val();
-                    var to = $("#fromAirport").val();
-
+                if (validateFields()) {
+                    $("#book").show();
+                    var from = $("#fromAirport").val();
+                    var to = $("#toAirport").val();
+                    var date = $("#departure").val();
                     $.ajax({
                         url: '/Home/getFlights',
                         type: 'POST',
                         contentType: "application/json:charset=utf-8",
-                        data: JSON.stringify({ from: from, to: to, date: returnDate }),
+                        data: JSON.stringify({ from: from, to: to, date: date }),
                         dataType: 'json',
                         success: function (jsFlights) {
-                            DisplayMatchingReturnFlights(jsFlights);
+                            DisplayMatchingFlights(jsFlights);
                         },
                         error: function (x, y, z) {
                             alert(x + '\n' + y + '\n' + z);
                         }
                     });
+
+                    if ($("#returnFlightChosen").is(":checked")) {
+                        var returnDate = $("#return").val();
+                        if (returnDate != "") {
+                            var from = $("#toAirport").val();
+                            var to = $("#fromAirport").val();
+
+                            $.ajax({
+                                url: '/Home/getFlights',
+                                type: 'POST',
+                                contentType: "application/json:charset=utf-8",
+                                data: JSON.stringify({ from: from, to: to, date: returnDate }),
+                                dataType: 'json',
+                                success: function (jsFlights) {
+                                    if (jsFlights != null) {
+                                        DisplayMatchingReturnFlights(jsFlights);
+                                    }
+                                },
+                                error: function (x, y, z) {
+                                    alert(x + '\n' + y + '\n' + z);
+                                }
+                            });
+                        }
+                    } else {
+                        $("#displayReturnFlights").html("");
+                    }
                 }
             });
 
             $("#book").click(function () {
                 var flight = $("input[name=idToDestination]:checked").val();
-                var amount = $("input[name=amountToDestination" + flight + "]").val();
+                var amount = $("input[name=amountToDestination]").val();
 
                 $.ajax({
                     url: '/Home/Register',
@@ -88,7 +107,7 @@
                 var returnDate = $("#return").val();
                 if (returnDate != "") {
                     var flight = $("input[name=idFromDestination]:checked").val();
-                    var amount = $("input[name=amountFromDestination" + flight + "]").val();
+                    var amount = $("input[name=amountFromDestination]").val();
 
                     $.ajax({
                         url: '/Home/Register',
@@ -124,26 +143,28 @@
                 "<table class='table'>" +
                     "<thead>" +
                         "<tr>" +
+                            "<th>Velg</th>" +
                             "<th>Fra</th>" +
                             "<th>Til</th>" +
                             "<th>Avreise</th>" +
                             "<th>Ankomst</th>" +
-                            "<th>Velg</th>" +
-                            "<th>Antall</th>" +
                         "</tr>" +
                     "</thead >";
             for (var f in jsFlights) {
                 result +=
                     "<tr>" +
+                        "<td><input type=\"radio\" name =\"idToDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
                         "<td>" + jsFlights[f].fromAirport + "</td>" +
                         "<td>" + jsFlights[f].toAirport + "</td>" +
                         "<td>" + jsFlights[f].departure + "</td>" +
-                        "<td>" + jsFlights[f].arrival + "</td>" +
-                        "<td><input type=\"radio\" name =\"idToDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
-                        "<td><input type=\"number\" name=\"amountToDestination" + jsFlights[f].id +"\" max=\"10\" min=\"1\" />" +
-                    "</tr>";
+                        "<td>" + jsFlights[f].arrival + "</td>"    
+                "</tr>"
             }
-            result += "<tr><td></td></tr></table>";
+            result += "<tr>" +
+                        "<td></td><td></td><td></td>" +
+                        "<td align=\"right\"><strong>Velg antall:</strong></td>" +
+                        "<td><input type=\"number\" name=\"amountToDestination\" max=\"10\" min=\"1\" />" +
+                    "</tr></table>";
             $("#displayFlights").html(result);
         }
 
@@ -152,26 +173,30 @@
                 "<table class='table'>" +
                 "<thead>" +
                 "<tr>" +
+                "<th>Velg</th>" +
                 "<th>Fra</th>" +
                 "<th>Til</th>" +
                 "<th>Avreise</th>" +
                 "<th>Ankomst</th>" +
-                "<th>Velg</th>" +
-                "<th>Antall</th>" +
                 "</tr>" +
                 "</thead >";
             for (var f in jsFlights) {
                 result +=
                     "<tr>" +
+                    "<td><input type=\"radio\" name =\"idFromDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
                     "<td>" + jsFlights[f].fromAirport + "</td>" +
                     "<td>" + jsFlights[f].toAirport + "</td>" +
                     "<td>" + jsFlights[f].departure + "</td>" +
                     "<td>" + jsFlights[f].arrival + "</td>" +
-                    "<td><input type=\"radio\" name =\"idFromDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
-                    "<td><input type=\"number\" name=\"amountFromDestination" + jsFlights[f].id + "\" max=\"10\" min=\"1\" />" +
                     "</tr>";
+                    
+                    
             }
-            result += "<tr><td></td></tr></table>";
+            result += "<tr>" +
+                "<td></td><td></td><td></td>" +
+                "<td align=\"right\"><strong>Velg antall:</strong></td>" +
+                "<td> <input type=\"number\" name=\"amountFromDestination\" max=\"10\" min=\"1\" /></td>" +
+                "</tr></table> ";
             $("#displayReturnFlights").html(result);
         }
 
@@ -181,21 +206,22 @@
     <h2>Bestill flytur</h2>
     
     <div class="row">
-        <!-- husk å kjøre (og oppdatere) /home/register og validateFields()-->
+        <!-- husk å kjøre og validateFields()-->
         <div class="col-sm-6">
             <fieldset>
                 <legend>Fly fra:</legend>
-                Destinasjon:
+                <label>Destinasjon:</label>
                 <br />
                 <select id="fromAirport">
-                    <option value=""></option>
+                    <option selected hidden value="">Velg flyplass</option>
                 </select>
-                &nbsp;<span class="label label-warning" id="fromDestinationWarning" style="display:none">Må fylles ut</span>
+                &nbsp;<span class="label label-warning" id="fromAirportWarning" style="display:none">Må fylles ut</span>
                 <br />
-                Avreise:<br />
+                <label>Avreise:</label><br />
                 <input type="date" id="departure" />
-                &nbsp;<span class="label label-warning" id="fromDateWarning" style="display:none">Må fylles ut</span>
+                &nbsp;<span class="label label-warning" id="departureWarning" style="display:none">Må fylles ut</span>
                 <br />
+                <input type="checkbox" id="returnFlightChosen" />Tur/retur<br/>
             </fieldset>
             <br /><button id="search">Søk</button><br/>
         </div>
@@ -203,15 +229,15 @@
         <div class="col-sm-6">
             <fieldset>
                 <legend>Fly til:</legend>
-                Destinasjon:<br />
+                <label>Destinasjon:</label><br />
                 <select id="toAirport">
-                    <option value=""></option>
+                    <option selected hidden value="">Velg flyplass</option>
                 </select>
-                &nbsp;<span class="label label-warning" id="toDestinationWarning" style="display:none">Må fylles ut</span>
+                &nbsp;<span class="label label-warning" id="toAirportWarning" style="display:none">Må fylles ut</span>
                 <br />
-                Hjemreise:<br />
-                <input type="date" id="return" />
-                &nbsp;<span class="label label-warning" id="toDateWarning" style="display:none">Må fylles ut</span>
+                <label id="returnLabel" style="display:none">Hjemreise:</label><br />
+                <input type="date" id="return" style="display:none"/>
+                &nbsp;<span class="label label-warning" id="returnWarning" style="display:none">Må fylles ut</span>
                 <br />
             </fieldset>
         </div>
@@ -222,73 +248,68 @@
 
     <script>
         function validateFields() {
-            var validateFromDestination = document.forms["registrationForm"]["fromDestination"].value;
-            var validateFromDate = document.forms["registrationForm"]["fromDate"].value;
-            var validateToDestination = document.forms["registrationForm"]["toDestination"].value;
-            var validateToDate = document.forms["registrationForm"]["toDate"].value;
+ 
+            var validateFromAirport = $("#fromAirport").val();
+            var validateDeparture = $("#departure").val();
+            var validateToAirport = $("#toAirport").val();
+            var validateReturn = $("#return").val();
 
-            if (validateFromDate > validateToDate) {
-                hideWarnings();
+            var validationOK = true;
+            hideWarnings();
 
-                document.getElementById("toDateWarning").innerHTML = "Dato må være etter avreise";
-                document.getElementById("toDateWarning").style.display = "inline";
-                return false;
+            if (validateDeparture > validateReturn && validateReturn != "") {
+                
+                document.getElementById("returnWarning").innerHTML = "Dato må være etter avreise";
+                document.getElementById("returnWarning").style.display = "inline";
+                validationOK = false;
             } else {
-                document.getElementById("toDateWarning").style.display = "none";
+                document.getElementById("returnWarning").style.display = "none";
             }
 
-            if (validateFromDestination == validateToDestination && validateFromDestination != "") {
-                hideWarnings();
-
-                document.getElementById("toDestinationWarning").innerHTML = "Du kan ikke reise til og fra samme sted";
-                document.getElementById("toDestinationWarning").style.display = "inline";
-                return false;
+            if (validateFromAirport == validateToAirport && validateFromAirport != "") {
+           
+                document.getElementById("toAirportWarning").innerHTML = "Du kan ikke reise til og fra samme sted";
+                document.getElementById("toAirportWarning").style.display = "inline";
+                validationOK = false;
             } else {
-                document.getElementById("toDestinationWarning").style.display = "none";
+                document.getElementById("toAirportWarning").style.display = "none";
             }
 
-            if (validateFromDestination == "") {
-                hideWarnings();
-                document.getElementById("fromDestinationWarning").innerHTML = "Må fylles ut";
-                document.getElementById("fromDestinationWarning").style.display = "inline";
-                return false;
+            if (validateFromAirport == "") {
+             
+                document.getElementById("fromAirportWarning").innerHTML = "Må fylles ut";
+                document.getElementById("fromAirportWarning").style.display = "inline";
+                validationOK = false;
             } else {
-                document.getElementById("fromDestinationWarning").style.display = "none";
+                document.getElementById("fromAirportWarning").style.display = "none";
             }
 
-            if (validateFromDate == "") {
-                hideWarnings();
-
-                document.getElementById("fromDateWarning").style.display = "inline";
-                return false;
+            if (validateToAirport == "") {
+             
+                document.getElementById("toAirportWarning").innerHTML = "Må fylles ut";
+                document.getElementById("toAirportWarning").style.display = "inline";
+                validationOK = false;
             } else {
-                document.getElementById("fromDateWarning").style.display = "none";
+                document.getElementById("toAirportWarning").style.display = "none";
             }
 
-            if (validateToDestination == "") {
-                hideWarnings();
-                document.getElementById("toDestinationWarning").innerHTML = "Må fylles ut";
-                document.getElementById("toDestinationWarning").style.display = "inline";
-                return false;
+            if (validateDeparture == "") {
+          
+                document.getElementById("departureWarning").style.display = "inline";
+                validationOK = false;
             } else {
-                document.getElementById("toDestinationWarning").style.display = "none";
+                document.getElementById("departureWarning").style.display = "none";
             }
 
-            if (validateToDate == "") {
-                hideWarnings();
-
-                document.getElementById("toDateWarning").style.display = "inline";
-                return false;
-            } else {
-                document.getElementById("toDateWarning").style.display = "none";
-            }
+            return validationOK;
         }
 
         function hideWarnings() {
-            document.getElementById("fromDestinationWarning").style.display = "none";
-            document.getElementById("fromDateWarning").style.display = "none";
-            document.getElementById("toDestinationWarning").style.display = "none";
-            document.getElementById("toDateWarning").style.display = "none";
+
+            document.getElementById("fromAirportWarning").style.display = "none";
+            document.getElementById("toAirportWarning").style.display = "none";
+            document.getElementById("departureWarning").style.display = "none";
+            document.getElementById("returnWarning").style.display = "none";
         }
     </script>
 </body>
