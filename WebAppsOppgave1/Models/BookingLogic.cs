@@ -21,7 +21,15 @@ namespace WebAppsOppgave1.Models
             return allAirports;
         }
 
-        public List<Flight> getMatchingflights(int from, int to, DateTime date)
+        public List<Flight> getMatchingflights(int from, int to)
+        {
+            List<Flight> matchingFlights =
+                Db.Flight.Where(a => a.FromAirport.Id == from &&
+                    a.ToAirport.Id == to).ToList();
+            return matchingFlights;
+        }
+
+        public List<Flight> getMatchingflightsOnDate(int from, int to, DateTime date)
         {
             List<Flight> matchingFlights =
                 Db.Flight.Where(a => a.FromAirport.Id == from &&

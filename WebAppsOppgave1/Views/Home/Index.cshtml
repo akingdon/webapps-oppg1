@@ -40,32 +40,73 @@
             // Add event for search button click
             $("#search").click(function () {
                 if (validateFields()) {
-                    $("#book").show();
-                    var from = $("#fromAirport").val();
-                    var to = $("#toAirport").val();
-                    var date = $("#departure").val();
-                    $.ajax({
-                        url: '/Home/getFlights',
-                        type: 'POST',
-                        contentType: "application/json:charset=utf-8",
-                        data: JSON.stringify({ from: from, to: to, date: date }),
-                        dataType: 'json',
-                        success: function (jsFlights) {
-                            DisplayMatchingFlights(jsFlights);
-                        },
-                        error: function (x, y, z) {
-                            alert(x + '\n' + y + '\n' + z);
-                        }
-                    });
-
+                    // Call search metod without date
+                    if ($("#departure").val() == "") {
+                        var from = $("#fromAirport").val();
+                        var to = $("#toAirport").val();
+                        
+                        $.ajax({
+                            url: '/Home/getFlights',
+                            type: 'POST',
+                            contentType: "application/json:charset=utf-8",
+                            data: JSON.stringify({ from: from, to: to }),
+                            dataType: 'json',
+                            success: function (jsFlights) {
+                                DisplayMatchingFlights(jsFlights);
+                            },
+                            error: function (x, y, z) {
+                                alert(x + '\n' + y + '\n' + z);
+                            }
+                        });
+                    }
+                    // Call search method with date
+                    else {
+                        var from = $("#fromAirport").val();
+                        var to = $("#toAirport").val();
+                        var date = $("#departure").val();
+                        $.ajax({
+                            url: '/Home/getFlightsOnDate',
+                            type: 'POST',
+                            contentType: "application/json:charset=utf-8",
+                            data: JSON.stringify({ from: from, to: to, date: date }),
+                            dataType: 'json',
+                            success: function (jsFlights) {
+                                DisplayMatchingFlights(jsFlights);
+                            },
+                            error: function (x, y, z) {
+                                alert(x + '\n' + y + '\n' + z);
+                            }
+                        });
+                    }
+                    // Return flights
                     if ($("#returnFlightChosen").is(":checked")) {
-                        var returnDate = $("#return").val();
-                        if (returnDate != "") {
+                        // Call search methoc without date
+                        if ($("#return").val() == "") {
                             var from = $("#toAirport").val();
                             var to = $("#fromAirport").val();
-
                             $.ajax({
                                 url: '/Home/getFlights',
+                                type: 'POST',
+                                contentType: "application/json:charset=utf-8",
+                                data: JSON.stringify({ from: from, to: to }),
+                                dataType: 'json',
+                                success: function (jsFlights) {
+                                    if (jsFlights != null) {
+                                        DisplayMatchingReturnFlights(jsFlights);
+                                    }
+                                },
+                                error: function (x, y, z) {
+                                    alert(x + '\n' + y + '\n' + z);
+                                }
+                            });
+                        }
+                        // Call search method with date
+                        else {
+                            var from = $("#toAirport").val();
+                            var to = $("#fromAirport").val();
+                            var returnDate = $("#return").val();
+                            $.ajax({
+                                url: '/Home/getFlightsOnDate',
                                 type: 'POST',
                                 contentType: "application/json:charset=utf-8",
                                 data: JSON.stringify({ from: from, to: to, date: returnDate }),
@@ -83,6 +124,7 @@
                     } else {
                         $("#displayReturnFlights").html("");
                     }
+                    $("#book").show();
                 }
             });
 
@@ -257,7 +299,7 @@
             var validationOK = true;
             hideWarnings();
 
-            if (validateDeparture > validateReturn && validateReturn != "") {
+            if ((validateDeparture != "" && validateReturn != "") && (validateDeparture > validateReturn)) {
                 
                 document.getElementById("returnWarning").innerHTML = "Dato må være etter avreise";
                 document.getElementById("returnWarning").style.display = "inline";
@@ -293,16 +335,10 @@
                 document.getElementById("toAirportWarning").style.display = "none";
             }
 
-            if (validateDeparture == "") {
-          
-                document.getElementById("departureWarning").style.display = "inline";
-                validationOK = false;
-            } else {
-                document.getElementById("departureWarning").style.display = "none";
-            }
-
             return validationOK;
         }
+
+        
 
         function hideWarnings() {
 
