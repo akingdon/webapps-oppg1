@@ -29,23 +29,40 @@ namespace WebAppsOppgave1.Controllers
 
         public string getFlights(int from, int to, DateTime date)
         {
-            var Db = new BookingLogic();
-            List<Flight> matchingFlights = Db.getMatchingflights(from, to, date);
-            var jsMatchingFlights = new List<jsFlight>();
-            foreach (Flight f in matchingFlights)
+
+            bool hasValidatedCorrectly = false;
+            /*   if (bookingLogic.DestinationsAreSet(booking) && 
+                   bookingLogic.DestinationsAreDifferent(booking) && 
+                   bookingLogic.DepartureDateIsBeforeReturnDate(booking) && 
+                   !bookingLogic.DepartureDateIsBeforeToday(booking))
+               {*/
+            hasValidatedCorrectly = true;
+            //}
+            if (hasValidatedCorrectly)
             {
-                var aFlight = new jsFlight()
+                var Db = new BookingLogic();
+                List<Flight> matchingFlights = Db.getMatchingflights(from, to, date);
+                var jsMatchingFlights = new List<jsFlight>();
+                foreach (Flight f in matchingFlights)
                 {
-                    id = f.Id,
-                    fromAirport = f.FromAirport.Name,
-                    toAirport = f.ToAirport.Name,
-                    departure = f.Departure.ToString("dd.MM.yyyy HH:mm"), 
-                    arrival = f.Arrival.ToString("dd.MM.yyy HH:mm")
-                };
-                jsMatchingFlights.Add(aFlight);
+                    var aFlight = new jsFlight()
+                    {
+                        id = f.Id,
+                        fromAirport = f.FromAirport.Name,
+                        toAirport = f.ToAirport.Name,
+                        departure = f.Departure.ToString("dd.MM.yyyy HH:mm"), 
+                        arrival = f.Arrival.ToString("dd.MM.yyy HH:mm")
+                    };
+                    jsMatchingFlights.Add(aFlight);
+                }
+                var jsonSerializer = new JavaScriptSerializer();
+                return jsonSerializer.Serialize(jsMatchingFlights);
             }
-            var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(jsMatchingFlights);
+            else
+            {
+                return null;
+            }
+            
         }
 
         public string Register(JsBooking jsBooking)

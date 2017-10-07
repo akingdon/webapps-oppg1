@@ -70,12 +70,6 @@ namespace WebAppsOppgave1.Models
             };
             flight5.Arrival = flight5.Departure.AddHours(1);
 
-            var booking1 = new Booking
-            {
-                CustomerId = 1,
-                Flight = flight1.Id,
-                Amount = 2
-            };
 
 
             var returnFlight1 = new Flight
@@ -103,7 +97,6 @@ namespace WebAppsOppgave1.Models
             db.Flight.Add(flight3);
             db.Flight.Add(flight4);
             db.Flight.Add(flight5);
-            db.Booking.Add(booking1);
 
             db.Flight.Add(returnFlight1);
             db.Flight.Add(returnFlight2);
