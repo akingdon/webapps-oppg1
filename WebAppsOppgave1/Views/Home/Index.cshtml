@@ -47,7 +47,7 @@
                     $.ajax({
                         url: '/Home/getFlights',
                         type: 'POST',
-                        contentType: "application/json;charset=utf-8",
+                        contentType: "application/json:charset=utf-8",
                         data: JSON.stringify({ from: from, to: to, date: date }),
                         dataType: 'json',
                         success: function (jsFlights) {
@@ -107,7 +107,7 @@
                 var returnDate = $("#return").val();
                 if (returnDate != "") {
                     var flight = $("input[name=idFromDestination]:checked").val();
-                    var amount = $("input[name=amountFromDestination" + flight + "]").val();
+                    var amount = $("input[name=amountFromDestination]").val();
 
                     $.ajax({
                         url: '/Home/Register',
@@ -213,7 +213,7 @@
                 <label>Destinasjon:</label>
                 <br />
                 <select id="fromAirport">
-                    <option selected hidden value="">Choose airport</option>
+                    <option selected hidden value="">Velg flyplass</option>
                 </select>
                 &nbsp;<span class="label label-warning" id="fromAirportWarning" style="display:none">Må fylles ut</span>
                 <br />
@@ -221,7 +221,7 @@
                 <input type="date" id="departure" />
                 &nbsp;<span class="label label-warning" id="departureWarning" style="display:none">Må fylles ut</span>
                 <br />
-                <input type="checkbox" id="returnFlightChosen" /> I want a return flight<br/>
+                <input type="checkbox" id="returnFlightChosen" />Tur/retur<br/>
             </fieldset>
             <br /><button id="search">Søk</button><br/>
         </div>
@@ -231,7 +231,7 @@
                 <legend>Fly til:</legend>
                 <label>Destinasjon:</label><br />
                 <select id="toAirport">
-                    <option selected hidden value="">Choose airport</option>
+                    <option selected hidden value="">Velg flyplass</option>
                 </select>
                 &nbsp;<span class="label label-warning" id="toAirportWarning" style="display:none">Må fylles ut</span>
                 <br />
@@ -302,16 +302,6 @@
             }
 
             return validationOK;
-            
-          /*  if (validateReturn == "") {
-                hideWarnings();
-
-                document.getElementById("returnWarning").style.display = "inline";
-            } else {
-                document.getElementById("returnWarning").style.display = "none";
-            validationOK = true;
-            }*/
-
         }
 
         function hideWarnings() {
