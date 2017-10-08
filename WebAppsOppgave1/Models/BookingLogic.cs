@@ -9,6 +9,7 @@ namespace WebAppsOppgave1.Models
 {
     public class BookingLogic
     {
+        
         DB Db = new DB();
 
         public List<jsAirport> getAllAirports()

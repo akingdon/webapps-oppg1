@@ -120,29 +120,11 @@
                 }
             });
 
+
             $("#book").click(function () {
-                var flight = $("input[name=idToDestination]:checked").val();
-                var amount = $("input[name=amountToDestination]").val();
-
-                $.ajax({
-                    url: '/Home/Register',
-                    type: 'POST',
-                    contentType: "application/json:charset=utf-8",
-                    data: JSON.stringify({ flight: flight, amount: amount }),
-                    dataType: 'json',
-                    async: false,
-                    success: function (string) {
-                        // Do nothing, have to check if return flight is ordered first.
-                    },
-                    error: function (x, y, z) {
-                        alert(x + '\n' + y + '\n' + z);
-                    }
-                });
-
-                var returnDate = $("#return").val();
-                if (returnDate != "" || $("#returnFlightChosen").is(":checked")) {
-                    var flight = $("input[name=idFromDestination]:checked").val();
-                    var amount = $("input[name=amountFromDestination]").val();
+                if ($("input[name=radioSelectorReturnFlight]").is(":checked") && validateArrivalBeforeReturn()) {
+                    var flight = $("input[name=radioSelectorReturnFlight]:checked").val();
+                    var amount = $("#returnTicketAmount").val();
 
                     $.ajax({
                         url: '/Home/Register',
@@ -152,17 +134,37 @@
                         dataType: 'json',
                         async: false,
                         success: function (string) {
-                            window.location.href = "/Home/Bookings/";
+                            // Do nothing, have to check if return flight is ordered first.
                         },
                         error: function (x, y, z) {
                             alert(x + '\n' + y + '\n' + z);
                         }
                     });
-                } else {
-                    window.location.href = "/Home/Bookings/";
                 }
+
+                var flight = $("input[name=radioSelectorFlight]:checked").val();
+                var amount = $("#ticketAmount").val();
+
+                $.ajax({
+                    url: '/Home/Register',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ flight: flight, amount: amount }),
+                    dataType: 'json',
+                    async: false,
+                    success: function (string) {
+                        window.location.href = "/Home/Bookings/";
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+
+                
             });
         });
+        
+        
 
         function PopulateAirportDropDowns(jsAirports) {
             var result = "";
@@ -189,18 +191,18 @@
             for (var f in jsFlights) {
                 result +=
                     "<tr>" +
-                    "<td><input type=\"radio\" name =\"idToDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
-                    "<td>" + jsFlights[f].fromAirport + "</td>" +
-                    "<td>" + jsFlights[f].toAirport + "</td>" +
-                    "<td>" + jsFlights[f].departure + "</td>" +
-                    "<td>" + jsFlights[f].arrival + "</td>" +
-                    "<td>" + jsFlights[f].price + "</td>" +
+                    "<td><input type=\"radio\" name =\"radioSelectorFlight\" value=\"" + jsFlights[f].id + "\"></td>" +
+                    "<td id=\"" + jsFlights[f].id + "fromAirport\">" + jsFlights[f].fromAirport + "</td>" +
+                    "<td id=\"" + jsFlights[f].id + "toAirport\">" + jsFlights[f].toAirport + "</td>" +
+                    "<td id=\"" + jsFlights[f].id + "departure\">" + jsFlights[f].departure + "</td>" +
+                    "<td id=\"" + jsFlights[f].id + "arrival\">" + jsFlights[f].arrival + "</td>" +
+                    "<td id=\"" + jsFlights[f].id + "price\">" + jsFlights[f].price + "</td>" +
                     "</tr>"
             }
             result += "<tr>" +
                         "<td></td><td></td><td></td>" +
                         "<td align=\"right\"><strong>Velg antall:</strong></td>" +
-                        "<td><input type=\"number\" name=\"amountToDestination\" max=\"10\" min=\"1\" />" +
+                        "<td><input type=\"number\" id=\"ticketAmount\" max=\"10\" min=\"1\" />" +
                     "</tr></table>";
             $("#displayFlights").html(result);
         }
@@ -221,12 +223,12 @@
             for (var f in jsFlights) {
                 result +=
                     "<tr>" +
-                    "<td><input type=\"radio\" name =\"idFromDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
-                    "<td>" + jsFlights[f].fromAirport + "</td>" +
-                    "<td>" + jsFlights[f].toAirport + "</td>" +
-                    "<td>" + jsFlights[f].departure + "</td>" +
-                    "<td>" + jsFlights[f].arrival + "</td>" +
-                    "<td>" + jsFlights[f].price + "</td>" +
+                    "<td><input type=\"radio\" name=\"radioSelectorReturnFlight\" value=\"" + jsFlights[f].id + "\"></td>" +
+                    "<td id=\"" + jsFlights[f].id + "fromAirport\">" + jsFlights[f].fromAirport + "</td>" +
+                    "<td id=\"" + jsFlights[f].id + "toAirport\">" + jsFlights[f].toAirport + "</td>" +
+                    "<td id=\"" + jsFlights[f].id + "departure\">" + jsFlights[f].departure + "</td>" +
+                    "<td id=\"" + jsFlights[f].id + "arrival\">" + jsFlights[f].arrival + "</td>" +
+                    "<td id=\"" + jsFlights[f].id + "price\">" + jsFlights[f].price + "</td>" +
                     "</tr>";
                     
                     
@@ -234,7 +236,7 @@
             result += "<tr>" +
                 "<td></td><td></td><td></td>" +
                 "<td align=\"right\"><strong>Velg antall:</strong></td>" +
-                "<td> <input type=\"number\" name=\"amountFromDestination\" max=\"10\" min=\"1\" /></td>" +
+                "<td> <input type=\"number\" id=\"returnTicketAmount\" max=\"10\" min=\"1\" /></td>" +
                 "</tr></table> ";
             $("#displayReturnFlights").html(result);
         }
@@ -281,6 +283,7 @@
     </div>
     <div id="displayFlights" class="col-sm-6"></div>
     <div id="displayReturnFlights" class="col-sm-6"></div>
+    <div><span class="label label-warning" id="returnWarning" style="display:none"></span></div>
     <br /><button id="book">Bestill</button>
 
     <script>
@@ -332,6 +335,26 @@
 
             return validationOK;
         }        
+
+        function validateArrivalBeforeReturn() {
+
+            var flightId = $("input[name=radioSelectorFlight]:checked").val();
+            var returnFlightId = $("input[name=radioSelectorReturnFlight]:checked").val();
+            var flightArrival = $("#" + flightId + "arrival").val();
+            var returnDeparture = $("#" + returnFlightId + "departure").val();
+
+            if (returnDeparture <= flightArrival) {
+
+                document.getElementById("returnWarning").innerHTML = "Retur må være etter ankomst";
+                document.getElementById("returnWarning").style.display = "inline";
+                $("input[name=radioSelectorReturnFlight").prop("checked", false);
+                return false;
+
+            } else {
+                document.getElementById("returnWarning").style.display = "none";
+                return true;
+            }
+        }
 
         function hideWarnings() {
 

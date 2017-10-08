@@ -75,23 +75,32 @@ namespace WebAppsOppgave1.Models
             };
             flight5.Arrival = flight5.Departure.AddHours(1);
 
-            var returnFlight1 = new Flight
+            var flight6 = new Flight
             {
                 FromAirport = airport2,
                 ToAirport = airport1,
                 Departure = new DateTime(2017, 10, 20, 12, 00, 00),
                 Price = 600
             };
-            returnFlight1.Arrival = returnFlight1.Departure.AddHours(1);
+            flight6.Arrival = flight6.Departure.AddHours(1);
 
-            var returnFlight2 = new Flight
+            var flight7 = new Flight
             {
                 FromAirport = airport2,
                 ToAirport = airport1,
                 Departure = new DateTime(2017, 10, 20, 14, 30, 00),
                 Price = 800
             };
-            returnFlight2.Arrival = returnFlight2.Departure.AddHours(1);
+            flight7.Arrival = flight7.Departure.AddHours(1);
+
+            var flight8 = new Flight
+            {
+                FromAirport = airport2,
+                ToAirport = airport1,
+                Departure = new DateTime(2017, 10, 09, 14, 30, 00),
+                Price = 800
+            };
+            flight8.Arrival = flight8.Departure.AddHours(1);
 
             db.Airport.Add(airport1);
             db.Airport.Add(airport2);
@@ -102,9 +111,9 @@ namespace WebAppsOppgave1.Models
             db.Flight.Add(flight3);
             db.Flight.Add(flight4);
             db.Flight.Add(flight5);
-
-            db.Flight.Add(returnFlight1);
-            db.Flight.Add(returnFlight2);
+            db.Flight.Add(flight6);
+            db.Flight.Add(flight7);
+            db.Flight.Add(flight8);
 
             base.Seed(db);
         }
