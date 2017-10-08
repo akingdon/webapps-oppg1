@@ -97,15 +97,6 @@ namespace WebAppsOppgave1.Controllers
             return jsonSerializer.Serialize("ok");            
         }
 
-        public ActionResult Orders()
-        {
-            using (var Db = new DB())
-            {
-                List<Flight> Flights = Db.Flight.Include(c => c.FromAirport).Include(c => c.ToAirport).ToList();
-                return View(Flights);
-            }
-        }
-
         public ActionResult Bookings()
         {
             using (var Db = new DB())
