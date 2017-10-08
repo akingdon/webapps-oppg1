@@ -130,7 +130,7 @@
                     contentType: "application/json:charset=utf-8",
                     data: JSON.stringify({ flight: flight, amount: amount }),
                     dataType: 'json',
-                    async: false, // This is done to avoid errors with the redirect happening before the db is updated.
+                    async: false,
                     success: function (string) {
                         // Do nothing, have to check if return flight is ordered first.
                     },
@@ -150,7 +150,7 @@
                         contentType: "application/json:charset=utf-8",
                         data: JSON.stringify({ flight: flight, amount: amount }),
                         dataType: 'json',
-                        async: false, // This is done to avoid errors with the redirect happening before the db is updated.
+                        async: false,
                         success: function (string) {
                             window.location.href = "/Home/Bookings/";
                         },
