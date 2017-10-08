@@ -121,28 +121,11 @@
             });
 
             $("#book").click(function () {
-                var flight = $("input[name=idToDestination]:checked").val();
-                var amount = $("input[name=amountToDestination]").val();
 
-                $.ajax({
-                    url: '/Home/Register',
-                    type: 'POST',
-                    contentType: "application/json:charset=utf-8",
-                    data: JSON.stringify({ flight: flight, amount: amount }),
-                    dataType: 'json',
-                    async: false,
-                    success: function (string) {
-                        // Do nothing, have to check if return flight is ordered first.
-                    },
-                    error: function (x, y, z) {
-                        alert(x + '\n' + y + '\n' + z);
-                    }
-                });
+                if (confirm("Bekreft bestilling?") == true) {
 
-                var returnDate = $("#return").val();
-                if (returnDate != "" || $("#returnFlightChosen").is(":checked")) {
-                    var flight = $("input[name=idFromDestination]:checked").val();
-                    var amount = $("input[name=amountFromDestination]").val();
+                    var flight = $("input[name=idToDestination]:checked").val();
+                    var amount = $("input[name=amountToDestination]").val();
 
                     $.ajax({
                         url: '/Home/Register',
@@ -152,14 +135,35 @@
                         dataType: 'json',
                         async: false,
                         success: function (string) {
-                            window.location.href = "/Home/Bookings/";
+                            // Do nothing, have to check if return flight is ordered first.
                         },
                         error: function (x, y, z) {
                             alert(x + '\n' + y + '\n' + z);
                         }
                     });
-                } else {
-                    window.location.href = "/Home/Bookings/";
+
+                    var returnDate = $("#return").val();
+                    if (returnDate != "" || $("#returnFlightChosen").is(":checked")) {
+                        var flight = $("input[name=idFromDestination]:checked").val();
+                        var amount = $("input[name=amountFromDestination]").val();
+
+                        $.ajax({
+                            url: '/Home/Register',
+                            type: 'POST',
+                            contentType: "application/json:charset=utf-8",
+                            data: JSON.stringify({ flight: flight, amount: amount }),
+                            dataType: 'json',
+                            async: false,
+                            success: function (string) {
+                                window.location.href = "/Home/Bookings/";
+                            },
+                            error: function (x, y, z) {
+                                alert(x + '\n' + y + '\n' + z);
+                            }
+                        });
+                    } else {
+                        window.location.href = "/Home/Bookings/";
+                    }
                 }
             });
         });
