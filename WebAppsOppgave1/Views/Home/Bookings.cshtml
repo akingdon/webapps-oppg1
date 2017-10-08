@@ -1,37 +1,47 @@
-﻿
-@{
-    ViewBag.Title = "Bookings";
-}
+﻿@model List < WebAppsOppgave1.Models.Booking >
+<head>
+    <meta charset="UTF-8">
+    <title>Flybestilling</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width = device-width, initial-scale = 1">
+    </head>
+<body>
 
-<h2>Bookings</h2>
+<div class="container">
+    <div class="page-header">
+        <h1>Bestillinger</h1>
+    </div>
+    <div class="jumbotron">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>Kunde-ID</td>
+                    <td>Fly-ID</td>
+                    <td>Fra</td>
+                    <td>Til</td>
+                    <td>Avgang</td>
+                    <td>Ankomst</td>
+                    <td>Antall reisende</td>
+                    <td>Betalt</td>
+                </tr>
+            </thead>
 
-@model List<WebAppsOppgave1.Models.Booking>
+            @foreach (var booking in Model)
+            {
+                <tr>
+                    <td>@booking.CustomerId</td>
+                    <td>@booking.Flight.Id</td>
+                    <td>@booking.Flight.FromAirport.Name</td>
+                    <td>@booking.Flight.ToAirport.Name</td>
+                    <td>@booking.Flight.Departure.ToString("dd.MM.yyy HH:mm")</td>
+                    <td>@booking.Flight.Arrival.ToString("dd.MM.yyy HH:mm")</td>
+                    <td>@booking.Amount</td>
+                    <td>@booking.TotalPrice</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <td>Kunde-ID</td>
-            <td>Fly-ID</td>
-            <td>Fra</td>
-            <td>Til</td>
-            <td>Avgang</td>
-            <td>Ankomst</td>
-            <td>Antall reisende</td>
-            <td>Betalt</td>
-        </tr>
-    </thead>
-
-    @foreach (var booking in Model)
-    {
-        <tr>
-            <td>@booking.CustomerId</td>
-            <td>@booking.Flight.Id</td>
-            <td>@booking.Flight.FromAirport.Name</td>
-            <td>@booking.Flight.ToAirport.Name</td>
-            <td>@booking.Flight.Departure.ToString("dd.MM.yyy HH:mm")</td>
-            <td>@booking.Flight.Arrival.ToString("dd.MM.yyy HH:mm")</td>
-            <td>@booking.Amount</td>
-            <td>@booking.TotalPrice</td>
-        </tr>
-    }
-</table>
+    <script src="js/bootstrap.js"></script>
+</body>
