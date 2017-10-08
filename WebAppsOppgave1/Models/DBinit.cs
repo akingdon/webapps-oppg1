@@ -34,7 +34,8 @@ namespace WebAppsOppgave1.Models
             {
                 FromAirport = airport1,
                 ToAirport = airport2,
-                Departure = new DateTime(2017, 10, 10, 8, 30, 00)
+                Departure = new DateTime(2017, 10, 10, 8, 30, 00),
+                Price = 600
             };
             flight1.Arrival = flight1.Departure.AddHours(1);
 
@@ -42,7 +43,8 @@ namespace WebAppsOppgave1.Models
             {
                 FromAirport = airport1,
                 ToAirport = airport2,
-                Departure = new DateTime(2017, 10, 11, 8, 30, 00)
+                Departure = new DateTime(2017, 10, 11, 8, 30, 00),
+                Price = 600
             };
             flight2.Arrival = flight2.Departure.AddHours(1);
 
@@ -50,7 +52,8 @@ namespace WebAppsOppgave1.Models
             {
                 FromAirport = airport1,
                 ToAirport = airport2,
-                Departure = new DateTime(2017, 10, 11, 16, 00, 00)
+                Departure = new DateTime(2017, 10, 11, 16, 00, 00),
+                Price = 800
             };
             flight3.Arrival = flight3.Departure.AddHours(1);
 
@@ -58,7 +61,8 @@ namespace WebAppsOppgave1.Models
             {
                 FromAirport = airport1,
                 ToAirport = airport2,
-                Departure = new DateTime(2017, 10, 11, 22, 30, 00)
+                Departure = new DateTime(2017, 10, 11, 22, 30, 00),
+                Price = 500
             };
             flight4.Arrival = flight4.Departure.AddHours(1);
 
@@ -66,17 +70,17 @@ namespace WebAppsOppgave1.Models
             {
                 FromAirport = airport1,
                 ToAirport = airport2,
-                Departure = new DateTime(2017, 10, 12, 16, 00, 00)
+                Departure = new DateTime(2017, 10, 12, 16, 00, 00),
+                Price = 800
             };
             flight5.Arrival = flight5.Departure.AddHours(1);
-
-
 
             var returnFlight1 = new Flight
             {
                 FromAirport = airport2,
                 ToAirport = airport1,
-                Departure = new DateTime(2017, 10, 20, 12, 00, 00)
+                Departure = new DateTime(2017, 10, 20, 12, 00, 00),
+                Price = 600
             };
             returnFlight1.Arrival = returnFlight1.Departure.AddHours(1);
 
@@ -84,7 +88,8 @@ namespace WebAppsOppgave1.Models
             {
                 FromAirport = airport2,
                 ToAirport = airport1,
-                Departure = new DateTime(2017, 10, 20, 14, 30, 00)
+                Departure = new DateTime(2017, 10, 20, 14, 30, 00),
+                Price = 800
             };
             returnFlight2.Arrival = returnFlight2.Departure.AddHours(1);
 

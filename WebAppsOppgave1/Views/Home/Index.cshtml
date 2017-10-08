@@ -10,7 +10,6 @@
 
             $("#book").hide();
 
-            // Get airport names and build dropdowns
             $.ajax({
                 url: '/Home/getAirportNames',
                 type: 'GET',
@@ -23,7 +22,6 @@
                 }
             });
 
-            // Add event for returnFlightChosen checkbox to show/hide return input field
             $("#returnFlightChosen").change(function () {
                 if ($(this).is(":checked")) {
                     $("#returnLabel").show();
@@ -34,10 +32,8 @@
                 }
             });
 
-            // Add event for search button click
             $("#search").click(function () {
                 if (validateFields()) {
-                    // Call search metod without date
                     if ($("#departure").val() == "") {
                         var from = $("#fromAirport").val();
                         var to = $("#toAirport").val();
@@ -61,6 +57,7 @@
                         var from = $("#fromAirport").val();
                         var to = $("#toAirport").val();
                         var date = $("#departure").val();
+
                         $.ajax({
                             url: '/Home/getFlightsOnDate',
                             type: 'POST',
@@ -75,9 +72,8 @@
                             }
                         });
                     }
-                    // Return flights
+
                     if ($("#returnFlightChosen").is(":checked")) {
-                        // Call search methoc without date
                         if ($("#return").val() == "") {
                             var from = $("#toAirport").val();
                             var to = $("#fromAirport").val();
@@ -97,7 +93,6 @@
                                 }
                             });
                         }
-                        // Call search method with date
                         else {
                             var from = $("#toAirport").val();
                             var to = $("#fromAirport").val();
@@ -145,7 +140,7 @@
                 });
 
                 var returnDate = $("#return").val();
-                if (returnDate != "") {
+                if (returnDate != "" || $("#returnFlightChosen").is(":checked")) {
                     var flight = $("input[name=idFromDestination]:checked").val();
                     var amount = $("input[name=amountFromDestination]").val();
 
@@ -169,7 +164,6 @@
             });
         });
 
-
         function PopulateAirportDropDowns(jsAirports) {
             var result = "";
             for (var a in jsAirports) {
@@ -189,17 +183,19 @@
                             "<th>Til</th>" +
                             "<th>Avreise</th>" +
                             "<th>Ankomst</th>" +
+                            "<th>Pris</th>"
                         "</tr>" +
                     "</thead >";
             for (var f in jsFlights) {
                 result +=
                     "<tr>" +
-                        "<td><input type=\"radio\" name =\"idToDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
-                        "<td>" + jsFlights[f].fromAirport + "</td>" +
-                        "<td>" + jsFlights[f].toAirport + "</td>" +
-                        "<td>" + jsFlights[f].departure + "</td>" +
-                        "<td>" + jsFlights[f].arrival + "</td>"    
-                "</tr>"
+                    "<td><input type=\"radio\" name =\"idToDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
+                    "<td>" + jsFlights[f].fromAirport + "</td>" +
+                    "<td>" + jsFlights[f].toAirport + "</td>" +
+                    "<td>" + jsFlights[f].departure + "</td>" +
+                    "<td>" + jsFlights[f].arrival + "</td>" +
+                    "<td>" + jsFlights[f].price + "</td>" +
+                    "</tr>"
             }
             result += "<tr>" +
                         "<td></td><td></td><td></td>" +
@@ -219,6 +215,7 @@
                 "<th>Til</th>" +
                 "<th>Avreise</th>" +
                 "<th>Ankomst</th>" +
+                "<th>Pris</th>" +
                 "</tr>" +
                 "</thead >";
             for (var f in jsFlights) {
@@ -229,6 +226,7 @@
                     "<td>" + jsFlights[f].toAirport + "</td>" +
                     "<td>" + jsFlights[f].departure + "</td>" +
                     "<td>" + jsFlights[f].arrival + "</td>" +
+                    "<td>" + jsFlights[f].price + "</td>" +
                     "</tr>";
                     
                     
@@ -246,7 +244,6 @@
     <h2>Bestill flytur</h2>
     
     <div class="row">
-        <!-- husk å kjøre og validateFields()-->
         <div class="col-sm-6">
             <fieldset>
                 <legend>Fly fra:</legend>
@@ -334,9 +331,7 @@
             }
 
             return validationOK;
-        }
-
-        
+        }        
 
         function hideWarnings() {
 
