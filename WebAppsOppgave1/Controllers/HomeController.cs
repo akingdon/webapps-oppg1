@@ -40,7 +40,8 @@ namespace WebAppsOppgave1.Controllers
                     fromAirport = f.FromAirport.Name,
                     toAirport = f.ToAirport.Name,
                     departure = f.Departure.ToString("dd.MM.yyyy HH:mm"),
-                    arrival = f.Arrival.ToString("dd.MM.yyy HH:mm")
+                    arrival = f.Arrival.ToString("dd.MM.yyy HH:mm"),
+                    price = f.Price
                 };
                 jsMatchingFlights.Add(aFlight);
             }
@@ -114,6 +115,7 @@ namespace WebAppsOppgave1.Controllers
                 foreach(Booking b in Bookings)
                 {
                     b.Flight = Db.Flight.Include(f => f.FromAirport).Include(f => f.ToAirport).Single(f => f.Id == b.Id);
+                    b.TotalPrice = b.Flight.Price * b.Amount;
                 }
 
                 return View(Bookings);

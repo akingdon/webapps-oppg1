@@ -183,17 +183,19 @@
                             "<th>Til</th>" +
                             "<th>Avreise</th>" +
                             "<th>Ankomst</th>" +
+                            "<th>Pris</th>"
                         "</tr>" +
                     "</thead >";
             for (var f in jsFlights) {
                 result +=
                     "<tr>" +
-                        "<td><input type=\"radio\" name =\"idToDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
-                        "<td>" + jsFlights[f].fromAirport + "</td>" +
-                        "<td>" + jsFlights[f].toAirport + "</td>" +
-                        "<td>" + jsFlights[f].departure + "</td>" +
-                        "<td>" + jsFlights[f].arrival + "</td>"    
-                "</tr>"
+                    "<td><input type=\"radio\" name =\"idToDestination\" value=\"" + jsFlights[f].id + "\"></td>" +
+                    "<td>" + jsFlights[f].fromAirport + "</td>" +
+                    "<td>" + jsFlights[f].toAirport + "</td>" +
+                    "<td>" + jsFlights[f].departure + "</td>" +
+                    "<td>" + jsFlights[f].arrival + "</td>" +
+                    "<td>" + jsFlights[f].price + "</td>" +
+                    "</tr>"
             }
             result += "<tr>" +
                         "<td></td><td></td><td></td>" +
@@ -213,6 +215,7 @@
                 "<th>Til</th>" +
                 "<th>Avreise</th>" +
                 "<th>Ankomst</th>" +
+                "<th>Pris</th>" +
                 "</tr>" +
                 "</thead >";
             for (var f in jsFlights) {
@@ -223,6 +226,7 @@
                     "<td>" + jsFlights[f].toAirport + "</td>" +
                     "<td>" + jsFlights[f].departure + "</td>" +
                     "<td>" + jsFlights[f].arrival + "</td>" +
+                    "<td>" + jsFlights[f].price + "</td>" +
                     "</tr>";
                     
                     

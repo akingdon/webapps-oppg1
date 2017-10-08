@@ -14,5 +14,6 @@ namespace WebAppsOppgave1.Models
         [Required]
         public Flight Flight { get; set; }
         public int Amount { get; set; }
+        public int TotalPrice { get; set; }
     }
 }

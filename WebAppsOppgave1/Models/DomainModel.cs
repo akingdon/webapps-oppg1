@@ -18,6 +18,7 @@ namespace WebAppsOppgave1.Models
         public string toAirport { get; set; }
         public string departure { get; set; }
         public string arrival { get; set; }
+        public int price { get; set; }
     }
 
     public class JsBooking
