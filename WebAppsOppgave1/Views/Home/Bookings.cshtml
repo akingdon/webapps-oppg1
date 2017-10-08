@@ -10,17 +10,25 @@
 <table class="table">
     <thead>
         <tr>
-            <td>Flight ID</td>
-            <td>Customer ID</td>
-            <td>Amount</td>
+            <td>Kunde-ID</td>
+            <td>Fly-ID</td>
+            <td>Fra</td>
+            <td>Til</td>
+            <td>Avgang</td>
+            <td>Ankomst</td>
+            <td>Antall reisende</td>
         </tr>
     </thead>
 
     @foreach (var booking in Model)
     {
         <tr>
-            <td>@booking.Flight</td>
             <td>@booking.CustomerId</td>
+            <td>@booking.Flight.Id</td>
+            <td>@booking.Flight.FromAirport.Name</td>
+            <td>@booking.Flight.ToAirport.Name</td>
+            <td>@booking.Flight.Departure.ToString("dd.MM.yyy HH:mm")</td>
+            <td>@booking.Flight.Arrival.ToString("dd.MM.yyy HH:mm")</td>
             <td>@booking.Amount</td>
         </tr>
     }

@@ -10,7 +10,6 @@
 
             $("#book").hide();
 
-            // Get airport names and build dropdowns
             $.ajax({
                 url: '/Home/getAirportNames',
                 type: 'GET',
@@ -23,7 +22,6 @@
                 }
             });
 
-            // Add event for returnFlightChosen checkbox to show/hide return input field
             $("#returnFlightChosen").change(function () {
                 if ($(this).is(":checked")) {
                     $("#returnLabel").show();
@@ -34,10 +32,8 @@
                 }
             });
 
-            // Add event for search button click
             $("#search").click(function () {
                 if (validateFields()) {
-                    // Call search metod without date
                     if ($("#departure").val() == "") {
                         var from = $("#fromAirport").val();
                         var to = $("#toAirport").val();
@@ -61,6 +57,7 @@
                         var from = $("#fromAirport").val();
                         var to = $("#toAirport").val();
                         var date = $("#departure").val();
+
                         $.ajax({
                             url: '/Home/getFlightsOnDate',
                             type: 'POST',
@@ -75,9 +72,8 @@
                             }
                         });
                     }
-                    // Return flights
+
                     if ($("#returnFlightChosen").is(":checked")) {
-                        // Call search methoc without date
                         if ($("#return").val() == "") {
                             var from = $("#toAirport").val();
                             var to = $("#fromAirport").val();
@@ -97,7 +93,6 @@
                                 }
                             });
                         }
-                        // Call search method with date
                         else {
                             var from = $("#toAirport").val();
                             var to = $("#fromAirport").val();
@@ -135,7 +130,7 @@
                     contentType: "application/json:charset=utf-8",
                     data: JSON.stringify({ flight: flight, amount: amount }),
                     dataType: 'json',
-                    async: false,
+                    async: false, // This is done to avoid errors with the redirect happening before the db is updated.
                     success: function (string) {
                         // Do nothing, have to check if return flight is ordered first.
                     },
@@ -145,7 +140,7 @@
                 });
 
                 var returnDate = $("#return").val();
-                if (returnDate != "") {
+                if (returnDate != "" || $("#returnFlightChosen").is(":checked")) {
                     var flight = $("input[name=idFromDestination]:checked").val();
                     var amount = $("input[name=amountFromDestination]").val();
 
@@ -155,7 +150,7 @@
                         contentType: "application/json:charset=utf-8",
                         data: JSON.stringify({ flight: flight, amount: amount }),
                         dataType: 'json',
-                        async: false,
+                        async: false, // This is done to avoid errors with the redirect happening before the db is updated.
                         success: function (string) {
                             window.location.href = "/Home/Bookings/";
                         },
@@ -168,7 +163,6 @@
                 }
             });
         });
-
 
         function PopulateAirportDropDowns(jsAirports) {
             var result = "";
@@ -246,7 +240,6 @@
     <h2>Bestill flytur</h2>
     
     <div class="row">
-        <!-- husk å kjøre og validateFields()-->
         <div class="col-sm-6">
             <fieldset>
                 <legend>Fly fra:</legend>
@@ -334,9 +327,7 @@
             }
 
             return validationOK;
-        }
-
-        
+        }        
 
         function hideWarnings() {
 

@@ -71,45 +71,29 @@ namespace WebAppsOppgave1.Controllers
 
         public string Register(JsBooking jsBooking)
         {
-            var booking = new Booking
+            var jsonSerializer = new JavaScriptSerializer();
+
+            using (var Db = new DB())
             {
-                Flight = jsBooking.flight,
-                Amount = jsBooking.amount
-            };
-
-            bool hasValidatedCorrectly = false;
-
-         /*   if (bookingLogic.DestinationsAreSet(booking) && 
-                bookingLogic.DestinationsAreDifferent(booking) && 
-                bookingLogic.DepartureDateIsBeforeReturnDate(booking) && 
-                !bookingLogic.DepartureDateIsBeforeToday(booking))
-            {*/
-                hasValidatedCorrectly = true;
-            //}
-
-            if (hasValidatedCorrectly)
-            {
-                using (var Db = new DB())
+                try
                 {
-                    try
+                    var booking = new Booking
                     {
-                        Db.Booking.Add(booking);
-                        Db.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("Feil under skriving til DB. Lær deg hvordan du håndterer exceptions"+e.Message);
-                    }
+                        Flight = Db.Flight.Single(f => f.Id == jsBooking.flight),
+                        Amount = jsBooking.amount
+                    };
+
+                    Db.Booking.Add(booking);
+                    Db.SaveChanges();
                 }
-                var jsonSerializer = new JavaScriptSerializer();
-                return jsonSerializer.Serialize("ok");
-            }
-            else
-            {
-                var jsonSerializer = new JavaScriptSerializer();
-                return jsonSerializer.Serialize("failed");
+                catch (Exception e)
+                {
+                    Console.WriteLine("Feil under skriving til DB. Lær deg hvordan du håndterer exceptions"+e.Message);
+                    return jsonSerializer.Serialize("failed");
+                }
             }
             
+            return jsonSerializer.Serialize("ok");            
         }
 
         public ActionResult Orders()
@@ -126,6 +110,12 @@ namespace WebAppsOppgave1.Controllers
             using (var Db = new DB())
             {
                 List<Booking> Bookings = Db.Booking.ToList();
+
+                foreach(Booking b in Bookings)
+                {
+                    b.Flight = Db.Flight.Include(f => f.FromAirport).Include(f => f.ToAirport).Single(f => f.Id == b.Id);
+                }
+
                 return View(Bookings);
             }
         }
