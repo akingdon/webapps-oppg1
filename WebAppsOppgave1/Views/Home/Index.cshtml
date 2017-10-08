@@ -50,7 +50,7 @@
                         }
                     });
                 }
-                // Call search method with date
+
                 else {
                     var from = $("#fromAirport").val();
                     var to = $("#toAirport").val();
@@ -183,16 +183,16 @@
         var result =
             "<h3>Flyvninger</h3>" +
             "<table class='table table-striped'>" +
-                "<thead>" +
-                    "<tr>" +
-                        "<th>Velg</th>" +
-                        "<th>Fra</th>" +
-                        "<th>Til</th>" +
-                        "<th>Avreise</th>" +
-                        "<th>Ankomst</th>" +
-                        "<th>Pris</th>"
-                    "</tr>" +
-                "</thead >";
+            "<thead>" +
+            "<tr>" +
+            "<th>Velg</th>" +
+            "<th>Fra</th>" +
+            "<th>Til</th>" +
+            "<th>Avreise</th>" +
+            "<th>Ankomst</th>" +
+            "<th>Pris</th>" +
+            "</tr>" +
+            "</thead >";
         for (var f in jsFlights) {
             result +=
                 "<tr>" +
@@ -202,13 +202,13 @@
                 "<td>" + jsFlights[f].departure + "</td>" +
                 "<td>" + jsFlights[f].arrival + "</td>" +
                 "<td>" + jsFlights[f].price + "</td>" +
-                "</tr>"
+                "</tr>";
         }
         result += "<tr>" +
-                    "<td></td><td></td><td></td><td></td>" +
-                    "<td align=\"right\"><strong>Velg antall:</strong></td>" +
-                    "<td><input type=\"number\" name=\"amountToDestination\" max=\"10\" min=\"1\" value=\"1\" />" +
-                "</tr></table>";
+            "<td></td><td></td><td></td><td></td>" +
+            "<td align=\"right\"><strong>Velg antall:</strong></td>" +
+            "<td><input type=\"number\" name=\"amountToDestination\" max=\"10\" min=\"1\" value=\"1\" /></td>" +
+            "</tr></table>";
         $("#displayFlights").html(result);
     }
 
@@ -235,15 +235,13 @@
                 "<td>" + jsFlights[f].departure + "</td>" +
                 "<td>" + jsFlights[f].arrival + "</td>" +
                 "<td>" + jsFlights[f].price + "</td>" +
-                "</tr>";
-                    
-                    
+                "</tr>";                    
         }
         result += "<tr>" +
             "<td></td><td></td><td></td><td></td>" +
             "<td align=\"right\"><strong>Velg antall:</strong></td>" +
-            "<td> <input type=\"number\" name=\"amountFromDestination\" max=\"10\" min=\"1\" value=\"1\" /></td>" +
-            "</tr></table> ";
+            "<td><input type=\"number\" name=\"amountFromDestination\" max=\"10\" min=\"1\" value=\"1\" /></td>" +
+            "</tr></table>";
         $("#displayReturnFlights").html(result);
     }
 
