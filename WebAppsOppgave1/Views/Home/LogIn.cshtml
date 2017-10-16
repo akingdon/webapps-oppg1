@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Logg inn";
+}
+
+@model WebAppsOppgave1.Models.User
+
+<div class="container">
+    <div class="page-header">
+        <h1>Logg inn</h1>
+    </div>
+    <div class="jumbotron">
+        <form action="/Home/Index" method="post">
+            <fieldset>
+                <legend>Logg inn:</legend>
+                Brukernavn (e-post):<br />
+                <input type="text" name="username" /><br />
+                Passord:<br />
+                <input type="text" name="password" /><br />
+                <input type="submit" name="login" value="Logg inn" />
+            </fieldset>
+        </form>
+    </div>
+</div>
+

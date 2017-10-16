@@ -13,8 +13,58 @@ namespace WebAppsOppgave1.Controllers
     {
         // GET: Home
         public ActionResult Index()
+        {    
+            if (Session["LoggedIn"] == null)
+            {
+                Session["LoggedIn"] = false;
+                ViewBag.LoggedIn = false;
+            }
+            else
+            {
+                ViewBag.LoggedIn = (bool)Session["LoggedIn"];
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Index(FormCollection form)
         {
-            
+            if (UserInDb(form))
+            {
+                Session["LoggedIn"] = true;
+                ViewBag.LoggedIn = true;
+                return View();
+            }
+            else
+            {
+                Session["LoggedIn"] = false;
+                ViewBag.LoggedIn = false;
+                return View();
+            }
+        }
+
+        private static bool UserInDb(FormCollection form)
+        {
+            using (var db = new DB())
+            {
+                var UserName = form["username"];
+                byte[] HashedPassword = HashPassword(form["password"]);
+                var User = db.Users.FirstOrDefault(u => u.PassordHash == HashedPassword && u.Epost == UserName);
+
+                if (User == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        public ActionResult LogIn()
+        {
             return View();
         }
 

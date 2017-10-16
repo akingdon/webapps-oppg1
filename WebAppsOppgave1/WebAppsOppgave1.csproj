@@ -200,6 +200,7 @@
     <Content Include="Scripts\jquery-3.2.1.min.map" />
     <Content Include="Views\Home\Bookings.cshtml" />
     <Content Include="Views\Home\RegisterUser.cshtml" />
+    <Content Include="Views\Home\LogIn.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

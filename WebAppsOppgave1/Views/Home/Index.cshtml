@@ -248,47 +248,57 @@
 </script>
 
 <div class="container">
-<div class="page-header">
-    <h1>Bestill flytur</h1>
-</div>
-<div class="jumbotron">
-    <div class="row">
-        <div class="col-sm-6">
+    <div class="page-header">
+        <h1>Bestill flytur</h1>
+    </div>
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-sm-6">
                 <label class="label label-info">Fly fra:</label><br />
                 <select id="fromAirport">
                     <option selected hidden value="">Velg flyplass</option>
                 </select>
             &nbsp;<span class="label label-warning" id="fromAirportWarning" style="display:none"></span>
             <br/>
+            </div>
+            <div class="col-sm-6">
+                <label class="label label-info">Fly til:</label><br/>
+                <select id="toAirport">
+                    <option selected hidden value="">Velg flyplass</option>
+                </select>
+                &nbsp;<span class="label label-warning" id="toAirportWarning" style="display:none"></span> 
+                <br/>
+            </div>
         </div>
-        <div class="col-sm-6">
-            <label class="label label-info">Fly til:</label><br/>
-            <select id="toAirport">
-                <option selected hidden value="">Velg flyplass</option>
-            </select>
-            &nbsp;<span class="label label-warning" id="toAirportWarning" style="display:none"></span> 
-            <br/>
+        <div class="row">
+            <div class="col-sm-6">
+                <label class="label label-info">Avreise:</label><br />
+                <input type="date" id="departure" />
+                &nbsp;<span class="label label-warning" id="departureWarning" style="display:none"></span>
+                <br />
+                <input type="checkbox" id="returnFlightChosen" />
+                <label>Tur/retur</label>
+            </div>
+            <div class="col-sm-6">
+                <label id="returnLabel" class="label label-info" style="display:none">Hjemreise:</label><br />
+                <input type="date" id="return" style="display:none" />
+                &nbsp;<span class="label label-warning" id="returnWarning" style="display:none"></span>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <label class="label label-info">Avreise:</label><br />
-            <input type="date" id="departure" />
-            &nbsp;<span class="label label-warning" id="departureWarning" style="display:none"></span>
-            <br />
-            <input type="checkbox" id="returnFlightChosen" />
-            <label>Tur/retur</label>
+        <button id="search" class="btn btn-primary">Søk</button>
+        <div id="displayFlights"></div>
+        <div id="displayReturnFlights"></div>
+        <button id="book" class=" btn btn-success">Bestill</button>
+        <div>
+            @if (ViewBag.LoggedIn)
+            {
+                <p style="color:forestgreen">Innlogget</p>
+            }
+            else
+            {
+                <p style="color:indianred">Ikke innlogget</p>
+            }
         </div>
-        <div class="col-sm-6">
-            <label id="returnLabel" class="label label-info" style="display:none">Hjemreise:</label><br />
-            <input type="date" id="return" style="display:none" />
-            &nbsp;<span class="label label-warning" id="returnWarning" style="display:none"></span>
-        </div>
-    </div>
-    <button id="search" class="btn btn-primary">Søk</button>
-    <div id="displayFlights"></div>
-    <div id="displayReturnFlights"></div>
-    <button id="book" class=" btn btn-success">Bestill</button>
     </div>
 </div>
 
