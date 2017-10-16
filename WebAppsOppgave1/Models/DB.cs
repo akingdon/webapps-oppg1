@@ -18,5 +18,7 @@ namespace WebAppsOppgave1.Models
         public DbSet<Booking> Booking { get; set; }
         public DbSet<Flight> Flight { get; set; }
         public DbSet<Airport> Airport { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<PostSted> Poststed { get; set; }
     }
 }

@@ -186,6 +186,8 @@
     <Compile Include="Models\Flight.cs" />
     <Compile Include="Models\DB.cs" />
     <Compile Include="Models\Booking.cs" />
+    <Compile Include="Models\Poststed.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +199,8 @@
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.2.1.min.map" />
     <Content Include="Views\Home\Bookings.cshtml" />
+    <Content Include="Views\Home\RegisterUser.cshtml" />
+    <Content Include="Views\Home\LogIn.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
