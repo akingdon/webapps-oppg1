@@ -4,6 +4,50 @@
 <script src="~/Scripts/jquery-3.2.1.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
 <script type="text/javascript">
+    $(function () {
+
+        $("#airportButton").click(function () {
+            $("#flights").hide();
+            $("#bookings").hide();
+            $("#users").hide();
+            $("#airports").show();
+
+            $.ajax({
+                url: '/Admin/getAllAirports',
+                type: 'GET',
+                dataType: 'json',
+                success: function (jsAirports) {
+                    DisplayAirports(jsAirports);
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        });
+
+    });
+
+    function DisplayAirports(jsAirports) {
+
+        var result =
+            "<table class=\"table table-striped\">" +
+            "<thead>" +
+            "<tr>" +
+            "<th></th>" +
+            "<th>Navn</th>" +
+            "</tr>" +
+            "</thead>";
+        for (var a in jsAirports) {
+            result +=
+                "<tr>" +
+                "<td><input type=\"radio\" name =\"idAirport\" value=\"" + jsAirports[a].id + "\"></td>" +
+                "<td>" + jsAirports[a].name + "</td>" +
+                "</tr>";
+        }
+        result += "</table>";
+        $("#airportList").html(result);
+    }
+
 </script>
 
 <div class="container">
@@ -20,6 +64,46 @@
             {
                 <p style="color:indianred">Ikke innlogget</p>
             }
+        </div>
+        <div class="row">
+                <button id="airportButton" class="btn btn-lg btn-info">Airports</button>
+                <button id="flightButton" class="btn btn-lg btn-info">Flights</button>
+                <button id="bookingButton" class="btn btn-lg btn-info">Bookings</button>
+                <button id="userButton" class="btn btn-lg btn-info">Users</button>
+        </div>
+        <div class="row">
+            <div id="airports" style="display:none">
+                <div id="airportList">
+                </div>
+                <div>
+                    <button id="" class="btn btn-primary">Endre</button>
+                    <button class="btn btn-danger">Slett</button>
+                </div>
+            </div>
+            <div id="flights" style="display:none">
+                <div id="flightList">
+                </div>
+                <div>
+                    <button class="btn btn-primary">Endre</button>
+                    <button class="btn btn-danger">Slett</button>
+                </div>
+            </div>
+            <div id="bookings" style="display:none">
+                <div id="bookingList">
+                </div>
+                <div>
+                    <button class="btn btn-primary">Endre</button>
+                    <button class="btn btn-danger">Slett</button>
+                </div>
+            </div>
+            <div id="users" style="display:none">
+                <div id="userList">
+                </div>
+                <div>
+                    <button class="btn btn-primary">Endre</button>
+                    <button class="btn btn-danger">Slett</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

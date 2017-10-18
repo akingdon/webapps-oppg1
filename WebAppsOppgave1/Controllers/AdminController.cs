@@ -4,7 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
-using WebAppsOppgave1.Models;
+using WebAppsOppgave1.Model;
+using WebAppsOppgave1.BLL;
 using System.Web.Script.Serialization;
 
 namespace WebAppsOppgave1.Controllers
@@ -51,21 +52,21 @@ namespace WebAppsOppgave1.Controllers
 
         private static bool AdminInDb(FormCollection form)
         {
-            using (var db = new DB())
-            {
-                var UserName = form["username"];
-                byte[] HashedPassword = HashPassword(form["password"]);
-                var AdminUser = db.Admins.FirstOrDefault(a => a.PassordHash == HashedPassword && a.Epost == UserName);
+            var AdminBLL = new AdminBLL();
+            
+            var UserName = form["username"];
+            byte[] HashedPassword = HashPassword(form["password"]);
+            var AdminUser = AdminBLL.AdminInDb(UserName, HashedPassword);
 
-                if (AdminUser == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+            if (AdminUser == null)
+            {
+                return false;
             }
+            else
+            {
+                return true;
+            }
+            
         }
         public static byte[] HashPassword(string p)
         {
@@ -77,6 +78,13 @@ namespace WebAppsOppgave1.Controllers
             return output;
         }
 
+        public string getAllAirports()
+        {
+            var AdminBLL = new AdminBLL();
+            List<jsAirport> airports = AdminBLL.getAllAirports();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(airports);
+        }
 
     }
 }
