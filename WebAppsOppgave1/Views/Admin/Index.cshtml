@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Index administrator";
+}
+<script src="~/Scripts/jquery-3.2.1.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script type="text/javascript">
+</script>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Administrator</h1>
+    </div>
+    <div class="jumbotron">
+        <div class="row">
+            @if (ViewBag.Admin)
+            {
+                <p style="color:forestgreen">Innlogget</p>
+            }
+            else
+            {
+                <p style="color:indianred">Ikke innlogget</p>
+            }
+        </div>
+    </div>
+</div>
