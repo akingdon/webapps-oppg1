@@ -104,6 +104,12 @@ namespace WebAppsOppgave1.Models
                 PassordHash = Controllers.HomeController.HashPassword("test")
             };
 
+            var admin = new Model.AdminUser
+            {
+                Epost = "admin",
+                PassordHash = Controllers.AdminController.HashPassword("admin")
+            };
+
             var postSted = new PostSted
             {
                 Postnr = "0171",
@@ -124,6 +130,7 @@ namespace WebAppsOppgave1.Models
             db.Flight.Add(returnFlight2);
 
             db.Users.Add(testUser);
+            db.Admins.Add(admin);
             db.Poststed.Add(postSted);
 
             base.Seed(db);

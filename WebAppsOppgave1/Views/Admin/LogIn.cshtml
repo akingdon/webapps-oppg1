@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Admin-innlogging";
+}
+
+@model WebAppsOppgave1.Model.AdminUser
+
+<div class="container">
+    <div class="page-header">
+        <h1>Admin-innlogging</h1>
+    </div>
+    <div class="jumbotron">
+        <form action="/Admin/Index" method="post">
+            <fieldset>
+                <legend>Logg inn som administrator:</legend>
+                Brukernavn (e-post):<br />
+                <input type="text" name="username" /><br />
+                Passord:<br />
+                <input type="text" name="password" /><br />
+                <input type="submit" name="login" value="Logg inn" />
+            </fieldset>
+        </form>
+    </div>
+</div>
+
