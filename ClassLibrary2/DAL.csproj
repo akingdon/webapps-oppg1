@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="AdminDAL.cs" />
     <Compile Include="DB.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
