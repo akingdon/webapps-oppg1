@@ -20,5 +20,31 @@ namespace WebAppsOppgave1.BLL
             var AdminDAL = new AdminDAL();
             return AdminDAL.getAllAirports();
         }
+        public jsAirport getAirport(int id)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.getAirport(id);
+        }
+        public string registerAirport(string name)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.registerAirport(name);
+        }
+        public string editAirport(int id, string name)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.editAirport(id, name);
+        }
+        public string deleteAirport(int id)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.deleteAirport(id);
+        }
+
+        public List<Flight> getAllFlights()
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.getAllFlights();
+        }
     }
 }

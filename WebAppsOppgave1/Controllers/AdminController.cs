@@ -81,10 +81,56 @@ namespace WebAppsOppgave1.Controllers
         public string getAllAirports()
         {
             var AdminBLL = new AdminBLL();
-            List<jsAirport> airports = AdminBLL.getAllAirports();
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(airports);
+            return jsonSerializer.Serialize(AdminBLL.getAllAirports());
         }
 
+        public string getAirport(int id)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.getAirport(id));
+        }
+
+        public string registerAirport(string name)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.registerAirport(name));
+        }
+        public string editAirport(int id, string name)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.editAirport(id, name));
+        }
+        public string deleteAirport(int id)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.deleteAirport(id));
+        }
+
+        public string getAllFlights()
+        {
+            var AdminBLL = new AdminBLL();
+            List<Flight> flights = AdminBLL.getAllFlights();
+            var jsFlights = new List<jsFlight>();
+            foreach (Flight f in flights)
+            {
+                var aFlight = new jsFlight()
+                {
+                    id = f.Id,
+                    fromAirport = f.FromAirport.Name,
+                    toAirport = f.ToAirport.Name,
+                    departure = f.Departure.ToString("dd.MM.yyyy HH:mm"),
+                    arrival = f.Arrival.ToString("dd.MM.yyy HH:mm"),
+                    price = f.Price
+                };
+                jsFlights.Add(aFlight);
+            }
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(jsFlights);
+        }
     }
 }
