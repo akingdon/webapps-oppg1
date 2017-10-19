@@ -56,6 +56,14 @@ namespace WebAppsOppgave1.Controllers
             return View();
         }
 
+        public ActionResult LogOut()
+        {
+            ViewBag.Admin = false;
+            Session["Admin"] = false;
+
+            return View();
+        }
+
         private static bool AdminInDb(FormCollection form)
         {
             var AdminBLL = new AdminBLL();

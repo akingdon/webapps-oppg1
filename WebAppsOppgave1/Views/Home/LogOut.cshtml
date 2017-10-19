@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Logget ut av brukerkonto";
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Logget ut av brukerkonto</h1>
+    </div>
+    <div class="jumbotron">
+        <div class="row">
+            @if (ViewBag.LoggedIn)
+            {
+                <p style="color:forestgreen">Innlogget</p>
+            }
+            else
+            {
+                <p style="color:indianred">Ikke innlogget</p>
+            }
+        </div>
+    </div>
+</div>
