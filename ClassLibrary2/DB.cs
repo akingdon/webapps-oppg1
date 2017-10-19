@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using WebAppsOppgave1.Model;
 
-namespace WebAppsOppgave1.Models
+namespace WebAppsOppgave1.DAL
 {
     public class DB : DbContext
     {
@@ -12,14 +13,13 @@ namespace WebAppsOppgave1.Models
             : base("name=Booking")
         {
             Database.CreateIfNotExists();
-            Database.SetInitializer(new DBInit());
         }
 
         public DbSet<Booking> Booking { get; set; }
         public DbSet<Flight> Flight { get; set; }
         public DbSet<Airport> Airport { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Model.AdminUser> Admins { get; set; }
+        public DbSet<AdminUser> Admins { get; set; }
         public DbSet<PostSted> Poststed { get; set; }
     }
 }
