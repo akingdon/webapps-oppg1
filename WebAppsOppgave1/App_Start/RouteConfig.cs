@@ -18,6 +18,12 @@ namespace WebAppsOppgave1
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "Admin",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Admin", action = "LogIn", id = UrlParameter.Optional }
+            );
         }
     }
 }
