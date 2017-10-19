@@ -44,6 +44,7 @@
     <Compile Include="AdminUser.cs" />
     <Compile Include="Airport.cs" />
     <Compile Include="Booking.cs" />
+    <Compile Include="DomainModel.cs" />
     <Compile Include="Flight.cs" />
     <Compile Include="Poststed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -4,7 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
-using WebAppsOppgave1.Models;
+using WebAppsOppgave1.Model;
+using WebAppsOppgave1.BLL;
 using System.Web.Script.Serialization;
 
 namespace WebAppsOppgave1.Controllers
@@ -51,21 +52,21 @@ namespace WebAppsOppgave1.Controllers
 
         private static bool AdminInDb(FormCollection form)
         {
-            using (var db = new DB())
-            {
-                var UserName = form["username"];
-                byte[] HashedPassword = HashPassword(form["password"]);
-                var AdminUser = db.Admins.FirstOrDefault(a => a.PassordHash == HashedPassword && a.Epost == UserName);
+            var AdminBLL = new AdminBLL();
+            
+            var UserName = form["username"];
+            byte[] HashedPassword = HashPassword(form["password"]);
+            var AdminUser = AdminBLL.AdminInDb(UserName, HashedPassword);
 
-                if (AdminUser == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+            if (AdminUser == null)
+            {
+                return false;
             }
+            else
+            {
+                return true;
+            }
+            
         }
         public static byte[] HashPassword(string p)
         {
@@ -77,6 +78,59 @@ namespace WebAppsOppgave1.Controllers
             return output;
         }
 
+        public string getAllAirports()
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.getAllAirports());
+        }
 
+        public string getAirport(int id)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.getAirport(id));
+        }
+
+        public string registerAirport(string name)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.registerAirport(name));
+        }
+        public string editAirport(int id, string name)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.editAirport(id, name));
+        }
+        public string deleteAirport(int id)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.deleteAirport(id));
+        }
+
+        public string getAllFlights()
+        {
+            var AdminBLL = new AdminBLL();
+            List<Flight> flights = AdminBLL.getAllFlights();
+            var jsFlights = new List<jsFlight>();
+            foreach (Flight f in flights)
+            {
+                var aFlight = new jsFlight()
+                {
+                    id = f.Id,
+                    fromAirport = f.FromAirport.Name,
+                    toAirport = f.ToAirport.Name,
+                    departure = f.Departure.ToString("dd.MM.yyyy HH:mm"),
+                    arrival = f.Arrival.ToString("dd.MM.yyy HH:mm"),
+                    price = f.Price
+                };
+                jsFlights.Add(aFlight);
+            }
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(jsFlights);
+        }
     }
 }
