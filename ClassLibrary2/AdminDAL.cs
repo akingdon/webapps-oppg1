@@ -20,33 +20,15 @@ namespace WebAppsOppgave1.DAL
             AdminUser user = Db.Admins.FirstOrDefault(a => a.PassordHash == HashedPassword && a.Epost == UserName);
             return user;
         }
-        public List<jsAirport> getAllAirports()
+        public List<Airport> getAllAirports()
         {
             DB Db = new DB();
-            List<jsAirport> allAirports = Db.Airport.Select(a => new jsAirport()
-            {
-                id = a.Id,
-                name = a.Name
-            }).ToList();
-            return allAirports;
+            return Db.Airport.ToList();
         }
-        public jsAirport getAirport(int id)
+        public Airport getAirport(int id)
         {
             DB Db = new DB();
-            var anAirport = Db.Airport.Find(id);
-            if (anAirport != null)
-            {
-                var jsAirport = new jsAirport()
-                {
-                    id = anAirport.Id,
-                    name = anAirport.Name
-                };
-                return jsAirport;
-            }
-            else
-            {
-                return null;
-            }
+            return Db.Airport.Find(id);
         } 
         public string registerAirport(string name)
         {
@@ -74,9 +56,12 @@ namespace WebAppsOppgave1.DAL
             DB Db = new DB();
             try
             {
-                Airport airportToEdit = Db.Airport.Find(id);
+
+                var airportToEdit = Db.Airport.Find(id);
+
 
                 string OldName = airportToEdit.Name;
+
 
                 airportToEdit.Name = name;
                 Db.SaveChanges();
@@ -96,7 +81,7 @@ namespace WebAppsOppgave1.DAL
             DB Db = new DB();
             try
             {
-                Airport airportToDelete = Db.Airport.Find(id);
+                var airportToDelete = Db.Airport.Find(id);
                 Db.Airport.Remove(airportToDelete);
                 Db.SaveChanges();
 
@@ -114,16 +99,73 @@ namespace WebAppsOppgave1.DAL
         public List<Flight> getAllFlights()
         {
             DB Db = new DB();
-            List<Flight> allFlights = Db.Flight.Select(f => new Flight()
+            return Db.Flight.ToList();
+        }
+        public Flight getFlight(int id)
+        {
+            DB Db = new DB();
+            return Db.Flight.Find(id);
+        }
+        public string RegisterFlight(int fromAirportId, int toAirportId, DateTime departure, DateTime arrival, int price)
+        {
+            DB Db = new DB();
+            try
             {
-                Id = f.Id,
-                FromAirport = f.FromAirport,
-                ToAirport = f.ToAirport,
-                Departure = f.Departure,
-                Arrival = f.Arrival,
-                Price = f.Price
-            }).ToList();
-            return allFlights;
+                var fromAirport = Db.Airport.Find(fromAirportId);
+                var toAirport = Db.Airport.Find(toAirportId);
+                
+                var flight = new Flight()
+                {
+                    ToAirport = toAirport,
+                    FromAirport = fromAirport,
+                    Departure = departure,
+                    Arrival = arrival,
+                    Price = price
+                };
+                Db.Flight.Add(flight);
+                Db.SaveChanges();
+                return "ok";
+            }
+            catch (Exception e)
+            {
+                return "Adding to DB failed";
+            }
+        }
+        public string editFlight(int id, int fromAirportId, int toAirportId, DateTime departure, DateTime arrival, int price)
+        {
+            DB Db = new DB();
+            try
+            {
+                var fromAirport = Db.Airport.Find(fromAirportId);
+                var toAirport = Db.Airport.Find(toAirportId);
+                var flightToEdit = Db.Flight.Find(id);
+                flightToEdit.FromAirport = fromAirport;
+                flightToEdit.ToAirport = toAirport;
+                flightToEdit.Departure = departure;
+                flightToEdit.Arrival = arrival;
+                flightToEdit.Price = price;
+                Db.SaveChanges();
+                return "ok";
+            }
+            catch
+            {
+                return "Editing in DB failed";
+            }
+        }
+        public string deleteFlight(int id)
+        {
+            DB Db = new DB();
+            try
+            {
+                var flightToDelete = Db.Flight.Find(id);
+                Db.Flight.Remove(flightToDelete);
+                Db.SaveChanges();
+                return "ok";
+            }
+            catch
+            {
+                return "Deleting from DB failed";
+            }
         }
 
         private void WriteLogError(string msg)

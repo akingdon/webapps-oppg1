@@ -15,12 +15,12 @@ namespace WebAppsOppgave1.BLL
             var AdminDAL = new AdminDAL();
             return AdminDAL.AdminInDb(UserName, HashedPassword);
         }
-        public List<jsAirport> getAllAirports()
+        public List<Airport> getAllAirports()
         {
             var AdminDAL = new AdminDAL();
             return AdminDAL.getAllAirports();
         }
-        public jsAirport getAirport(int id)
+        public Airport getAirport(int id)
         {
             var AdminDAL = new AdminDAL();
             return AdminDAL.getAirport(id);
@@ -45,6 +45,26 @@ namespace WebAppsOppgave1.BLL
         {
             var AdminDAL = new AdminDAL();
             return AdminDAL.getAllFlights();
+        }
+        public Flight getFlight(int id)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.getFlight(id);
+        }
+        public string registerFlight(int fromAirportId, int toAirportId, DateTime departure, DateTime arrival, int price)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.RegisterFlight(fromAirportId, toAirportId, departure, arrival, price);
+        }
+        public string editFlight(int id, int fromAirportId, int toAirportId, DateTime departure, DateTime arrival, int price)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.editFlight(id, fromAirportId, toAirportId, departure, arrival, price);
+        }
+        public string deleteFlight(int id)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.deleteFlight(id);
         }
     }
 }
