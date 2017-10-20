@@ -14,8 +14,10 @@ namespace WebAppsOppgave1.Model
     public class jsFlight
     {
         public int id { get; set; }
-        public string fromAirport { get; set; }
-        public string toAirport { get; set; }
+        public int fromAirportId { get; set; }
+        public string fromAirportName { get; set; }
+        public int toAirportId { get; set; }
+        public string toAirportName { get; set; }
         public string departure { get; set; }
         public string arrival { get; set; }
         public int price { get; set; }

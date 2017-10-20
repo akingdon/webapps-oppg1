@@ -81,15 +81,32 @@ namespace WebAppsOppgave1.Controllers
         public string getAllAirports()
         {
             var AdminBLL = new AdminBLL();
+            var airports = AdminBLL.getAllAirports();
+            var jsAirports = new List<jsAirport>();
+            foreach (Airport a in airports)
+            {
+                var anAirport = new jsAirport()
+                {
+                    id = a.Id,
+                    name = a.Name
+                };
+                jsAirports.Add(anAirport);
+            }
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.getAllAirports());
+            return jsonSerializer.Serialize(jsAirports);
         }
 
         public string getAirport(int id)
         {
             var AdminBLL = new AdminBLL();
+            var airport = AdminBLL.getAirport(id);
+            var jsAirport = new jsAirport()
+            {
+                id = airport.Id,
+                name = airport.Name
+            };
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.getAirport(id));
+            return jsonSerializer.Serialize(jsAirport);
         }
 
         public string registerAirport(string name)
@@ -114,15 +131,15 @@ namespace WebAppsOppgave1.Controllers
         public string getAllFlights()
         {
             var AdminBLL = new AdminBLL();
-            List<Flight> flights = AdminBLL.getAllFlights();
+            var flights = AdminBLL.getAllFlights();
             var jsFlights = new List<jsFlight>();
             foreach (Flight f in flights)
             {
                 var aFlight = new jsFlight()
                 {
                     id = f.Id,
-                    fromAirport = f.FromAirport.Name,
-                    toAirport = f.ToAirport.Name,
+                    fromAirportName = f.FromAirport.Name,
+                    toAirportName = f.ToAirport.Name,
                     departure = f.Departure.ToString("dd.MM.yyyy HH:mm"),
                     arrival = f.Arrival.ToString("dd.MM.yyy HH:mm"),
                     price = f.Price
@@ -131,6 +148,42 @@ namespace WebAppsOppgave1.Controllers
             }
             var jsonSerializer = new JavaScriptSerializer();
             return jsonSerializer.Serialize(jsFlights);
+        }
+        public string getFlight(int id)
+        {
+            var AdminBLL = new AdminBLL();
+            var flight = AdminBLL.getFlight(id);
+                var jsFlight = new jsFlight()
+                {
+                    id = flight.Id,
+                    fromAirportId = flight.FromAirport.Id,
+                    fromAirportName = flight.FromAirport.Name,
+                    toAirportId = flight.ToAirport.Id,
+                    toAirportName = flight.ToAirport.Name,
+                    departure = flight.Departure.ToString("dd.MM.yyyy HH:mm"),
+                    arrival = flight.Arrival.ToString("dd.MM.yyy HH:mm"),
+                    price = flight.Price
+                };
+                var jsonSerializer = new JavaScriptSerializer();
+                return jsonSerializer.Serialize(jsFlight);
+        }
+        public string registerFlight(int fromAirportId, int toAirportId, DateTime departure, DateTime arrival, int price)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.registerFlight(fromAirportId, toAirportId, departure, arrival, price));
+        }
+        public string editFlight(int id, int fromAirportId, int toAirportId, DateTime departure, DateTime arrival, int price)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.editFlight(id, fromAirportId, toAirportId, departure, arrival, price));
+        }
+        public string deleteFlight(int id)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.deleteFlight(id));
         }
     }
 }

@@ -60,7 +60,8 @@
                     dataType: 'json',
                     success: function (jsAirport) {
                         if (jsAirport != null) {
-                            DisplayAirportToEdit(jsAirport);
+                            $("#airportIdEd").val(jsAirport.id);
+                            $("#airportNameEd").val(jsAirport.name);
                         }
                         else {
                             $("#registerAirportConfirmation").html("<p style=\"color:indianred\">Fant ikke flyplass i database</p>");
@@ -93,7 +94,8 @@
                     dataType: 'json',
                     success: function (jsAirport) {
                         if (jsAirport != null) {
-                            DisplayAirportToDelete(jsAirport);
+                            $("#airportIdDel").val(jsAirport.id);
+                            $("#airportNameDel").val(jsAirport.name);
                         }
                         else {
                             $("#registerAirportConfirmation").html("<p style=\"color:indianred\">Fant ikke flyplass i database</p>");
@@ -167,7 +169,166 @@
             $("#deleteFlight").hide();
             $("#editFlight").hide();
             $("#flights").show();
+            PopulateAirportDropDowns();
             GetAllFlights();
+        });
+
+        $("#registerFlight").click(function () {
+            
+            var fromAirport = $("#fromAirportReg").val();
+            var toAirport = $("#toAirportReg").val();
+            var departure = $("#departureReg").val().toString("dd.MM.yyyy HH:mm");
+            var arrival = $("#arrivalReg").val().toString("dd.MM.yyyy HH:mm");
+            var price = $("#priceReg").val();
+
+            $.ajax({
+                url: '/Admin/registerFlight',
+                type: 'POST',
+                contentType: "application/json:charset=utf-8",
+                data: JSON.stringify({ fromAirportId: fromAirport, toAirportId: toAirport, departure: departure, arrival: arrival, price: price }),
+                dataType: 'json',
+                success: function (success) {
+                    if (success == "ok") {
+                        $("#registerFlightConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
+                        GetAllFlights();
+                    }
+                    else {
+                        $("#registerFlightConfirmation").html("<p style=\"color:indianred\">Feil ved registrering</p>");
+                    }
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z + " :)");
+                }
+            });
+        });
+
+        $("#showEditFlight").click(function () {
+            $("#deleteFlight").hide();
+            $("#editFlightConfirmation").html("");
+            $("#editFlight").show();
+
+            if ($("input[name=idFlight]").is(":checked")) {
+                var id = $("input[name=idFlight]:checked").val();
+
+                $.ajax({
+                    url: '/Admin/getFlight',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ id: id }),
+                    dataType: 'json',
+                    success: function (jsFlight) {
+                        if (jsFlight != null) {
+                            $("#flightIdEd").val(jsFlight.id);
+                            $("#fromAirportEd").val(jsFlight.fromAirportId);
+                            $("#toAirportEd").val(jsFlight.toAirportId);
+                            $("#departureEd").val(jsFlight.departure);
+                            $("#arrivalEd").val(jsFlight.arrival);
+                            $("#priceEd").val(jsFlight.price);
+                        }
+                        else {
+                            $("#editFlightConfirmation").html("<p style=\"color:indianred\">Fant ikke flyvning i database</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+
+            }
+            else {
+                $("#editFlightConfirmation").html("<p style=\"color:indianred\">Velg hvilken flyvning som skal endres</p>");
+            }
+        });
+
+        $("#showDeleteFlight").click(function () {
+            $("#editFlight").hide();
+            $("#deleteFlightConfirmation").html("");
+            $("#deleteFlight").show();
+
+            if ($("input[name=idFlight]").is(":checked")) {
+                var id = $("input[name=idFlight]:checked").val();
+
+                $.ajax({
+                    url: '/Admin/getFlight',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ id: id }),
+                    dataType: 'json',
+                    success: function (jsFlight) {
+                        if (jsFlight != null) {
+                            $("#flightIdDel").val(jsFlight.id);
+                            $("#fromAirportDel").val(jsFlight.fromAirportName);
+                            $("#toAirportDel").val(jsFlight.toAirportName);
+                            $("#departureDel").val(jsFlight.departure);
+                            $("#arrivalDel").val(jsFlight.arrival);
+                            $("#priceDel").val(jsFlight.price);
+                        }
+                        else {
+                            $("#deleteFlightConfirmation").html("<p style=\"color:indianred\">Fant ikke flyvning i database</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+
+            }
+            else {
+                $("#deleteFlightConfirmation").html("<p style=\"color:indianred\">Velg hvilken flyvning som skal slettes</p>");
+            }
+        });
+
+        $("#confirmEditFlight").click(function () {
+            var id = $("#flightIdEd").val();
+            var fromAirport = $("#fromAirportEd").val();
+            var toAirport = $("#toAirportEd").val();
+            var departure = $("#departureEd").val().toString("dd.MM.yyyy HH:mm");
+            var arrival = $("#arrivalEd").val().toString("dd.MM.yyyy HH:mm");
+            var price = $("#priceEd").val();
+            $("#editFlightConfirmation").html("<p>"+id+fromAirport+toAirport+departure+arrival+price+"</p>");
+            $.ajax({
+                url: '/Admin/editFlight',
+                type: 'POST',
+                contentType: "application/json:charset=utf-8",
+                data: JSON.stringify({ id: id, fromAirportId: fromAirport, toAirportId: toAirport, departure: departure, arrival: arrival, price: price }),
+                dataType: 'json',
+                success: function (success) {
+                    if (success == "ok") {
+                        $("#editFlightConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
+                        GetAllFlights();
+                    }
+                    else {
+                        $("#editFlightConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
+                    }
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        });
+
+        $("#confirmDeleteFlight").click(function () {
+            var id = $("#flightIdDel").val();
+
+            $.ajax({
+                url: '/Admin/deleteFlight',
+                type: 'POST',
+                contentType: "application/json:charset=utf-8",
+                data: JSON.stringify({ id: id }),
+                dataType: 'json',
+                success: function (success) {
+                    if (success == "ok") {
+                        $("#deleteFlightConfirmation").html("<p style=\"color:forestgreen\">Sletting gjennomført</p>");
+                        GetAllFlights();
+                    }
+                    else {
+                        $("#deleteFlightConfirmation").html("<p style=\"color:indianred\">Feil ved sletting</p>");
+                    }
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
         });
     });
 
@@ -207,36 +368,28 @@
         $("#airportList").html(result);
     }
 
-    function DisplayAirportToEdit(jsAirport) {
-        var result =
-            "<h4>Endre følgende flyplass:</h4>" +
-            "<div class=\"input-group\">" +
-            "<span class=\"input-group-addon\">FlyplassID</span>" +
-            "<input id=\"airportIdEd\" type=\"text\" class=\"form-control\" value=\"" + jsAirport.id + "\" readonly=\"readonly\" />" +
-            "</div>";
-        result +=
-            "<div class=\"input-group\">" +
-            "<span class=\"input-group-addon\">Flyplassnavn</span>" +
-            "<input id=\"airportNameEd\" type=\"text\" class=\"form-control\" value=\"" + jsAirport.name + "\"/>" +
-            "</div>";
-        $("#editAirportInput").html(result);
-    }
+    
 
-    function DisplayAirportToDelete(jsAirport) {
-        var result =
-            "<h4>Slett følgende flyplass:</h4>" +
-            "<div class=\"input-group\">" +
-            "<span class=\"input-group-addon\">FlyplassID</span>" +
-            "<input id=\"airportIdDel\" type=\"text\" class=\"form-control\" value=\"" + jsAirport.id + "\" readonly=\"readonly\" />" +
-            "</div>";
-        result +=
-            "<div class=\"input-group\">" +
-            "<span class=\"input-group-addon\">Flyplassnavn</span>" +
-            "<input id=\"airportNameDel\" type=\"text\" class=\"form-control\" value=\"" + jsAirport.name + "\" readonly=\"readonly\" />" +
-            "</div>";
-        $("#deleteAirportDisplay").html(result);
+    function PopulateAirportDropDowns() {
+        $.ajax({
+            url: '/Admin/getAllAirports',
+            type: 'GET',
+            dataType: 'json',
+            success: function (jsAirports) {
+                var result = "<option selected hidden value=\"\">Velg flyplass</option>";
+                for (var a in jsAirports) {
+                    result += "<option value=\"" + jsAirports[a].id + "\">" + jsAirports[a].name + "</option>";
+                }
+                $("#fromAirportReg").html(result);
+                $("#toAirportReg").html(result);
+                $("#toAirportEd").html(result);
+                $("#fromAirportEd").html(result);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
     }
-
 
     function GetAllFlights() {
         $.ajax({
@@ -263,20 +416,42 @@
             "<th>Til</th>" +
             "<th>Avgang</th>" +
             "<th>Ankomst</th>" +
+            "<th>Pris</th>" +
             "</tr>" +
             "</thead>";
         for (var f in jsFlights) {
             result +=
                 "<tr>" +
                 "<td><input type=\"radio\" name =\"idFlight\" value=\"" + jsFlights[f].id + "\"></td>" +
-                "<td>" + jsFlights[f].fromAirport + "</td>" +
-                "<td>" + jsFlights[f].toAirport + "</td>" +
+                "<td>" + jsFlights[f].fromAirportName + "</td>" +
+                "<td>" + jsFlights[f].toAirportName + "</td>" +
                 "<td>" + jsFlights[f].departure + "</td>" +
                 "<td>" + jsFlights[f].arrival + "</td>" +
+                "<td>" + jsFlights[f].price + " kr</td>" +
                 "</tr>";
         }
         result += "</table>";
         $("#flightList").html(result);
+    }
+
+    function ValidateFlightReg(jsFlight) {
+        var validationOK = true;
+        if (jsFlight.fromAirport == null) {
+            nullVal = false;
+        }
+        if (jsFlight.toAirport == null) {
+            nullVal = false;
+        }
+        if (jsFlight.departure == null) {
+            nullVal = false;
+        }
+        if (jsFlight.arrival == null) {
+            nullVal = false;
+        }
+        if (jsFlight.price == null) {
+            nullVal = false;
+        }
+        return validationOK;
     }
 
 </script>
@@ -320,13 +495,29 @@
                     <button id="showEditAirport" class="btn btn-primary">Endre</button>
                     <button id="showDeleteAirport" class="btn btn-primary">Slett</button>
                 </div>
-                <div id="editAirport">
-                    <div id="editAirportInput"></div>
+                <div id="editAirport">  
+                    <h4>Endre følgende flyplass:</h4>
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        <input id="airportIdEd" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Navn</span>
+                        <input id="airportNameEd" type="text" class="form-control" />
+                    </div>
                     <button id="confirmEditAirport" class="btn btn-success">Bekreft endring</button><br/>
                     <span id="editAirportConfirmation"></span>
                 </div>
                 <div id="deleteAirport">
-                    <div id="deleteAirportDisplay"></div>
+                    <h4>Slett følgende flyplass:</h4>
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        <input id="airportIdDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Navn</span>
+                        <input id="airportNameDel" type="text" class="form-control" readonly />
+                    </div>
                     <button id="confirmDeleteAirport" class="btn btn-danger">Bekreft sletting</button><br />
                     <span id="deleteAirportConfirmation"></span>
                 </div>
@@ -337,23 +528,19 @@
                     <h2>Registrer ny flyvning</h2><br />
                     <div class="input-group">
                         <span class="input-group-addon">Fra flyplass</span>
-                        <select id="fromAirportReg">
-                            <option selected hidden value="">Velg flyplass</option>
-                        </select>
+                        <select id="fromAirportReg"></select>
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">Til flyplass</span>
-                        <select id="toAirportReg">
-                            <option selected hidden value="">Velg flyplass</option>
-                        </select>
+                        <select id="toAirportReg"></select>
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">Avreise</span>
-                        <input id="departureReg" type="date" class="form-control" />
+                        <input id="departureReg" type="datetime" class="form-control" />
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">Ankomst</span>
-                        <input id="arrivalReg" type="date" class="form-control" />
+                        <input id="arrivalReg" type="datetime" class="form-control" />
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">Pris</span>
@@ -370,12 +557,60 @@
                     <button id="showDeleteFlight" class="btn btn-primary">Slett</button>
                 </div>
                 <div id="editFlight">
-                    <div id="editFlightInput"></div>
+                    <h4>Endre følgende flyvning:</h4>
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        <input id="flightIdEd" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Fra flyplass</span>
+                        <select id="fromAirportEd"></select>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Til flyplass</span>
+                        <select id="toAirportEd"></select>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Avreise</span>
+                        <input id="departureEd" type="datetime" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Ankomst</span>
+                        <input id="arrivalEd" type="datetime" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Pris</span>
+                        <input id="priceEd" type="number" class="form-control" />
+                    </div>
                     <button id="confirmEditFlight" class="btn btn-success">Bekreft endring</button><br />
                     <span id="editFlightConfirmation"></span>
                 </div>
                 <div id="deleteFlight">
-                    <div id="deleteFlightDisplay"></div>
+                    <h4>Slett følgende flyvning:</h4>
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        <input id="flightIdDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Fra flyplass</span>
+                        <input id="fromAirportDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Til flyplass</span>
+                        <input id="toAirportDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Avreise</span>
+                        <input id="departureDel" type="datetime" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Ankomst</span>
+                        <input id="arrivalDel" type="datetime" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Pris</span>
+                        <input id="priceDel" type="number" class="form-control" readonly />
+                    </div>
                     <button id="confirmDeleteFlight" class="btn btn-danger">Bekreft sletting</button><br />
                     <span id="deleteFlightConfirmation"></span>
                 </div>
