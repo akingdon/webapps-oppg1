@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Logget ut av administrator";
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Logget ut av administrator</h1>
+    </div>
+    <div class="jumbotron">
+        <div class="row">
+            @if (ViewBag.Admin)
+            {
+                <p style="color:forestgreen">Innlogget</p>
+            }
+            else
+            {
+                <p style="color:indianred">Ikke innlogget</p>
+            }
+        </div>
+    </div>
+</div>
+

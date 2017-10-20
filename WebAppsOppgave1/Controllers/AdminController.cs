@@ -15,17 +15,23 @@ namespace WebAppsOppgave1.Controllers
         // GET: Admin
         public ActionResult Index()
         {
+            if ((bool)Session["Admin"] == false)
+            {
+                return RedirectToAction("LogIn");
+            }
+
             if (Session["Admin"] == null)
             {
                 Session["Admin"] = false;
                 ViewBag.Admin = false;
+
+                return RedirectToAction("LogIn");
             }
             else
             {
                 ViewBag.Admin = (bool)Session["Admin"];
-            }
-
-            return View();
+                return View();
+            }            
         }
 
         [HttpPost]
@@ -41,12 +47,20 @@ namespace WebAppsOppgave1.Controllers
             {
                 Session["Admin"] = false;
                 ViewBag.Admin = false;
-                return View();
+                return RedirectToAction("LogIn");
             }
         }
 
         public ActionResult LogIn()
         {
+            return View();
+        }
+
+        public ActionResult LogOut()
+        {
+            ViewBag.Admin = false;
+            Session["Admin"] = false;
+
             return View();
         }
 

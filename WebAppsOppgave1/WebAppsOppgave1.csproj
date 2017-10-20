@@ -204,6 +204,8 @@
     <Content Include="Views\Home\LogIn.cshtml" />
     <Content Include="Views\Admin\LogIn.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Home\LogOut.cshtml" />
+    <Content Include="Views\Admin\LogOut.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

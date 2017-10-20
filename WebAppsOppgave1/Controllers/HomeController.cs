@@ -67,6 +67,13 @@ namespace WebAppsOppgave1.Controllers
         {
             return View();
         }
+        public ActionResult LogOut()
+        {
+            ViewBag.LoggedIn = false;
+            Session["LoggedIn"] = false;
+
+            return View();
+        }
 
         public string getAirportNames()
         {
