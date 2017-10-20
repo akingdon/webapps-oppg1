@@ -164,6 +164,74 @@ namespace WebAppsOppgave1.DAL
             }
         }
 
+        public List<Booking> getAllBookings()
+        {
+            DB Db = new DB();
+            return Db.Booking.ToList();
+        }
+        public Booking getBooking(int id)
+        {
+            DB Db = new DB();
+            return Db.Booking.Find(id);
+        }
+        public string registerBooking(int userId, int flightId, int amount)
+        {
+            DB Db = new DB();
+            try
+            {
+                var user = Db.Users.Find(userId);
+                var flight = Db.Flight.Find(flightId);
+
+                var booking = new Booking
+                {
+                    User = user,
+                    Flight = flight,
+                    Amount = amount
+                };
+                Db.Booking.Add(booking);
+                Db.SaveChanges();
+                return "ok";
+            }
+            catch (Exception e)
+            {
+                return "Adding to DB failed";
+            }
+        }
+        public string editBooking(int id, int userId, int flightId, int amount)
+        {
+            DB Db = new DB();
+            try
+            {
+                var user = Db.Users.Find(userId);
+                var flight = Db.Flight.Find(flightId);
+                var bookingToEdit = Db.Booking.Find(id);
+                bookingToEdit.User = user;
+                bookingToEdit.Flight = flight;
+                bookingToEdit.Amount = amount;
+                Db.SaveChanges();
+                return "ok";
+            }
+            catch
+            {
+                return "Editing in DB failed";
+            }
+        }
+        public string deleteBooking(int id)
+        {
+            DB Db = new DB();
+            try
+            {
+                var bookingToDelete = Db.Booking.Find(id);
+                Db.Booking.Remove(bookingToDelete);
+                Db.SaveChanges();
+                return "ok";
+            }
+            catch
+            {
+                return "Deleting from DB failed";
+            }
+        }
+
         public List<User> getAllUsers()
         {
             DB Db = new DB();

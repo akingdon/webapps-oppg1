@@ -216,7 +216,6 @@ namespace WebAppsOppgave1.Controllers
                 foreach(Booking b in Bookings)
                 {
                     b.Flight = Db.Flight.Include(f => f.FromAirport).Include(f => f.ToAirport).Single(f => f.Id == b.Id);
-                    b.TotalPrice = b.Flight.Price * b.Amount;
                 }
 
                 return View(Bookings);

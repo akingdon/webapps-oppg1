@@ -68,6 +68,32 @@ namespace WebAppsOppgave1.BLL
             return AdminDAL.deleteFlight(id);
         }
 
+        public List<Booking> getAllBookings()
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.getAllBookings();
+        }
+        public Booking getBooking(int id)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.getBooking(id);
+        }
+        public string registerBooking(int userId, int flightId, int amount)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.registerBooking(userId, flightId, amount);
+        }
+        public string editBooking(int id, int userId, int flightId, int amount)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.editBooking(id, userId, flightId, amount);
+        }
+        public string deleteBooking(int id)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.deleteBooking(id);
+        }
+
         public List<User> getAllUsers()
         {
             var AdminDAL = new AdminDAL();

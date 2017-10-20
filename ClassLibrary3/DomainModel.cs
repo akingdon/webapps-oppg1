@@ -36,7 +36,14 @@ namespace WebAppsOppgave1.Model
 
     public class JsBooking
     {
-        public int flight { get; set; }
-        public int amount { get; set; }
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public string UserFirstname { get; set; }
+        public string UserLastname { get; set; }
+        public int FlightId { get; set; }
+        public string FlightFrom { get; set; }
+        public string FlightTo { get; set; }
+        public string FlightDeparture { get; set; }
+        public int Amount { get; set; }
     }
 }

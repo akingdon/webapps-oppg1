@@ -203,6 +203,68 @@ namespace WebAppsOppgave1.Controllers
         }
 
 
+        public string getAllBookings()
+        {
+            var AdminBLL = new AdminBLL();
+            var bookings = AdminBLL.getAllBookings();
+            var jsBookings = new List<JsBooking>();
+            foreach (Booking b in bookings)
+            {
+                var aBooking = new JsBooking()
+                {
+                    Id = b.Id,
+                    UserId = b.User.Id,
+                    UserFirstname = b.User.Fornavn,
+                    UserLastname = b.User.Etternavn,
+                    FlightId = b.Flight.Id,
+                    FlightFrom = b.Flight.FromAirport.Name,
+                    FlightTo = b.Flight.ToAirport.Name,
+                    FlightDeparture = b.Flight.Departure.ToString("dd.MM.yyyy HH:mm"),
+                    Amount = b.Amount
+                };
+                jsBookings.Add(aBooking);
+            }
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(jsBookings);
+        }
+        public string getBooking(int id)
+        {
+            var AdminBLL = new AdminBLL();
+            var booking = AdminBLL.getBooking(id);
+            var jsBooking = new JsBooking()
+            {
+                Id = booking.Id,
+                UserId = booking.User.Id,
+                UserFirstname = booking.User.Fornavn,
+                UserLastname = booking.User.Etternavn,
+                FlightId = booking.Flight.Id,
+                FlightFrom = booking.Flight.FromAirport.Name,
+                FlightTo = booking.Flight.ToAirport.Name,
+                FlightDeparture = booking.Flight.Departure.ToString("dd.MM.yyyy HH:mm"),
+                Amount = booking.Amount
+            };
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(jsBooking);
+        }
+        public string registerBooking(int userId, int flightId, int amount)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.registerBooking(userId, flightId, amount));
+        }
+        public string editBooking(int id, int userId, int flightId, int amount)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.editBooking(id, userId, flightId, amount));
+        }
+        public string deleteBooking(int id)
+        {
+            var AdminBLL = new AdminBLL();
+            var jsonSerializer = new JavaScriptSerializer();
+            return jsonSerializer.Serialize(AdminBLL.deleteBooking(id));
+        }
+
         public string getAllUsers()
         {
             var AdminBLL = new AdminBLL();

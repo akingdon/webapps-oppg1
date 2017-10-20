@@ -75,38 +75,68 @@ namespace WebAppsOppgave1.Models
             };
             flight5.Arrival = flight5.Departure.AddHours(1);
 
-            var returnFlight1 = new Flight
+            var flight6 = new Flight
             {
                 FromAirport = airport2,
                 ToAirport = airport1,
                 Departure = new DateTime(2017, 10, 20, 12, 00, 00),
                 Price = 600
             };
-            returnFlight1.Arrival = returnFlight1.Departure.AddHours(1);
+            flight6.Arrival = flight6.Departure.AddHours(1);
 
-            var returnFlight2 = new Flight
+            var flight7 = new Flight
             {
                 FromAirport = airport2,
                 ToAirport = airport1,
                 Departure = new DateTime(2017, 10, 20, 14, 30, 00),
                 Price = 800
             };
-            returnFlight2.Arrival = returnFlight2.Departure.AddHours(1);
+            flight7.Arrival = flight7.Departure.AddHours(1);
 
-            var postSted = new PostSted
+            var postSted1 = new PostSted
             {
                 Postnr = "0171",
                 Poststed = "Oslo"
             };
 
-            var testUser = new User
+            var postSted2 = new PostSted
+            {
+                Postnr = "2345",
+                Poststed = "Snertingdal"
+            };
+
+            var user1 = new User
             {
                 Fornavn = "Kurt",
-                Etternavn = "Johnny",
+                Etternavn = "Johansen",
                 Adresse = "Brandts gate 2b",
-                Poststed = postSted,
+                Poststed = postSted1,
                 Epost = "test",
                 PassordHash = Controllers.HomeController.HashPassword("test")
+            };
+
+            var user2 = new User
+            {
+                Fornavn = "Rolf",
+                Etternavn = "Paulsen",
+                Adresse = "Høgglinna 9",
+                Poststed = postSted2,
+                Epost = "nr9@talas.no",
+                PassordHash = Controllers.HomeController.HashPassword("knus")
+            };
+
+            var booking1 = new Booking
+            {
+                User = user1,
+                Flight = flight2,
+                Amount = 2
+            };
+
+            var booking2 = new Booking
+            {
+                User = user1,
+                Flight = flight5,
+                Amount = 1
             };
 
             var admin = new Model.AdminUser
@@ -120,19 +150,23 @@ namespace WebAppsOppgave1.Models
             db.Airport.Add(airport2);
             db.Airport.Add(airport3);
             db.Airport.Add(airport4);
+
             db.Flight.Add(flight1);
             db.Flight.Add(flight2);
             db.Flight.Add(flight3);
             db.Flight.Add(flight4);
             db.Flight.Add(flight5);
+            db.Flight.Add(flight6);
+            db.Flight.Add(flight7);
 
-            db.Flight.Add(returnFlight1);
-            db.Flight.Add(returnFlight2);
-
-            db.Poststed.Add(postSted);
-            db.Users.Add(testUser);
+            db.Poststed.Add(postSted1);
+            db.Poststed.Add(postSted2);
+            db.Users.Add(user1);
+            db.Users.Add(user2);
             db.Admins.Add(admin);
-            
+
+            db.Booking.Add(booking1);
+            db.Booking.Add(booking2);
 
             base.Seed(db);
         }
