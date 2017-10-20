@@ -56,12 +56,8 @@ namespace WebAppsOppgave1.DAL
             DB Db = new DB();
             try
             {
-
                 var airportToEdit = Db.Airport.Find(id);
-
-
                 string OldName = airportToEdit.Name;
-
 
                 airportToEdit.Name = name;
                 Db.SaveChanges();
@@ -159,6 +155,97 @@ namespace WebAppsOppgave1.DAL
             {
                 var flightToDelete = Db.Flight.Find(id);
                 Db.Flight.Remove(flightToDelete);
+                Db.SaveChanges();
+                return "ok";
+            }
+            catch
+            {
+                return "Deleting from DB failed";
+            }
+        }
+
+        public List<User> getAllUsers()
+        {
+            DB Db = new DB();
+            return Db.Users.ToList();
+        }
+        public User getUser(int id)
+        {
+            DB Db = new DB();
+            return Db.Users.Find(id);
+        }
+        public string registerUser(string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, byte[] passord)
+        {
+            try
+            {
+                var Db = new DB();
+                var poststedToInsert = Db.Poststed.Find(postnummer);
+                if (poststedToInsert == null)
+                {
+                    poststedToInsert = new PostSted();
+                    poststedToInsert.Postnr = postnummer;
+                    poststedToInsert.Poststed = poststed;
+                    Db.Poststed.Add(poststedToInsert);
+                }
+
+                var user = new User();
+                user.Fornavn = fornavn;
+                user.Etternavn = etternavn;
+                user.Adresse = adresse;
+                user.Poststed = poststedToInsert;
+                user.Epost = epost;
+                user.PassordHash = passord;
+
+                
+
+                Db.Users.Add(user);
+                Db.SaveChanges();
+
+                return "ok";
+            }
+            catch (Exception e)
+            {
+                return "Adding to DB failed";
+            }
+        }
+        public string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, byte[] passord)
+        {
+            try
+            {
+                var Db = new DB();
+
+                var poststedToInsert = Db.Poststed.Find(postnummer);
+                if (poststedToInsert == null)
+                {
+                    poststedToInsert = new PostSted();
+                    poststedToInsert.Postnr = postnummer;
+                    poststedToInsert.Poststed = poststed;
+                    Db.Poststed.Add(poststedToInsert);
+                }
+
+                var userToEdit = Db.Users.Find(id);
+                userToEdit.Fornavn = fornavn;
+                userToEdit.Etternavn = etternavn;
+                userToEdit.Adresse = adresse;
+                userToEdit.Poststed = poststedToInsert;
+                userToEdit.Epost = epost;
+                userToEdit.PassordHash = passord;
+                Db.SaveChanges();
+
+                return "ok";
+            }
+            catch (Exception e)
+            {
+                return "Editing in DB failed";
+            }
+        }
+        public string deleteUser(int id)
+        {
+            DB Db = new DB();
+            try
+            {
+                var userToDelete = Db.Users.Find(id);
+                Db.Users.Remove(userToDelete);
                 Db.SaveChanges();
                 return "ok";
             }

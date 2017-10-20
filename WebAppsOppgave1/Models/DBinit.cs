@@ -93,13 +93,18 @@ namespace WebAppsOppgave1.Models
             };
             returnFlight2.Arrival = returnFlight2.Departure.AddHours(1);
 
+            var postSted = new PostSted
+            {
+                Postnr = "0171",
+                Poststed = "Oslo"
+            };
 
             var testUser = new User
             {
                 Fornavn = "Kurt",
                 Etternavn = "Johnny",
                 Adresse = "Brandts gate 2b",
-                Postnummer = "0171",
+                Poststed = postSted,
                 Epost = "test",
                 PassordHash = Controllers.HomeController.HashPassword("test")
             };
@@ -110,11 +115,6 @@ namespace WebAppsOppgave1.Models
                 PassordHash = Controllers.AdminController.HashPassword("admin")
             };
 
-            var postSted = new PostSted
-            {
-                Postnr = "0171",
-                Poststed = "Oslo"
-            };
 
             db.Airport.Add(airport1);
             db.Airport.Add(airport2);
@@ -129,9 +129,10 @@ namespace WebAppsOppgave1.Models
             db.Flight.Add(returnFlight1);
             db.Flight.Add(returnFlight2);
 
+            db.Poststed.Add(postSted);
             db.Users.Add(testUser);
             db.Admins.Add(admin);
-            db.Poststed.Add(postSted);
+            
 
             base.Seed(db);
         }
