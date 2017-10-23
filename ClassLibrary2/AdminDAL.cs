@@ -120,10 +120,14 @@ namespace WebAppsOppgave1.DAL
                 };
                 Db.Flight.Add(flight);
                 Db.SaveChanges();
+
+                WriteLogEvent("Added new flight: From " + fromAirport.Name + " " + departure + ", to " + toAirport.Name + " " + arrival + ", price: " + price + " (id: " + flight.Id + ").");
+
                 return "ok";
             }
             catch (Exception e)
             {
+                WriteLogError("Could not register new flight. Error: " + e.Message);
                 return "Adding to DB failed";
             }
         }
@@ -135,16 +139,30 @@ namespace WebAppsOppgave1.DAL
                 var fromAirport = Db.Airport.Find(fromAirportId);
                 var toAirport = Db.Airport.Find(toAirportId);
                 var flightToEdit = Db.Flight.Find(id);
+
+                var From = flightToEdit.FromAirport.Name;
+                var To = flightToEdit.ToAirport.Name;
+                var Departure = flightToEdit.Departure;
+                var Arrival = flightToEdit.Arrival;
+                var Price = flightToEdit.Price;
+
                 flightToEdit.FromAirport = fromAirport;
                 flightToEdit.ToAirport = toAirport;
                 flightToEdit.Departure = departure;
                 flightToEdit.Arrival = arrival;
                 flightToEdit.Price = price;
                 Db.SaveChanges();
+
+                WriteLogEvent("Edited flight id " + id + ": From airport was " + From + " " + Departure + 
+                    ", now " + flightToEdit.FromAirport.Name + " " + flightToEdit.Departure + ". Destination was " + To + 
+                    " " + Arrival + ", now " + flightToEdit.ToAirport.Name + " " + flightToEdit.Arrival + 
+                    ". Price was " + Price + ", now " + flightToEdit.Price);
+
                 return "ok";
             }
-            catch
+            catch (Exception e)
             {
+                WriteLogError("Could not edit flight id " + id + ". Error: " + e.Message);
                 return "Editing in DB failed";
             }
         }
@@ -154,12 +172,22 @@ namespace WebAppsOppgave1.DAL
             try
             {
                 var flightToDelete = Db.Flight.Find(id);
+
+                var From = flightToDelete.FromAirport.Name;
+                var Departure = flightToDelete.Departure;
+                var To = flightToDelete.ToAirport.Name;
+                var Arrival = flightToDelete.Arrival;
+
                 Db.Flight.Remove(flightToDelete);
                 Db.SaveChanges();
+
+                WriteLogEvent("Deleted flight id " + id + ": From " + From + " " + Departure + ", to " + To + " " + Arrival);
+
                 return "ok";
             }
-            catch
+            catch (Exception e)
             {
+                WriteLogError("Could not delete flight Id " + id + ". Error: " + e.Message);
                 return "Deleting from DB failed";
             }
         }
@@ -190,10 +218,14 @@ namespace WebAppsOppgave1.DAL
                 };
                 Db.Booking.Add(booking);
                 Db.SaveChanges();
+
+                WriteLogEvent("Registered new booking: User id " + user.Id + " with flight id " + flight.Id + ", " + amount + " passengers");
+
                 return "ok";
             }
             catch (Exception e)
             {
+                WriteLogError("Could not register new booking: " + e.Message);
                 return "Adding to DB failed";
             }
         }
@@ -205,14 +237,25 @@ namespace WebAppsOppgave1.DAL
                 var user = Db.Users.Find(userId);
                 var flight = Db.Flight.Find(flightId);
                 var bookingToEdit = Db.Booking.Find(id);
+
+                var OldUser = bookingToEdit.User.Id;
+                var OldFlight = bookingToEdit.Flight.Id;
+                var OldAmountOfPassengers = bookingToEdit.Amount;
+
                 bookingToEdit.User = user;
                 bookingToEdit.Flight = flight;
                 bookingToEdit.Amount = amount;
                 Db.SaveChanges();
+
+                WriteLogEvent("Edited booking with id " + bookingToEdit.Id + ": User id was " + OldUser + ", now " + 
+                    bookingToEdit.User.Id + ", flight id was " + OldFlight + ", now " + bookingToEdit.Flight.Id + 
+                    ", passengers was " + OldAmountOfPassengers + ", now " + bookingToEdit.Amount);
+
                 return "ok";
             }
-            catch
+            catch (Exception e)
             {
+                WriteLogError("Could not edit booking with id " + id + ". Error: " + e.Message);
                 return "Editing in DB failed";
             }
         }
@@ -222,12 +265,19 @@ namespace WebAppsOppgave1.DAL
             try
             {
                 var bookingToDelete = Db.Booking.Find(id);
+                var User = bookingToDelete.User.Id;
+                var Flight = bookingToDelete.Flight.Id;
+                var Amount = bookingToDelete.Amount;
                 Db.Booking.Remove(bookingToDelete);
                 Db.SaveChanges();
+
+                WriteLogEvent("Deleted booking id " + id + ": User " + User + ", flight " + Flight + ", passengers " + Amount);
+
                 return "ok";
             }
-            catch
+            catch (Exception e)
             {
+                WriteLogError("Could not delete booking with id " + id + ". Error: " + e.Message);
                 return "Deleting from DB failed";
             }
         }
@@ -262,17 +312,19 @@ namespace WebAppsOppgave1.DAL
                 user.Adresse = adresse;
                 user.Poststed = poststedToInsert;
                 user.Epost = epost;
-                user.PassordHash = passord;
-
-                
+                user.PassordHash = passord;                
 
                 Db.Users.Add(user);
                 Db.SaveChanges();
+
+                WriteLogEvent("Registered new user: " + user.Etternavn + ", " + user.Fornavn + ". " + user.Adresse + " " + user.Poststed.Postnr + " " + 
+                    user.Poststed.Poststed + ". " + user.Epost + " (id " + user.Id + ")");
 
                 return "ok";
             }
             catch (Exception e)
             {
+                WriteLogError("Could not register new user. Error: " + e.Message);
                 return "Adding to DB failed";
             }
         }
@@ -292,6 +344,14 @@ namespace WebAppsOppgave1.DAL
                 }
 
                 var userToEdit = Db.Users.Find(id);
+
+                var Fornavn = userToEdit.Fornavn;
+                var Etternavn = userToEdit.Etternavn;
+                var Adresse = userToEdit.Adresse;
+                var Postnr = userToEdit.Poststed.Postnr;
+                var Poststed = userToEdit.Poststed.Poststed;
+                var Epost = userToEdit.Epost;
+
                 userToEdit.Fornavn = fornavn;
                 userToEdit.Etternavn = etternavn;
                 userToEdit.Adresse = adresse;
@@ -300,10 +360,17 @@ namespace WebAppsOppgave1.DAL
                 userToEdit.PassordHash = passord;
                 Db.SaveChanges();
 
+                WriteLogEvent("Edited user id " + id + ": Fornavn from " + Fornavn + " to " + userToEdit.Fornavn + 
+                    ", etternavn from " + Etternavn + " to " + userToEdit.Etternavn + ", adresse from " + 
+                    Adresse + " to " + userToEdit.Adresse + ", postnr/-sted from " + Postnr + 
+                    " " + Poststed + " to " + userToEdit.Poststed.Postnr + " " + userToEdit.Poststed.Poststed + 
+                    ", epost from " + Epost + " to " + userToEdit.Epost);
+
                 return "ok";
             }
             catch (Exception e)
             {
+                WriteLogError("Could not edit user with id " + id + ". Error: " + e.Message);
                 return "Editing in DB failed";
             }
         }
@@ -315,10 +382,14 @@ namespace WebAppsOppgave1.DAL
                 var userToDelete = Db.Users.Find(id);
                 Db.Users.Remove(userToDelete);
                 Db.SaveChanges();
+
+                WriteLogEvent("Deleted user with Id " + id);
+
                 return "ok";
             }
-            catch
+            catch (Exception e)
             {
+                WriteLogError("Could not delete user with id " + id + ". Error: " + e.Message);
                 return "Deleting from DB failed";
             }
         }
