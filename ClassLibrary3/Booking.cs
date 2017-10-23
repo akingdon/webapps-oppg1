@@ -10,10 +10,9 @@ namespace WebAppsOppgave1.Model
     public class Booking
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
+        public virtual User User { get; set; }
         [Required]
-        public Flight Flight { get; set; }
+        public virtual Flight Flight { get; set; }
         public int Amount { get; set; }
-        public int TotalPrice { get; set; }
     }
 }

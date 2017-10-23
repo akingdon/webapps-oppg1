@@ -166,25 +166,22 @@ namespace WebAppsOppgave1.Controllers
             {
                 using (var db = new DB())
                 {
+                    var InputPostnummer = db.Poststed.Find(form["postnummer"]);
+                    if (InputPostnummer == null)
+                    {
+                        InputPostnummer = new PostSted();
+                        InputPostnummer.Postnr = form["postnummer"];
+                        InputPostnummer.Poststed = form["poststed"];
+                        db.Poststed.Add(InputPostnummer);
+                    }
+
                     var user = new User();
                     user.Fornavn = form["fornavn"];
                     user.Etternavn = form["etternavn"];
                     user.Adresse = form["adresse"];
-                    user.Postnummer = form["postnummer"];
+                    user.Poststed = InputPostnummer;
                     user.Epost = form["epost"];
                     user.PassordHash = HashPassword(form["passord"]);
-
-                    var InputPostnummer = form["postnummer"];
-
-                    var PoststedFound = db.Poststed.FirstOrDefault(p => p.Postnr == InputPostnummer);
-
-                    if (PoststedFound == null)
-                    {
-                        var Poststed = new PostSted();
-                        Poststed.Postnr = form["postnummer"];
-                        Poststed.Poststed = form["poststed"];
-                        db.Poststed.Add(Poststed);
-                    }
 
                     db.Users.Add(user);
                     db.SaveChanges();
@@ -219,7 +216,6 @@ namespace WebAppsOppgave1.Controllers
                 foreach(Booking b in Bookings)
                 {
                     b.Flight = Db.Flight.Include(f => f.FromAirport).Include(f => f.ToAirport).Single(f => f.Id == b.Id);
-                    b.TotalPrice = b.Flight.Price * b.Amount;
                 }
 
                 return View(Bookings);

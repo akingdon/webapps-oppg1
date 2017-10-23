@@ -12,28 +12,24 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <td>Kunde-ID</td>
-                    <td>Fly-ID</td>
                     <td>Fra</td>
                     <td>Til</td>
                     <td>Avgang</td>
                     <td>Ankomst</td>
+                    <td>Pris</td>
                     <td>Antall reisende</td>
-                    <td>Betalt</td>
                 </tr>
             </thead>
 
             @foreach (var booking in Model)
             {
                 <tr>
-                    <td>@booking.CustomerId</td>
-                    <td>@booking.Flight.Id</td>
                     <td>@booking.Flight.FromAirport.Name</td>
                     <td>@booking.Flight.ToAirport.Name</td>
                     <td>@booking.Flight.Departure.ToString("dd.MM.yyy HH:mm")</td>
                     <td>@booking.Flight.Arrival.ToString("dd.MM.yyy HH:mm")</td>
+                    <td>@booking.Flight.Price kr</td>
                     <td>@booking.Amount</td>
-                    <td>@booking.TotalPrice</td>
                 </tr>
             }
         </table>

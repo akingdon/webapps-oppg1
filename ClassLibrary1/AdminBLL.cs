@@ -15,6 +15,7 @@ namespace WebAppsOppgave1.BLL
             var AdminDAL = new AdminDAL();
             return AdminDAL.AdminInDb(UserName, HashedPassword);
         }
+
         public List<Airport> getAllAirports()
         {
             var AdminDAL = new AdminDAL();
@@ -65,6 +66,58 @@ namespace WebAppsOppgave1.BLL
         {
             var AdminDAL = new AdminDAL();
             return AdminDAL.deleteFlight(id);
+        }
+
+        public List<Booking> getAllBookings()
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.getAllBookings();
+        }
+        public Booking getBooking(int id)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.getBooking(id);
+        }
+        public string registerBooking(int userId, int flightId, int amount)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.registerBooking(userId, flightId, amount);
+        }
+        public string editBooking(int id, int userId, int flightId, int amount)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.editBooking(id, userId, flightId, amount);
+        }
+        public string deleteBooking(int id)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.deleteBooking(id);
+        }
+
+        public List<User> getAllUsers()
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.getAllUsers();
+        }
+        public User getUser(int id)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.getUser(id);
+        }
+        public string registerUser(string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, byte[] passord)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.registerUser(fornavn, etternavn, adresse, postnummer, poststed, epost, passord);
+        }
+        public string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, byte[] passord)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost, passord);
+        }
+        public string deleteUser(int id)
+        {
+            var AdminDAL = new AdminDAL();
+            return AdminDAL.deleteUser(id);
         }
     }
 }

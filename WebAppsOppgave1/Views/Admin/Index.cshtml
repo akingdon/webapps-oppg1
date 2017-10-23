@@ -16,6 +16,40 @@
             GetAllAirports();
         });
 
+        $("#flightButton").click(function () {
+            $("#airports").hide();
+            $("#bookings").hide();
+            $("#users").hide();
+            $("#deleteFlight").hide();
+            $("#editFlight").hide();
+            $("#flights").show();
+            PopulateAirportDropDowns();
+            GetAllFlights();
+        });
+
+        $("#bookingButton").click(function () {
+            $("#airports").hide();
+            $("#flights").hide();
+            $("#users").hide();
+            $("#deleteBooking").hide();
+            $("#editBooking").hide();
+            $("#bookings").show();
+            PopulateUserDropDowns();
+            PopulateFlightDropDowns();
+            GetAllBookings();
+        });
+
+        $("#userButton").click(function () {
+            $("#airports").hide();
+            $("#flights").hide();
+            $("#bookings").hide();
+            $("#deleteUser").hide();
+            $("#editUser").hide();
+            $("#users").show();
+            GetAllUsers();
+        });
+
+
         $("#registerAirport").click(function () {
             var name = $("#airportNameReg").val();
             if (name != "") {
@@ -162,16 +196,7 @@
         });
 
 
-        $("#flightButton").click(function () {
-            $("#airports").hide();
-            $("#bookings").hide();
-            $("#users").hide();
-            $("#deleteFlight").hide();
-            $("#editFlight").hide();
-            $("#flights").show();
-            PopulateAirportDropDowns();
-            GetAllFlights();
-        });
+        
 
         $("#registerFlight").click(function () {
             
@@ -279,13 +304,14 @@
         });
 
         $("#confirmEditFlight").click(function () {
+
             var id = $("#flightIdEd").val();
             var fromAirport = $("#fromAirportEd").val();
             var toAirport = $("#toAirportEd").val();
             var departure = $("#departureEd").val().toString("dd.MM.yyyy HH:mm");
             var arrival = $("#arrivalEd").val().toString("dd.MM.yyyy HH:mm");
             var price = $("#priceEd").val();
-            $("#editFlightConfirmation").html("<p>"+id+fromAirport+toAirport+departure+arrival+price+"</p>");
+            
             $.ajax({
                 url: '/Admin/editFlight',
                 type: 'POST',
@@ -330,7 +356,323 @@
                 }
             });
         });
+
+
+        $("#registerBooking").click(function () {
+
+            var userId = $("#userReg").val();
+            var flightId = $("#flightReg").val();
+            var amount = $("#amountReg").val();
+
+            $.ajax({
+                url: '/Admin/registerBooking',
+                type: 'POST',
+                contentType: "application/json:charset=utf-8",
+                data: JSON.stringify({ userId:userId, flightId:flightId, amount:amount }),
+                dataType: 'json',
+                success: function (success) {
+                    if (success == "ok") {
+                        $("#registerBookingConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
+                        GetAllBookings();
+                    }
+                    else {
+                        $("#registerBookingConfirmation").html("<p style=\"color:indianred\">Feil ved registrering</p>");
+                    }
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z + " :)");
+                }
+            });
+        });
+
+        $("#showEditBooking").click(function () {
+            $("#deleteBooking").hide();
+            $("#editBookingConfirmation").html("");
+            $("#editBooking").show();
+
+            if ($("input[name=idBooking]").is(":checked")) {
+                var id = $("input[name=idBooking]:checked").val();
+
+                $.ajax({
+                    url: '/Admin/getBooking',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ id:id }),
+                    dataType: 'json',
+                    success: function (jsBooking) {
+                        if (jsBooking != null) {
+                            $("#bookingIdEd").val(jsBooking.Id);
+                            $("#userEd").val(jsBooking.UserId);
+                            $("#flightEd").val(jsBooking.FlightId);
+                            $("#amountEd").val(jsBooking.Amount);
+                        }
+                        else {
+                            $("#editBookingConfirmation").html("<p style=\"color:indianred\">Fant ikke bestilling i database</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+
+            }
+            else {
+                $("#editBookingConfirmation").html("<p style=\"color:indianred\">Velg hvilken bestilling som skal endres</p>");
+            }
+        });
+
+        $("#showDeleteBooking").click(function () {
+
+            $("#editBooking").hide();
+            $("#deleteBookingConfirmation").html("");
+            $("#deleteBooking").show();
+
+            if ($("input[name=idBooking]").is(":checked")) {
+                var id = $("input[name=idBooking]:checked").val();
+
+                $.ajax({
+                    url: '/Admin/getBooking',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ id: id }),
+                    dataType: 'json',
+                    success: function (jsBooking) {
+                        if (jsBooking != null) {
+                            $("#bookingIdDel").val(jsBooking.Id);
+                            $("#userDel").val(jsBooking.UserFirstname + " " + jsBooking.UserLastname);
+                            $("#flightDel").val(jsBooking.FlightFrom + " - " + jsBooking.FlightTo + ": " +jsBooking.FlightDeparture);
+                            $("#amountDel").val(jsBooking.Amount);
+                        }
+                        else {
+                            $("#deleteBookingConfirmation").html("<p style=\"color:indianred\">Fant ikke bestilling i database</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+
+            }
+            else {
+                $("#deleteBookingConfirmation").html("<p style=\"color:indianred\">Velg hvilken bestilling som skal slettes</p>");
+            }
+        });
+
+        $("#confirmEditBooking").click(function () {
+            var id = $("#bookingIdEd").val();
+            var userId = $("#userEd").val();
+            var flightId = $("#flightEd").val();
+            var amount = $("#amountEd").val();
+            
+            $.ajax({
+                url: '/Admin/editBooking',
+                type: 'POST',
+                contentType: "application/json:charset=utf-8",
+                data: JSON.stringify({ id:id, userId:userId, flightId:flightId, amount:amount }),
+                dataType: 'json',
+                success: function (success) {
+                    if (success == "ok") {
+                        $("#editBookingConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
+                        GetAllBookings();
+                    }
+                    else {
+                        $("#editFlightConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
+                    }
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        });
+
+        $("#confirmDeleteBooking").click(function () {
+            var id = $("#bookingIdDel").val();
+
+            $.ajax({
+                url: '/Admin/deleteBooking',
+                type: 'POST',
+                contentType: "application/json:charset=utf-8",
+                data: JSON.stringify({ id:id }),
+                dataType: 'json',
+                success: function (success) {
+                    if (success == "ok") {
+                        $("#deleteBookingConfirmation").html("<p style=\"color:forestgreen\">Sletting gjennomført</p>");
+                        GetAllBookings();
+                    }
+                    else {
+                        $("#deleteBookingConfirmation").html("<p style=\"color:indianred\">Feil ved sletting</p>");
+                    }
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        });
+
+
+        $("#registerUser").click(function () {
+            var fornavn = $("#fornavnReg").val();
+            var etternavn = $("#etternavnReg").val();
+            var adresse = $("#adresseReg").val();
+            var postnummer = $("#postnummerReg").val();
+            var poststed = $("#poststedReg").val();
+            var epost = $("#epostReg").val();
+            var passord = $("#passordReg").val();
+
+            $.ajax({
+                url: '/Admin/registerUser',
+                type: 'POST',
+                contentType: "application/json:charset=utf-8",
+                data: JSON.stringify({ fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost, passord: passord }),
+                dataType: 'json',
+                success: function (success) {
+                    if (success == "ok") {
+                        $("#registerUserConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
+                        GetAllUsers();
+                    }
+                    else {
+                        $("#registerUserConfirmation").html("<p style=\"color:indianred\">Feil ved registrering</p>");
+                    }
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        });
+
+        $("#showEditUser").click(function () {
+            $("#deleteUser").hide();
+            $("#editUserConfirmation").html("");
+            $("#editUser").show();
+
+            if ($("input[name=idUser]").is(":checked")) {
+                var id = $("input[name=idUser]:checked").val();
+
+                $.ajax({
+                    url: '/Admin/getUser',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ id: id }),
+                    dataType: 'json',
+                    success: function (jsUser) {
+                        if (jsUser != null) {
+                            $("#userIdEd").val(jsUser.Id);
+                            $("#fornavnEd").val(jsUser.Fornavn);
+                            $("#etternavnEd").val(jsUser.Etternavn);
+                            $("#adresseEd").val(jsUser.Adresse);
+                            $("#postnummerEd").val(jsUser.Postnummer);
+                            $("#poststedEd").val(jsUser.Poststed);
+                            $("#epostEd").val(jsUser.Epost);
+                        }
+                        else {
+                            $("#registerUserConfirmation").html("<p style=\"color:indianred\">Fant ikke kunde i database</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+
+            }
+            else {
+                $("#editUserConfirmation").html("<p style=\"color:indianred\">Velg hvilken bruker som skal endres</p>");
+            }
+        });
+
+        $("#showDeleteUser").click(function () {
+            $("#editUser").hide();
+            $("#deleteUserConfirmation").html("");
+            $("#deleteUser").show();
+
+            if ($("input[name=idUser]").is(":checked")) {
+                var id = $("input[name=idUser]:checked").val();
+
+                $.ajax({
+                    url: '/Admin/getUser',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ id: id }),
+                    dataType: 'json',
+                    success: function (jsUser) {
+                        if (jsUser != null) {
+                            $("#userIdDel").val(jsUser.Id);
+                            $("#fornavnDel").val(jsUser.Fornavn);
+                            $("#etternavnDel").val(jsUser.Etternavn);
+                            $("#adresseDel").val(jsUser.Adresse);
+                            $("#postnummerDel").val(jsUser.Postnummer);
+                            $("#poststedDel").val(jsUser.Poststed);
+                            $("#epostDel").val(jsUser.Epost);
+                        }
+                        else {
+                            $("#registerUserConfirmation").html("<p style=\"color:indianred\">Fant ikke bruker i database</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+            else {
+                $("#deleteUserConfirmation").html("<p style=\"color:indianred\">Velg hvilken bruker som skal slettes</p>");
+            }
+        });
+
+        $("#confirmEditUser").click(function () {
+            var id = $("#userIdEd").val();
+            var fornavn = $("#fornavnEd").val();
+            var etternavn = $("#etternavnEd").val();
+            var adresse = $("#adresseEd").val();
+            var postnummer = $("#postnummerEd").val();
+            var poststed = $("#poststedEd").val();
+            var epost = $("#epostEd").val();
+            var passord = $("#passordEd").val();
+
+            $.ajax({
+                url: '/Admin/editUser',
+                type: 'POST',
+                contentType: "application/json:charset=utf-8",
+                data: JSON.stringify({ id:id, fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost, passord: passord }),
+                dataType: 'json',
+                success: function (success) {
+                    if (success == "ok") {
+                        $("#editUserConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
+                        GetAllUsers();
+                    }
+                    else {
+                        $("#editUserConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
+                    }
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        });
+
+        $("#confirmDeleteUser").click(function () {
+            var id = $("#userIdDel").val();
+
+            $.ajax({
+                url: '/Admin/deleteUser',
+                type: 'POST',
+                contentType: "application/json:charset=utf-8",
+                data: JSON.stringify({ id: id }),
+                dataType: 'json',
+                success: function (success) {
+                    if (success == "ok") {
+                        $("#deleteUserConfirmation").html("<p style=\"color:forestgreen\">Sletting gjennomført</p>");
+                        GetAllUsers();
+                    }
+                    else {
+                        $("#deleteUserConfirmation").html("<p style=\"color:indianred\">Feil ved sletting</p>");
+                    }
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        });
     });
+
 
 
     function GetAllAirports() {
@@ -382,8 +724,8 @@
                 }
                 $("#fromAirportReg").html(result);
                 $("#toAirportReg").html(result);
-                $("#toAirportEd").html(result);
                 $("#fromAirportEd").html(result);
+                $("#toAirportEd").html(result);
             },
             error: function (x, y, z) {
                 alert(x + '\n' + y + '\n' + z);
@@ -434,7 +776,7 @@
         $("#flightList").html(result);
     }
 
-    function ValidateFlightReg(jsFlight) {
+  /*  function ValidateFlightReg(jsFlight) {
         var validationOK = true;
         if (jsFlight.fromAirport == null) {
             nullVal = false;
@@ -452,6 +794,137 @@
             nullVal = false;
         }
         return validationOK;
+    }
+*/
+
+    function PopulateUserDropDowns() {
+        $.ajax({
+            url: '/Admin/getAllUsers',
+            type: 'GET',
+            dataType: 'json',
+            success: function (jsUsers) {
+                var result = "<option selected hidden value=\"\">Velg kunde</option>";
+                for (var u in jsUsers) {
+                    result += "<option value=\"" + jsUsers[u].Id + "\">" +
+                        jsUsers[u].Fornavn + " " + jsUsers[u].Etternavn + "</option>";
+                }
+                $("#userReg").html(result);
+                $("#userEd").html(result);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
+    function PopulateFlightDropDowns() {
+        $.ajax({
+            url: '/Admin/getAllFlights',
+            type: 'GET',
+            dataType: 'json',
+            success: function (jsFlights) {
+                var result = "<option selected hidden value=\"\">Velg flyvning</option>";
+                for (var f in jsFlights) {
+                    result += "<option value=\"" + jsFlights[f].id + "\">" +
+                        jsFlights[f].fromAirportName + " - " + jsFlights[f].toAirportName + ": " +
+                        jsFlights[f].departure + "</option>";
+                }
+                $("#flightReg").html(result);
+                $("#flightEd").html(result);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
+    function GetAllBookings() {
+        $.ajax({
+            url: '/Admin/getAllBookings',
+            type: 'GET',
+            dataType: 'json',
+            success: function (jsBookings) {
+                DisplayAllBookings(jsBookings);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
+    function DisplayAllBookings(jsBookings) {
+
+        var result =
+            "<table class=\"table table-striped\">" +
+            "<thead>" +
+            "<tr>" +
+            "<th></th>" +
+            "<th>Kunde</th>" +
+            "<th>Fra</th>" +
+            "<th>Til</th>" +
+            "<th>Avgang</th>" +
+            "<th>Antall reisende</th>" +
+            "</tr>" +
+            "</thead>";
+        for (var b in jsBookings) {
+            result +=
+                "<tr>" +
+                "<td><input type=\"radio\" name =\"idBooking\" value=\"" + jsBookings[b].Id + "\"></td>" +
+                "<td>" + jsBookings[b].UserFirstname + " " + jsBookings[b].UserLastname + "</td>" +
+                "<td>" + jsBookings[b].FlightFrom + "</td>" +
+                "<td>" + jsBookings[b].FlightTo + "</td>" +
+                "<td>" + jsBookings[b].FlightDeparture + "</td>" +
+                "<td>" + jsBookings[b].Amount + "</td>" +
+                "</tr>";
+        }
+        result += "</table>";
+        $("#bookingList").html(result);
+    }
+
+
+    function GetAllUsers() {
+        $.ajax({
+            url: '/Admin/getAllUsers',
+            type: 'GET',
+            dataType: 'json',
+            success: function (jsUsers) {
+                DisplayAllUsers(jsUsers);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
+    function DisplayAllUsers(jsUsers) {
+
+        var result =
+            "<table class=\"table table-striped\">" +
+            "<thead>" +
+            "<tr>" +
+            "<th></th>" +
+            "<th>Fornavn</th>" +
+            "<th>Etternavn</th>" +
+            "<th>Adresse</th>" +
+            "<th>Postnummer</th>" +
+            "<th>Poststed</th>" +
+            "<th>Epost</th>" +
+            "</tr>" +
+            "</thead>";
+        for (var u in jsUsers) {
+            result +=
+                "<tr>" +
+                "<td><input type=\"radio\" name =\"idUser\" value=\"" + jsUsers[u].Id + "\"></td>" +
+                "<td>" + jsUsers[u].Fornavn + "</td>" +
+                "<td>" + jsUsers[u].Etternavn + "</td>" +
+                "<td>" + jsUsers[u].Adresse + "</td>" +
+                "<td>" + jsUsers[u].Postnummer + "</td>" +
+                "<td>" + jsUsers[u].Poststed + "</td>" +
+                "<td>" + jsUsers[u].Epost + "</td>" +
+                "</tr>";
+        }
+        result += "</table>";
+        $("#userList").html(result);
     }
 
 </script>
@@ -607,19 +1080,184 @@
             </div>
 
             <div id="bookings" style="display:none">
+                <div>
+                    <h2>Registrer ny bestilling</h2><br />
+                    <div class="input-group">
+                        <span class="input-group-addon">Kunde</span>
+                        <select id="userReg"></select>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Flyvning</span>
+                        <select id="flightReg"></select>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Antall reisende</span>
+                        <input id="amountReg" type="number" class="form-control" />
+                    </div>
+                    <button id="registerBooking" class="btn btn-success">Registrer bestilling</button><br />
+                    <span id="registerBookingConfirmation"></span>
+                </div>
+                <h2>Registrerte bestillinger</h2>
                 <div id="bookingList">
                 </div>
                 <div>
-                    <button class="btn btn-primary">Endre</button>
-                    <button class="btn btn-danger">Slett</button>
+                    <button id="showEditBooking" class="btn btn-primary">Endre</button>
+                    <button id="showDeleteBooking" class="btn btn-primary">Slett</button>
+                </div>
+                <div id="editBooking">
+                    <h4>Endre følgende bestilling:</h4>
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        <input id="bookingIdEd" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Kunde</span>
+                        <select id="userEd"></select>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Flyvning</span>
+                        <select id="flightEd"></select>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Antall reisende</span>
+                        <input id="amountEd" type="number" class="form-control" />
+                    </div>
+                    <button id="confirmEditBooking" class="btn btn-success">Bekreft endring</button><br />
+                    <span id="editBookingConfirmation"></span>
+                </div>
+                <div id="deleteBooking">
+                    <h4>Slett følgende bestilling:</h4>
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        <input id="bookingIdDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Kunde</span>
+                        <input id="userDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Flyvning</span>
+                        <input id="flightDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Antall reisende</span>
+                        <input id="amountDel" type="number" class="form-control" readonly />
+                    </div>
+                    <button id="confirmDeleteBooking" class="btn btn-danger">Bekreft sletting</button><br />
+                    <span id="deleteBookingConfirmation"></span>
                 </div>
             </div>
+
             <div id="users" style="display:none">
+                <div>
+                    <h2>Registrer ny kunde</h2><br />
+                    <div class="input-group">
+                        <span class="input-group-addon">Fornavn</span>
+                        <input id="fornavnReg" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Etternavn</span>
+                        <input id="etternavnReg" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Adressee</span>
+                        <input id="adresseReg" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Postnummer</span>
+                        <input id="postnummerReg" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Poststed</span>
+                        <input id="poststedReg" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Epost</span>
+                        <input id="epostReg" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Passord</span>
+                        <input id="passordReg" type="password" class="form-control" />
+                    </div>
+                    <button id="registerUser" class="btn btn-success">Registrer kunde</button><br />
+                    <span id="registerUserConfirmation"></span>
+                </div>
+                <h2>Registrerte kunder</h2>
                 <div id="userList">
                 </div>
                 <div>
-                    <button class="btn btn-primary">Endre</button>
-                    <button class="btn btn-danger">Slett</button>
+                    <button id="showEditUser" class="btn btn-primary">Endre</button>
+                    <button id="showDeleteUser" class="btn btn-primary">Slett</button>
+                </div>
+                <div id="editUser">
+                    <h4>Endre følgende kunde:</h4>
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        <input id="userIdEd" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Fornavn</span>
+                        <input id="fornavnEd" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Etternavn</span>
+                        <input id="etternavnEd" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Adressee</span>
+                        <input id="adresseEd" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Postnummer</span>
+                        <input id="postnummerEd" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Poststed</span>
+                        <input id="poststedEd" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Epost</span>
+                        <input id="epostEd" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Passord</span>
+                        <input id="passordEd" type="password" class="form-control" />
+                    </div>
+                    <button id="confirmEditUser" class="btn btn-success">Bekreft endring</button><br />
+                    <span id="editUserConfirmation"></span>
+                </div>
+                <div id="deleteUser">
+                    <h4>Slett følgende kunde:</h4>
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        <input id="userIdDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Fornavn</span>
+                        <input id="fornavnDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Etternavn</span>
+                        <input id="etternavnDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Adressee</span>
+                        <input id="adresseDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Postnummer</span>
+                        <input id="postnummerDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Poststed</span>
+                        <input id="poststedDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Epost</span>
+                        <input id="epostDel" type="text" class="form-control" readonly />
+                    </div>
+                    <button id="confirmDeleteUser" class="btn btn-danger">Bekreft sletting</button><br />
+                    <span id="deleteUserConfirmation"></span>
                 </div>
             </div>
         </div>
