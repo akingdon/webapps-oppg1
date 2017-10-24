@@ -12,7 +12,9 @@ namespace WebAppsOppgave1.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public int UserId { get; set; }
         public virtual User User { get; set; }
+        public int FlightId { get; set; }
         public virtual Flight Flight { get; set; }
         public int Amount { get; set; }
     }

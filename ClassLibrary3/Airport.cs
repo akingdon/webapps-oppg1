@@ -13,6 +13,6 @@ namespace WebAppsOppgave1.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public String Name { get; set; }
-
+        public List<Flight> Flights { get; set; }
     }
 }

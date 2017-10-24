@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebAppsOppgave1.Model
@@ -14,5 +15,6 @@ namespace WebAppsOppgave1.Model
         public virtual PostSted Poststed { get; set; }
         public string Epost { get; set; }
         public byte[] PassordHash { get; set; }
+        public List<Booking> Bookings { get; set; }
     }
 }
