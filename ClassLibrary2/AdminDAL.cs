@@ -121,7 +121,7 @@ namespace WebAppsOppgave1.DAL
                 Db.Flight.Add(flight);
                 Db.SaveChanges();
 
-                WriteLogEvent("Added new flight: From " + fromAirport.Name + " " + departure + ", to " + toAirport.Name + " " + arrival + ", price: " + price + " (id: " + flight.Id + ").");
+                WriteLogEvent("Added new flight: From " + fromAirport.Name + " " + departure + ", to " + toAirport.Name + " " + arrival + ", price: " + price + " (id: " + flight.FlightId + ").");
 
                 return "ok";
             }
@@ -219,7 +219,7 @@ namespace WebAppsOppgave1.DAL
                 Db.Booking.Add(booking);
                 Db.SaveChanges();
 
-                WriteLogEvent("Registered new booking: User id " + user.Id + " with flight id " + flight.Id + ", " + amount + " passengers");
+                WriteLogEvent("Registered new booking: User id " + user.UserId + " with flight id " + flight.FlightId + ", " + amount + " passengers");
 
                 return "ok";
             }
@@ -238,8 +238,8 @@ namespace WebAppsOppgave1.DAL
                 var flight = Db.Flight.Find(flightId);
                 var bookingToEdit = Db.Booking.Find(id);
 
-                var OldUser = bookingToEdit.User.Id;
-                var OldFlight = bookingToEdit.Flight.Id;
+                var OldUser = bookingToEdit.User.UserId;
+                var OldFlight = bookingToEdit.Flight.FlightId;
                 var OldAmountOfPassengers = bookingToEdit.Amount;
 
                 bookingToEdit.User = user;
@@ -248,7 +248,7 @@ namespace WebAppsOppgave1.DAL
                 Db.SaveChanges();
 
                 WriteLogEvent("Edited booking with id " + bookingToEdit.Id + ": User id was " + OldUser + ", now " + 
-                    bookingToEdit.User.Id + ", flight id was " + OldFlight + ", now " + bookingToEdit.Flight.Id + 
+                    bookingToEdit.User.UserId + ", flight id was " + OldFlight + ", now " + bookingToEdit.Flight.FlightId + 
                     ", passengers was " + OldAmountOfPassengers + ", now " + bookingToEdit.Amount);
 
                 return "ok";
@@ -265,8 +265,8 @@ namespace WebAppsOppgave1.DAL
             try
             {
                 var bookingToDelete = Db.Booking.Find(id);
-                var User = bookingToDelete.User.Id;
-                var Flight = bookingToDelete.Flight.Id;
+                var User = bookingToDelete.User.UserId;
+                var Flight = bookingToDelete.Flight.FlightId;
                 var Amount = bookingToDelete.Amount;
                 Db.Booking.Remove(bookingToDelete);
                 Db.SaveChanges();
@@ -318,7 +318,7 @@ namespace WebAppsOppgave1.DAL
                 Db.SaveChanges();
 
                 WriteLogEvent("Registered new user: " + user.Etternavn + ", " + user.Fornavn + ". " + user.Adresse + " " + user.Poststed.Postnr + " " + 
-                    user.Poststed.Poststed + ". " + user.Epost + " (id " + user.Id + ")");
+                    user.Poststed.Poststed + ". " + user.Epost + " (id " + user.UserId + ")");
 
                 return "ok";
             }

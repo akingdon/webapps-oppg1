@@ -9,6 +9,8 @@ namespace WebAppsOppgave1.Models
 {
     public class Flight
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public virtual Airport FromAirport { get; set; }
         public virtual Airport ToAirport { get; set; }

@@ -259,3 +259,5 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+WebAppsOppgave1/logs/log_errors.txt
+WebAppsOppgave1/logs/log_events.txt

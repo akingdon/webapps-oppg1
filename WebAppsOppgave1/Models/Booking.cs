@@ -9,9 +9,10 @@ namespace WebAppsOppgave1.Models
 {
     public class Booking
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public virtual User User { get; set; }
-        [Required]
         public virtual Flight Flight { get; set; }
         public int Amount { get; set; }
     }

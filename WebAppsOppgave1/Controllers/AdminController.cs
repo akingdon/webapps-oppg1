@@ -153,7 +153,7 @@ namespace WebAppsOppgave1.Controllers
             {
                 var aFlight = new jsFlight()
                 {
-                    id = f.Id,
+                    id = f.FlightId,
                     fromAirportName = f.FromAirport.Name,
                     toAirportName = f.ToAirport.Name,
                     departure = f.Departure.ToString("dd.MM.yyyy HH:mm"),
@@ -171,7 +171,7 @@ namespace WebAppsOppgave1.Controllers
             var flight = AdminBLL.getFlight(id);
                 var jsFlight = new jsFlight()
                 {
-                    id = flight.Id,
+                    id = flight.FlightId,
                     fromAirportId = flight.FromAirport.Id,
                     fromAirportName = flight.FromAirport.Name,
                     toAirportId = flight.ToAirport.Id,
@@ -213,10 +213,10 @@ namespace WebAppsOppgave1.Controllers
                 var aBooking = new JsBooking()
                 {
                     Id = b.Id,
-                    UserId = b.User.Id,
+                    UserId = b.User.UserId,
                     UserFirstname = b.User.Fornavn,
                     UserLastname = b.User.Etternavn,
-                    FlightId = b.Flight.Id,
+                    FlightId = b.Flight.FlightId,
                     FlightFrom = b.Flight.FromAirport.Name,
                     FlightTo = b.Flight.ToAirport.Name,
                     FlightDeparture = b.Flight.Departure.ToString("dd.MM.yyyy HH:mm"),
@@ -234,10 +234,10 @@ namespace WebAppsOppgave1.Controllers
             var jsBooking = new JsBooking()
             {
                 Id = booking.Id,
-                UserId = booking.User.Id,
+                UserId = booking.User.UserId,
                 UserFirstname = booking.User.Fornavn,
                 UserLastname = booking.User.Etternavn,
-                FlightId = booking.Flight.Id,
+                FlightId = booking.Flight.FlightId,
                 FlightFrom = booking.Flight.FromAirport.Name,
                 FlightTo = booking.Flight.ToAirport.Name,
                 FlightDeparture = booking.Flight.Departure.ToString("dd.MM.yyyy HH:mm"),
@@ -274,7 +274,7 @@ namespace WebAppsOppgave1.Controllers
             {
                 var aUser = new JsUser()
                 {
-                    Id = u.Id,
+                    Id = u.UserId,
                     Fornavn = u.Fornavn,
                     Etternavn = u.Etternavn,
                     Adresse = u.Adresse,
@@ -293,7 +293,7 @@ namespace WebAppsOppgave1.Controllers
             var user = AdminBLL.getUser(id);
             var jsUser = new JsUser()
             {
-                Id = user.Id,
+                Id = user.UserId,
                 Fornavn = user.Fornavn,
                 Etternavn = user.Etternavn,
                 Adresse = user.Adresse,

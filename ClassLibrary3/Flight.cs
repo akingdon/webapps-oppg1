@@ -9,12 +9,14 @@ namespace WebAppsOppgave1.Model
 {
     public class Flight
     {
-        public int Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int FlightId { get; set; }
         public virtual Airport FromAirport { get; set; }
         public virtual Airport ToAirport { get; set; }
         public DateTime Departure { get; set; }
         public DateTime Arrival { get; set; }
-        public virtual Booking Booking { get; set; }
+        public virtual Booking Bookings { get; set; }
         public int Price { get; set; }
     }
 }
