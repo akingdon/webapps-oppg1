@@ -8,7 +8,7 @@ using WebAppsOppgave1.Model;
 
 namespace WebAppsOppgave1.DAL
 {
-    public class AdminDAL
+    public class AdminDAL : IAdminDAL
     {
         private readonly string LogPath = AppDomain.CurrentDomain.BaseDirectory + "\\logs\\";
         private const string LOG_EVENTS = "log_events.txt";

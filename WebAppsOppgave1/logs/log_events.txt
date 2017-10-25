@@ -1,0 +1,8 @@
+
+------------------------------
+onsdag 25. oktober 2017 10.48.45:
+Added new airport: qweeerg with id: 5
+
+------------------------------
+onsdag 25. oktober 2017 10.48.48:
+Deleted airport id: 5 name: qweeerg
