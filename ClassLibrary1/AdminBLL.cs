@@ -28,9 +28,9 @@ namespace WebAppsOppgave1.BLL
             return AdminInDb;
         }
 
-        public List<Airport> getAllAirports()
+        public List<Airport> getAllAirports(string name)
         {
-            var AllAirports = _repository.getAllAirports();
+            var AllAirports = _repository.getAllAirports(name);
             return AllAirports;
         }
 
@@ -58,9 +58,9 @@ namespace WebAppsOppgave1.BLL
             return DeletedAirport;
         }
 
-        public List<Flight> getAllFlights()
+        public List<Flight> getAllFlights(string from, string to, string departure)
         {
-            var AllFlights = _repository.getAllFlights();
+            var AllFlights = _repository.getAllFlights(from, to, departure);
             return AllFlights;
         }
 
@@ -88,9 +88,9 @@ namespace WebAppsOppgave1.BLL
             return DeletedFlight;
         }
 
-        public List<Booking> getAllBookings()
+        public List<Booking> getAllBookings(string user, string flight)
         {
-            var AllBookings = _repository.getAllBookings();
+            var AllBookings = _repository.getAllBookings(user, flight);
             return AllBookings;
         }
 
@@ -118,9 +118,9 @@ namespace WebAppsOppgave1.BLL
             return DeletedBooking;
         }
 
-        public List<User> getAllUsers()
+        public List<User> getAllUsers(string etternavn, string postnr)
         {
-            var AllUsers = _repository.getAllUsers();
+            var AllUsers = _repository.getAllUsers(etternavn, postnr);
             return AllUsers;
         }
 

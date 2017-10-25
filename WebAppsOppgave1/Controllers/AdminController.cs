@@ -106,9 +106,9 @@ namespace WebAppsOppgave1.Controllers
         }
 
 
-        public string getAllAirports()
+        public string getAllAirports(string name)
         {
-            var airports = _adminBLL.getAllAirports();
+            var airports = _adminBLL.getAllAirports(name);
             var jsAirports = new List<jsAirport>();
             foreach (Airport a in airports)
             {
@@ -158,9 +158,9 @@ namespace WebAppsOppgave1.Controllers
         }
 
 
-        public string getAllFlights()
+        public string getAllFlights(string from, string to, string departure)
         {
-            var flights = _adminBLL.getAllFlights();
+            var flights = _adminBLL.getAllFlights(from, to, departure);
             var jsFlights = new List<jsFlight>();
             foreach (Flight f in flights)
             {
@@ -217,9 +217,9 @@ namespace WebAppsOppgave1.Controllers
         }
 
 
-        public string getAllBookings()
+        public string getAllBookings(string user, string flight)
         {
-            var bookings = _adminBLL.getAllBookings();
+            var bookings = _adminBLL.getAllBookings(user, flight);
             var jsBookings = new List<JsBooking>();
             foreach (Booking b in bookings)
             {
@@ -279,9 +279,9 @@ namespace WebAppsOppgave1.Controllers
             return jsonSerializer.Serialize(_adminBLL.deleteBooking(id));
         }
 
-        public string getAllUsers()
+        public string getAllUsers(string etternavn, string postnr)
         {
-            var users = _adminBLL.getAllUsers();
+            var users = _adminBLL.getAllUsers(etternavn, postnr);
             var jsUsers = new List<JsUser>();
             foreach (User u in users)
             {
