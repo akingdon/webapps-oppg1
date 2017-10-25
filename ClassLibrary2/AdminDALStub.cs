@@ -119,12 +119,153 @@ namespace WebAppsOppgave1.DAL
 
         public List<Airport> getAllAirports(string name)
         {
-            throw new NotImplementedException();
+            var AllAirports = new List<Airport>();
+
+            var Airport1 = new Airport()
+            {
+                Id = 1,
+                Name = "Torp"
+            };
+            var Airport2 = new Airport
+            {
+                Id = 2,
+                Name = "Rygge"
+            };
+            var Airport3 = new Airport
+            {
+                Id = 3,
+                Name = "Torp"
+            };
+
+            if (String.IsNullOrEmpty(name))
+            {
+                AllAirports.Add(Airport1);
+                AllAirports.Add(Airport2);
+                AllAirports.Add(Airport3);
+
+            }
+            else
+            {
+                AllAirports.Add(Airport1);
+                AllAirports.Add(Airport3);
+            }
+
+            return AllAirports;
         }
 
         public List<Booking> getAllBookings(string user, string flight)
         {
-            throw new NotImplementedException();
+            var AllBookings = new List<Booking>();
+
+            var User1 = new User
+            {
+                Fornavn = "Fornavn",
+                Etternavn = "Etternavn",
+                Adresse = "Adresseveien 2",
+                Poststed = new PostSted
+                {
+                    Postnr = "0123",
+                    Poststed = "Oslo"
+                },
+                Epost = "e@post.no"
+            };
+            var User2 = new User
+            {
+                Fornavn = "AnnetFornavn",
+                Etternavn = "AnnetEtternavn",
+                Adresse = "Postnummerveien 9",
+                Poststed = new PostSted
+                {
+                    Postnr = "9876",
+                    Poststed = "Huttiheita"
+                },
+                Epost = "b@post.no"
+            };
+
+            var Flight1 = new Flight
+            {
+                Id = 8,
+                FromAirport = new Airport
+                {
+                    Name = "Torp"
+                },
+                Departure = DateTime.Parse("01.11.2017 12:00"),
+                ToAirport = new Airport
+                {
+                    Name = "Stockholm"
+                },
+                Arrival = DateTime.Parse("01.11.2017 12:50"),
+                Price = 900
+            };
+
+            var Flight2 = new Flight
+            {
+                Id = 9,
+                FromAirport = new Airport
+                {
+                    Name = "London"
+                },
+                Departure = DateTime.Parse("01.11.2017 12:00"),
+                ToAirport = new Airport
+                {
+                    Name = "Oslo"
+                },
+                Arrival = DateTime.Parse("01.11.2017 14:00"),
+                Price = 1200
+            };
+
+            var Booking1 = new Booking
+            {
+                Id = 1,
+                Amount = 4,
+                User = User1,
+                Flight = Flight1,
+            };
+            var Booking2 = new Booking
+            {
+                Id = 2,
+                Amount = 7,
+                User = User1,
+                Flight = Flight2,
+            };
+            var Booking3 = new Booking
+            {
+                Id = 3,
+                Amount = 6,
+                User = User2,
+                Flight = Flight1,
+            };
+
+            var Booking4 = new Booking
+            {
+                Id = 4,
+                Amount = 2,
+                User = User2,
+                Flight = Flight2,
+            };
+
+            if (String.IsNullOrEmpty(user) && String.IsNullOrEmpty(flight))
+            {
+                AllBookings.Add(Booking1);
+                AllBookings.Add(Booking2);
+                AllBookings.Add(Booking3);
+                AllBookings.Add(Booking4);
+            }
+            else if (!String.IsNullOrEmpty(user) && String.IsNullOrEmpty(flight))
+            {
+                AllBookings.Add(Booking3);
+                AllBookings.Add(Booking4);
+            }
+            else if (String.IsNullOrEmpty(user) && !String.IsNullOrEmpty(flight))
+            {
+                AllBookings.Add(Booking2);
+            }
+            else
+            {
+                AllBookings.Add(Booking1);
+            }
+
+            return AllBookings;
         }
 
         public List<Flight> getAllFlights(string from, string to, string departure)
