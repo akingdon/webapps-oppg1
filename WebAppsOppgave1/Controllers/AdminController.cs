@@ -12,14 +12,21 @@ namespace WebAppsOppgave1.Controllers
 {
     public class AdminController : Controller
     {
+        private IAdminBLL _adminBLL;
+
+        public AdminController()
+        {
+            _adminBLL = new AdminBLL();
+        }
+
+        public AdminController(IAdminBLL stub)
+        {
+            _adminBLL = stub;
+        }
+
         // GET: Admin
         public ActionResult Index()
         {
-            if ((bool)Session["Admin"] == false)
-            {
-                return RedirectToAction("LogIn");
-            }
-
             if (Session["Admin"] == null)
             {
                 Session["Admin"] = false;
@@ -27,6 +34,13 @@ namespace WebAppsOppgave1.Controllers
 
                 return RedirectToAction("LogIn");
             }
+
+            if ((bool)Session["Admin"] == false)
+            {
+                return RedirectToAction("LogIn");
+            }
+
+
             else
             {
                 ViewBag.Admin = (bool)Session["Admin"];
@@ -64,13 +78,12 @@ namespace WebAppsOppgave1.Controllers
             return View();
         }
 
-        private static bool AdminInDb(FormCollection form)
+        public bool AdminInDb(FormCollection form)
         {
-            var AdminBLL = new AdminBLL();
             
             var UserName = form["username"];
             byte[] HashedPassword = HashPassword(form["password"]);
-            var AdminUser = AdminBLL.AdminInDb(UserName, HashedPassword);
+            var AdminUser = _adminBLL.AdminInDb(UserName, HashedPassword);
 
             if (AdminUser == null)
             {
@@ -93,10 +106,9 @@ namespace WebAppsOppgave1.Controllers
         }
 
 
-        public string getAllAirports()
+        public string getAllAirports(string name)
         {
-            var AdminBLL = new AdminBLL();
-            var airports = AdminBLL.getAllAirports();
+            var airports = _adminBLL.getAllAirports(name);
             var jsAirports = new List<jsAirport>();
             foreach (Airport a in airports)
             {
@@ -113,41 +125,42 @@ namespace WebAppsOppgave1.Controllers
 
         public string getAirport(int id)
         {
-            var AdminBLL = new AdminBLL();
-            var airport = AdminBLL.getAirport(id);
-            var jsAirport = new jsAirport()
+            var airport = _adminBLL.getAirport(id);
+            if (airport != null)
             {
-                id = airport.Id,
-                name = airport.Name
-            };
-            var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(jsAirport);
+                var jsAirport = new jsAirport()
+                {
+                    id = airport.Id,
+                    name = airport.Name
+                };
+
+                var jsonSerializer = new JavaScriptSerializer();
+                return jsonSerializer.Serialize(jsAirport);
+            }
+
+            return null;
         }
 
         public string registerAirport(string name)
         {
-            var AdminBLL = new AdminBLL();
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.registerAirport(name));
+            return jsonSerializer.Serialize(_adminBLL.registerAirport(name));
         }
         public string editAirport(int id, string name)
         {
-            var AdminBLL = new AdminBLL();
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.editAirport(id, name));
+            return jsonSerializer.Serialize(_adminBLL.editAirport(id, name));
         }
         public string deleteAirport(int id)
         {
-            var AdminBLL = new AdminBLL();
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.deleteAirport(id));
+            return jsonSerializer.Serialize(_adminBLL.deleteAirport(id));
         }
 
 
-        public string getAllFlights()
+        public string getAllFlights(string from, string to, string departure)
         {
-            var AdminBLL = new AdminBLL();
-            var flights = AdminBLL.getAllFlights();
+            var flights = _adminBLL.getAllFlights(from, to, departure);
             var jsFlights = new List<jsFlight>();
             foreach (Flight f in flights)
             {
@@ -167,8 +180,9 @@ namespace WebAppsOppgave1.Controllers
         }
         public string getFlight(int id)
         {
-            var AdminBLL = new AdminBLL();
-            var flight = AdminBLL.getFlight(id);
+            var flight = _adminBLL.getFlight(id);
+            if (flight != null)
+            {
                 var jsFlight = new jsFlight()
                 {
                     id = flight.Id,
@@ -182,31 +196,30 @@ namespace WebAppsOppgave1.Controllers
                 };
                 var jsonSerializer = new JavaScriptSerializer();
                 return jsonSerializer.Serialize(jsFlight);
+            }
+
+            return null;
         }
         public string registerFlight(int fromAirportId, int toAirportId, DateTime departure, DateTime arrival, int price)
         {
-            var AdminBLL = new AdminBLL();
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.registerFlight(fromAirportId, toAirportId, departure, arrival, price));
+            return jsonSerializer.Serialize(_adminBLL.registerFlight(fromAirportId, toAirportId, departure, arrival, price));
         }
         public string editFlight(int id, int fromAirportId, int toAirportId, DateTime departure, DateTime arrival, int price)
         {
-            var AdminBLL = new AdminBLL();
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.editFlight(id, fromAirportId, toAirportId, departure, arrival, price));
+            return jsonSerializer.Serialize(_adminBLL.editFlight(id, fromAirportId, toAirportId, departure, arrival, price));
         }
         public string deleteFlight(int id)
         {
-            var AdminBLL = new AdminBLL();
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.deleteFlight(id));
+            return jsonSerializer.Serialize(_adminBLL.deleteFlight(id));
         }
 
 
-        public string getAllBookings()
+        public string getAllBookings(string user, string flight)
         {
-            var AdminBLL = new AdminBLL();
-            var bookings = AdminBLL.getAllBookings();
+            var bookings = _adminBLL.getAllBookings(user, flight);
             var jsBookings = new List<JsBooking>();
             foreach (Booking b in bookings)
             {
@@ -229,46 +242,46 @@ namespace WebAppsOppgave1.Controllers
         }
         public string getBooking(int id)
         {
-            var AdminBLL = new AdminBLL();
-            var booking = AdminBLL.getBooking(id);
-            var jsBooking = new JsBooking()
+            var booking = _adminBLL.getBooking(id);
+            if (booking != null)
             {
-                Id = booking.Id,
-                UserId = booking.User.Id,
-                UserFirstname = booking.User.Fornavn,
-                UserLastname = booking.User.Etternavn,
-                FlightId = booking.Flight.Id,
-                FlightFrom = booking.Flight.FromAirport.Name,
-                FlightTo = booking.Flight.ToAirport.Name,
-                FlightDeparture = booking.Flight.Departure.ToString("dd.MM.yyyy HH:mm"),
-                Amount = booking.Amount
-            };
-            var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(jsBooking);
+                var jsBooking = new JsBooking()
+                {
+                    Id = booking.Id,
+                    UserId = booking.User.Id,
+                    UserFirstname = booking.User.Fornavn,
+                    UserLastname = booking.User.Etternavn,
+                    FlightId = booking.Flight.Id,
+                    FlightFrom = booking.Flight.FromAirport.Name,
+                    FlightTo = booking.Flight.ToAirport.Name,
+                    FlightDeparture = booking.Flight.Departure.ToString("dd.MM.yyyy HH:mm"),
+                    Amount = booking.Amount
+                };
+                var jsonSerializer = new JavaScriptSerializer();
+                return jsonSerializer.Serialize(jsBooking);
+            }
+
+            return null;
         }
         public string registerBooking(int userId, int flightId, int amount)
         {
-            var AdminBLL = new AdminBLL();
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.registerBooking(userId, flightId, amount));
+            return jsonSerializer.Serialize(_adminBLL.registerBooking(userId, flightId, amount));
         }
         public string editBooking(int id, int userId, int flightId, int amount)
         {
-            var AdminBLL = new AdminBLL();
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.editBooking(id, userId, flightId, amount));
+            return jsonSerializer.Serialize(_adminBLL.editBooking(id, userId, flightId, amount));
         }
         public string deleteBooking(int id)
         {
-            var AdminBLL = new AdminBLL();
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.deleteBooking(id));
+            return jsonSerializer.Serialize(_adminBLL.deleteBooking(id));
         }
 
-        public string getAllUsers()
+        public string getAllUsers(string etternavn, string postnr)
         {
-            var AdminBLL = new AdminBLL();
-            var users = AdminBLL.getAllUsers();
+            var users = _adminBLL.getAllUsers(etternavn, postnr);
             var jsUsers = new List<JsUser>();
             foreach (User u in users)
             {
@@ -289,40 +302,41 @@ namespace WebAppsOppgave1.Controllers
         }
         public string getUser(int id)
         {
-            var AdminBLL = new AdminBLL();
-            var user = AdminBLL.getUser(id);
-            var jsUser = new JsUser()
+            var user = _adminBLL.getUser(id);
+            if (user != null)
             {
-                Id = user.Id,
-                Fornavn = user.Fornavn,
-                Etternavn = user.Etternavn,
-                Adresse = user.Adresse,
-                Postnummer = user.Poststed.Postnr,
-                Poststed = user.Poststed.Poststed,
-                Epost = user.Epost
-            };
-            var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(jsUser);
+                var jsUser = new JsUser()
+                {
+                    Id = user.Id,
+                    Fornavn = user.Fornavn,
+                    Etternavn = user.Etternavn,
+                    Adresse = user.Adresse,
+                    Postnummer = user.Poststed.Postnr,
+                    Poststed = user.Poststed.Poststed,
+                    Epost = user.Epost
+                };
+                var jsonSerializer = new JavaScriptSerializer();
+                return jsonSerializer.Serialize(jsUser);
+            }
+
+            return null;
         }
         public string registerUser(string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, string passord)
         {
-            var AdminBLL = new AdminBLL();
             var hashedPassword = HashPassword(passord);
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.registerUser(fornavn, etternavn, adresse, postnummer, poststed, epost, hashedPassword));
+            return jsonSerializer.Serialize(_adminBLL.registerUser(fornavn, etternavn, adresse, postnummer, poststed, epost, hashedPassword));
         }
         public string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, string passord)
         {
-            var AdminBLL = new AdminBLL();
             var hashedPassword = HashPassword(passord);
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost, hashedPassword));
+            return jsonSerializer.Serialize(_adminBLL.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost, hashedPassword));
         }
         public string deleteUser(int id)
         {
-            var AdminBLL = new AdminBLL();
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(AdminBLL.deleteUser(id));
+            return jsonSerializer.Serialize(_adminBLL.deleteUser(id));
         }
     }
 }

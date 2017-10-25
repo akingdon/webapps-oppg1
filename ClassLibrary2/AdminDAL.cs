@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,7 +10,7 @@ using WebAppsOppgave1.Model;
 
 namespace WebAppsOppgave1.DAL
 {
-    public class AdminDAL
+    public class AdminDAL : IAdminDAL
     {
         private readonly string LogPath = AppDomain.CurrentDomain.BaseDirectory + "\\logs\\";
         private const string LOG_EVENTS = "log_events.txt";
@@ -20,10 +22,18 @@ namespace WebAppsOppgave1.DAL
             AdminUser user = Db.Admins.FirstOrDefault(a => a.PassordHash == HashedPassword && a.Epost == UserName);
             return user;
         }
-        public List<Airport> getAllAirports()
+        public List<Airport> getAllAirports(string name)
         {
             DB Db = new DB();
-            return Db.Airport.ToList();
+            var nameSet = !String.IsNullOrEmpty(name);
+
+            if (nameSet)
+            {
+                return Db.Airport.Where(a => a.Name == name).ToList();
+            }
+            else{
+                return Db.Airport.ToList();
+            }
         }
         public Airport getAirport(int id)
         {
@@ -92,10 +102,50 @@ namespace WebAppsOppgave1.DAL
             }
         }
 
-        public List<Flight> getAllFlights()
+        public List<Flight> getAllFlights(string from, string to, string departure)
         {
             DB Db = new DB();
-            return Db.Flight.ToList();
+            var fromSet = int.TryParse(from, out int fromId);
+            var toSet = int.TryParse(to, out int toId);
+            var departureSet = DateTime.TryParse(departure, out DateTime departureFilter);
+
+            if (fromSet && !toSet && !departureSet)
+            {
+                return Db.Flight.Where(f => f.FromAirport.Id == fromId).ToList();
+            }
+            else if (!fromSet && toSet && !departureSet)
+            {
+                return Db.Flight.Where(f => f.ToAirport.Id == toId).ToList();
+            }
+            else if (!fromSet && !toSet && departureSet)
+            {
+                return Db.Flight.Where(f => DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+            }
+            else if (fromSet && toSet && !departureSet)
+            {
+                return Db.Flight.Where(f => f.FromAirport.Id == fromId &&
+                                            f.ToAirport.Id == toId).ToList();
+            }
+            else if (fromSet && !toSet && departureSet)
+            {
+                return Db.Flight.Where(f => f.FromAirport.Id == fromId &&
+                                            DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+            }
+            else if (!fromSet && toSet && departureSet)
+            {
+                return Db.Flight.Where(f => f.ToAirport.Id == toId &&
+                                            DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+            }
+            else if (fromSet && toSet && departureSet)
+            {
+                return Db.Flight.Where(f => f.FromAirport.Id == fromId &&
+                                            f.ToAirport.Id == toId &&
+                                            DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+            }
+            else
+            {
+                return Db.Flight.ToList();
+            }
         }
         public Flight getFlight(int id)
         {
@@ -192,10 +242,28 @@ namespace WebAppsOppgave1.DAL
             }
         }
 
-        public List<Booking> getAllBookings()
+        public List<Booking> getAllBookings(string user, string flight)
         {
             DB Db = new DB();
-            return Db.Booking.ToList();
+            var userSet = int.TryParse(user, out int userFilterId);
+            var flightSet = int.TryParse(flight, out int flightFilterId);
+
+            if (userSet && !flightSet)
+            {
+                return Db.Booking.Where(b => b.User.Id == userFilterId).ToList();
+            }
+            else if (!userSet && flightSet)
+            {
+                return Db.Booking.Where(b => b.Flight.Id == flightFilterId).ToList();
+            }
+            else if (userSet && flightSet)
+            {
+                return Db.Booking.Where(b => b.User.Id == userFilterId && b.Flight.Id == flightFilterId).ToList();
+            }
+            else
+            {
+                return Db.Booking.ToList();
+            }
         }
         public Booking getBooking(int id)
         {
@@ -282,10 +350,28 @@ namespace WebAppsOppgave1.DAL
             }
         }
 
-        public List<User> getAllUsers()
+        public List<User> getAllUsers(string etternavn, string postnr)
         {
             DB Db = new DB();
-            return Db.Users.ToList();
+            var etternavnSet = !String.IsNullOrEmpty(etternavn);
+            var postnrSet = !String.IsNullOrEmpty(postnr);
+
+            if (etternavnSet && !postnrSet)
+            {
+                return Db.Users.Where(u => u.Etternavn == etternavn).ToList();
+            }
+            else if (!etternavnSet && postnrSet)
+            {
+                return Db.Users.Where(u => u.Poststed.Postnr == postnr).ToList();
+            }
+            else if (etternavnSet && postnrSet)
+            {
+                return Db.Users.Where(u => u.Etternavn == etternavn && u.Poststed.Postnr == postnr).ToList();
+            }
+            else
+            {
+                return Db.Users.ToList();
+            }
         }
         public User getUser(int id)
         {
