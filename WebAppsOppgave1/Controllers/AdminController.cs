@@ -27,11 +27,6 @@ namespace WebAppsOppgave1.Controllers
         // GET: Admin
         public ActionResult Index()
         {
-            if ((bool)Session["Admin"] == false)
-            {
-                return RedirectToAction("LogIn");
-            }
-
             if (Session["Admin"] == null)
             {
                 Session["Admin"] = false;
@@ -39,6 +34,13 @@ namespace WebAppsOppgave1.Controllers
 
                 return RedirectToAction("LogIn");
             }
+
+            if ((bool)Session["Admin"] == false)
+            {
+                return RedirectToAction("LogIn");
+            }
+
+
             else
             {
                 ViewBag.Admin = (bool)Session["Admin"];

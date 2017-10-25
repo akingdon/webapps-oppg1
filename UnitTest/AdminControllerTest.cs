@@ -7,6 +7,7 @@ using WebAppsOppgave1.BLL;
 using WebAppsOppgave1.DAL;
 using System.Collections.Generic;
 using WebAppsOppgave1.Model;
+using MvcContrib.TestHelper;
 
 namespace UnitTest
 {
@@ -14,17 +15,46 @@ namespace UnitTest
     public class AdminControllerTest
     {
         [TestMethod]
-        public void TestShowIndexView()
+        public void TestShowIndexViewLoggedIn()
         {
-            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var SessionMock = new TestControllerBuilder();
+            var Controller = new AdminController();
+            SessionMock.InitializeController(Controller);
+            Controller.Session["Admin"] = true;
             var Result = (ViewResult)Controller.Index();
             Assert.AreEqual(Result.ViewName, "");
         }
 
         [TestMethod]
+        public void TestRedirectFromIndexToLogInWhenSessionValueIsFalse()
+        {
+            var SessionMock = new TestControllerBuilder();
+            var Controller = new AdminController();
+            SessionMock.InitializeController(Controller);
+            Controller.Session["Admin"] = false;
+            var Result = (RedirectToRouteResult)Controller.Index();
+
+            Assert.AreEqual("", Result.RouteName);
+            Assert.AreEqual("LogIn", Result.RouteValues.Values.First());
+        }
+
+        [TestMethod]
+        public void TestRedirectFromIndexToLogInWhenSesssionValueIsNull()
+        {
+            var SessionMock = new TestControllerBuilder();
+            var Controller = new AdminController();
+            SessionMock.InitializeController(Controller);
+            Controller.Session["Admin"] = null;
+            var Result = (RedirectToRouteResult)Controller.Index();
+
+            Assert.AreEqual("", Result.RouteName);
+            Assert.AreEqual("LogIn", Result.RouteValues.Values.First());
+        }
+
+        [TestMethod]
         public void TestShowLogInView()
         {
-            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Controller = new AdminController();
             var Result = (ViewResult)Controller.LogIn();
             Assert.AreEqual(Result.ViewName, "");
         }
@@ -32,9 +62,47 @@ namespace UnitTest
         [TestMethod]
         public void TestShowLogOutView()
         {
+            var SessionMock = new TestControllerBuilder();
+            var Controller = new AdminController();
+            SessionMock.InitializeController(Controller);
+            Controller.Session["Admin"] = true;
+            var Result = (ViewResult)Controller.LogOut();
+            Assert.AreEqual(Result.ViewName, "");
+            Assert.IsFalse((bool)Controller.Session["Admin"]);
+            Assert.IsFalse((bool)Controller.ViewData["Admin"]);
+        }
+
+        [TestMethod]
+        public void TestAdminLogin()
+        {
+            var SessionMock = new TestControllerBuilder();
             var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
-            //var Result = (ViewResult)Controller.LogOut();
-            //Assert.AreEqual(Result.ViewName, "");
+            SessionMock.InitializeController(Controller);
+            var form = new FormCollection();
+            form.Add("username", "admin");
+            form.Add("password", "admin");
+
+            var Result = (ViewResult)Controller.Index(form);
+            Assert.AreEqual("", Result.ViewName);
+            Assert.IsTrue((bool) Controller.Session["Admin"]);
+            Assert.IsTrue((bool) Controller.ViewData["Admin"]);            
+        }
+
+        [TestMethod]
+        public void TestAdminLoginWithIncorrectCredentials()
+        {
+            var SessionMock = new TestControllerBuilder();
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            SessionMock.InitializeController(Controller);
+            var form = new FormCollection();
+            form.Add("username", "not_admin");
+            form.Add("password", "admin");
+
+            var Result = (RedirectToRouteResult)Controller.Index(form);
+            Assert.AreEqual("", Result.RouteName);
+            Assert.AreEqual("LogIn", Result.RouteValues.Values.First());
+            Assert.IsFalse((bool)Controller.Session["Admin"]);
+            Assert.IsFalse((bool)Controller.ViewData["Admin"]);
         }
 
         [TestMethod]
