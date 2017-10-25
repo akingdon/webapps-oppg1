@@ -270,7 +270,120 @@ namespace WebAppsOppgave1.DAL
 
         public List<Flight> getAllFlights(string from, string to, string departure)
         {
-            throw new NotImplementedException();
+            var AllFlights = new List<Flight>();
+
+            var Torp = new Airport
+            {
+                Id = 1,
+                Name = "Torp"
+            };
+            var Trondheim = new Airport
+            {
+                Id = 2,
+                Name = "Trondheim"
+            };
+            var Rygge = new Airport
+            {
+                Id = 3,
+                Name = "Rygge"
+            };
+
+            var RyggeTrondheim = new Flight
+            {
+                Id = 1,
+                FromAirport = Rygge,
+                ToAirport = Trondheim,
+                Departure = DateTime.Parse("01.11.2017 13:00"),
+                Arrival = DateTime.Parse("01.11.2017 13:50"),
+                Price = 799
+            };
+            var RyggeTorp = new Flight
+            {
+                Id = 2,
+                FromAirport = Rygge,
+                ToAirport = Torp,
+                Departure = DateTime.Parse("02.11.2017 11:25"),
+                Arrival = DateTime.Parse("02.11.2017 12:10"),
+                Price = 299
+            };
+            var TorpTrondheim = new Flight
+            {
+                Id = 3,
+                FromAirport = Torp,
+                ToAirport = Trondheim,
+                Departure = DateTime.Parse("02.11.2017 11:55"),
+                Arrival = DateTime.Parse("02.11.2017 12:45"),
+                Price = 499
+            };
+            var TorpRygge = new Flight
+            {
+                Id = 4,
+                FromAirport = Torp,
+                ToAirport = Rygge,
+                Departure = DateTime.Parse("03.11.2017 19:10"),
+                Arrival = DateTime.Parse("03.11.2017 19:45"),
+                Price = 299
+            };
+            var TrondheimRygge = new Flight
+            {
+                Id = 5,
+                FromAirport = Trondheim,
+                ToAirport = Rygge,
+                Departure = DateTime.Parse("03.11.2017 17:30"),
+                Arrival = DateTime.Parse("03.11.2017 17:20"),
+                Price = 399
+            };
+            var TrondheimTorp = new Flight
+            {
+                Id = 6,
+                FromAirport = Trondheim,
+                ToAirport = Torp,
+                Departure = DateTime.Parse("04.11.2017 18:50"),
+                Arrival = DateTime.Parse("04.11.2017 19:40"),
+                Price = 299
+            };
+
+            if (!String.IsNullOrEmpty(from) && String.IsNullOrEmpty(to) && String.IsNullOrEmpty(departure)) 
+            {
+                AllFlights.Add(TrondheimRygge);
+                AllFlights.Add(TrondheimTorp);
+            }
+            else if (String.IsNullOrEmpty(from) && !String.IsNullOrEmpty(to) && String.IsNullOrEmpty(departure))
+            {
+                AllFlights.Add(RyggeTrondheim);
+                AllFlights.Add(TorpTrondheim);
+            }
+            else if (String.IsNullOrEmpty(from) && String.IsNullOrEmpty(to) && !String.IsNullOrEmpty(departure))
+            {
+                AllFlights.Add(RyggeTrondheim);
+            }
+            else if (!String.IsNullOrEmpty(from) && !String.IsNullOrEmpty(to) && String.IsNullOrEmpty(departure))
+            {
+                AllFlights.Add(TrondheimRygge);
+            }
+            else if (!String.IsNullOrEmpty(from) && String.IsNullOrEmpty(to) && !String.IsNullOrEmpty(departure))
+            {
+                AllFlights.Add(TrondheimTorp);
+            }
+            else if (String.IsNullOrEmpty(from) && !String.IsNullOrEmpty(to) && !String.IsNullOrEmpty(departure))
+            {
+                AllFlights.Add(TrondheimRygge);
+            }
+            else if (!String.IsNullOrEmpty(from) && !String.IsNullOrEmpty(to) && !String.IsNullOrEmpty(departure))
+            {
+                AllFlights.Add(RyggeTorp);
+            }
+            else
+            {
+                AllFlights.Add(RyggeTrondheim);
+                AllFlights.Add(RyggeTorp);
+                AllFlights.Add(TorpTrondheim);
+                AllFlights.Add(TorpRygge);
+                AllFlights.Add(TrondheimRygge);
+                AllFlights.Add(TrondheimTorp);
+            }
+
+            return AllFlights;
         }
 
         public List<User> getAllUsers(string etternavn, string postnr)

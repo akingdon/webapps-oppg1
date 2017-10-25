@@ -516,6 +516,496 @@ namespace UnitTest
         }
 
         [TestMethod]
+        public void TestGetAllFlightsWithoutFilters()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<Flight>();
+
+            var Torp = new Airport
+            {
+                Id = 1,
+                Name = "Torp"
+            };
+            var Trondheim = new Airport
+            {
+                Id = 2,
+                Name = "Trondheim"
+            };
+            var Rygge = new Airport
+            {
+                Id = 3,
+                Name = "Rygge"
+            };
+
+            var RyggeTrondheim = new Flight
+            {
+                Id = 1,
+                FromAirport = Rygge,
+                ToAirport = Trondheim,
+                Departure = DateTime.Parse("01.11.2017 13:00"),
+                Arrival = DateTime.Parse("01.11.2017 13:50"),
+                Price = 799
+            };
+            var RyggeTorp = new Flight
+            {
+                Id = 2,
+                FromAirport = Rygge,
+                ToAirport = Torp,
+                Departure = DateTime.Parse("02.11.2017 11:25"),
+                Arrival = DateTime.Parse("02.11.2017 12:10"),
+                Price = 299
+            };
+            var TorpTrondheim = new Flight
+            {
+                Id = 3,
+                FromAirport = Torp,
+                ToAirport = Trondheim,
+                Departure = DateTime.Parse("02.11.2017 11:55"),
+                Arrival = DateTime.Parse("02.11.2017 12:45"),
+                Price = 499
+            };
+            var TorpRygge = new Flight
+            {
+                Id = 4,
+                FromAirport = Torp,
+                ToAirport = Rygge,
+                Departure = DateTime.Parse("03.11.2017 19:10"),
+                Arrival = DateTime.Parse("03.11.2017 19:45"),
+                Price = 299
+            };
+            var TrondheimRygge = new Flight
+            {
+                Id = 5,
+                FromAirport = Trondheim,
+                ToAirport = Rygge,
+                Departure = DateTime.Parse("03.11.2017 17:30"),
+                Arrival = DateTime.Parse("03.11.2017 17:20"),
+                Price = 399
+            };
+            var TrondheimTorp = new Flight
+            {
+                Id = 6,
+                FromAirport = Trondheim,
+                ToAirport = Torp,
+                Departure = DateTime.Parse("04.11.2017 18:50"),
+                Arrival = DateTime.Parse("04.11.2017 19:40"),
+                Price = 299
+            };
+
+            Expected.Add(RyggeTrondheim);
+            Expected.Add(RyggeTorp);
+            Expected.Add(TorpTrondheim);
+            Expected.Add(TorpRygge);
+            Expected.Add(TrondheimRygge);
+            Expected.Add(TrondheimTorp);
+
+            var ResultJson = Controller.getAllFlights(null, null, null);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<jsFlight> ResultList = jsonSerializer.Deserialize<List<jsFlight>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i ++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].id);
+                Assert.AreEqual(Expected[i].FromAirport.Name, ResultList[i].fromAirportName);
+                Assert.AreEqual(Expected[i].ToAirport.Name, ResultList[i].toAirportName);
+                Assert.AreEqual(Expected[i].Departure.ToString("dd.MM.yyyy HH:mm"), ResultList[i].departure);
+                Assert.AreEqual(Expected[i].Arrival.ToString("dd.MM.yyyy HH:mm"), ResultList[i].arrival);
+                Assert.AreEqual(Expected[i].Price, ResultList[i].price);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAllFlightsWithFromFilter()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<Flight>();
+            var From = "Trondheim";
+
+            var Torp = new Airport
+            {
+                Id = 1,
+                Name = "Torp"
+            };
+            var Trondheim = new Airport
+            {
+                Id = 2,
+                Name = "Trondheim"
+            };
+            var Rygge = new Airport
+            {
+                Id = 3,
+                Name = "Rygge"
+            };
+
+            var TrondheimRygge = new Flight
+            {
+                Id = 5,
+                FromAirport = Trondheim,
+                ToAirport = Rygge,
+                Departure = DateTime.Parse("03.11.2017 17:30"),
+                Arrival = DateTime.Parse("03.11.2017 17:20"),
+                Price = 399
+            };
+            var TrondheimTorp = new Flight
+            {
+                Id = 6,
+                FromAirport = Trondheim,
+                ToAirport = Torp,
+                Departure = DateTime.Parse("04.11.2017 18:50"),
+                Arrival = DateTime.Parse("04.11.2017 19:40"),
+                Price = 299
+            };
+
+            Expected.Add(TrondheimRygge);
+            Expected.Add(TrondheimTorp);
+
+            var ResultJson = Controller.getAllFlights(From, null, null);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<jsFlight> ResultList = jsonSerializer.Deserialize<List<jsFlight>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].id);
+                Assert.AreEqual(Expected[i].FromAirport.Name, ResultList[i].fromAirportName);
+                Assert.AreEqual(Expected[i].ToAirport.Name, ResultList[i].toAirportName);
+                Assert.AreEqual(Expected[i].Departure.ToString("dd.MM.yyyy HH:mm"), ResultList[i].departure);
+                Assert.AreEqual(Expected[i].Arrival.ToString("dd.MM.yyyy HH:mm"), ResultList[i].arrival);
+                Assert.AreEqual(Expected[i].Price, ResultList[i].price);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAllFlightsWithToFilter()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<Flight>();
+            var To = "Trondheim";
+
+            var Torp = new Airport
+            {
+                Id = 1,
+                Name = "Torp"
+            };
+            var Trondheim = new Airport
+            {
+                Id = 2,
+                Name = "Trondheim"
+            };
+            var Rygge = new Airport
+            {
+                Id = 3,
+                Name = "Rygge"
+            };
+
+            var RyggeTrondheim = new Flight
+            {
+                Id = 1,
+                FromAirport = Rygge,
+                ToAirport = Trondheim,
+                Departure = DateTime.Parse("01.11.2017 13:00"),
+                Arrival = DateTime.Parse("01.11.2017 13:50"),
+                Price = 799
+            };
+            var TorpTrondheim = new Flight
+            {
+                Id = 3,
+                FromAirport = Torp,
+                ToAirport = Trondheim,
+                Departure = DateTime.Parse("02.11.2017 11:55"),
+                Arrival = DateTime.Parse("02.11.2017 12:45"),
+                Price = 499
+            };
+
+            Expected.Add(RyggeTrondheim);
+            Expected.Add(TorpTrondheim);
+
+            var ResultJson = Controller.getAllFlights(null, To, null);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<jsFlight> ResultList = jsonSerializer.Deserialize<List<jsFlight>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].id);
+                Assert.AreEqual(Expected[i].FromAirport.Name, ResultList[i].fromAirportName);
+                Assert.AreEqual(Expected[i].ToAirport.Name, ResultList[i].toAirportName);
+                Assert.AreEqual(Expected[i].Departure.ToString("dd.MM.yyyy HH:mm"), ResultList[i].departure);
+                Assert.AreEqual(Expected[i].Arrival.ToString("dd.MM.yyyy HH:mm"), ResultList[i].arrival);
+                Assert.AreEqual(Expected[i].Price, ResultList[i].price);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAllFlightsWithDepartureFilter()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<Flight>();
+            var Departure = "01.11.2017 13:00";
+
+            var Torp = new Airport
+            {
+                Id = 1,
+                Name = "Torp"
+            };
+            var Trondheim = new Airport
+            {
+                Id = 2,
+                Name = "Trondheim"
+            };
+            var Rygge = new Airport
+            {
+                Id = 3,
+                Name = "Rygge"
+            };
+
+            var RyggeTrondheim = new Flight
+            {
+                Id = 1,
+                FromAirport = Rygge,
+                ToAirport = Trondheim,
+                Departure = DateTime.Parse("01.11.2017 13:00"),
+                Arrival = DateTime.Parse("01.11.2017 13:50"),
+                Price = 799
+            };
+
+            Expected.Add(RyggeTrondheim);
+
+            var ResultJson = Controller.getAllFlights(null, null, Departure);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<jsFlight> ResultList = jsonSerializer.Deserialize<List<jsFlight>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].id);
+                Assert.AreEqual(Expected[i].FromAirport.Name, ResultList[i].fromAirportName);
+                Assert.AreEqual(Expected[i].ToAirport.Name, ResultList[i].toAirportName);
+                Assert.AreEqual(Expected[i].Departure.ToString("dd.MM.yyyy HH:mm"), ResultList[i].departure);
+                Assert.AreEqual(Expected[i].Arrival.ToString("dd.MM.yyyy HH:mm"), ResultList[i].arrival);
+                Assert.AreEqual(Expected[i].Price, ResultList[i].price);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAllFlightsWithFromAndToFilters()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<Flight>();
+            var From = "Trondheim";
+            var To = "Rygge";
+
+            var Torp = new Airport
+            {
+                Id = 1,
+                Name = "Torp"
+            };
+            var Trondheim = new Airport
+            {
+                Id = 2,
+                Name = "Trondheim"
+            };
+            var Rygge = new Airport
+            {
+                Id = 3,
+                Name = "Rygge"
+            };
+
+            var TrondheimRygge = new Flight
+            {
+                Id = 5,
+                FromAirport = Trondheim,
+                ToAirport = Rygge,
+                Departure = DateTime.Parse("03.11.2017 17:30"),
+                Arrival = DateTime.Parse("03.11.2017 17:20"),
+                Price = 399
+            };
+
+            Expected.Add(TrondheimRygge);
+
+            var ResultJson = Controller.getAllFlights(From, To, null);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<jsFlight> ResultList = jsonSerializer.Deserialize<List<jsFlight>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].id);
+                Assert.AreEqual(Expected[i].FromAirport.Name, ResultList[i].fromAirportName);
+                Assert.AreEqual(Expected[i].ToAirport.Name, ResultList[i].toAirportName);
+                Assert.AreEqual(Expected[i].Departure.ToString("dd.MM.yyyy HH:mm"), ResultList[i].departure);
+                Assert.AreEqual(Expected[i].Arrival.ToString("dd.MM.yyyy HH:mm"), ResultList[i].arrival);
+                Assert.AreEqual(Expected[i].Price, ResultList[i].price);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAllFlightsWIthFromAndDepartureFilters()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<Flight>();
+            var From = "Trondheim";
+            var Departure = "04.11.2017 18:50";
+
+            var Torp = new Airport
+            {
+                Id = 1,
+                Name = "Torp"
+            };
+            var Trondheim = new Airport
+            {
+                Id = 2,
+                Name = "Trondheim"
+            };
+            var Rygge = new Airport
+            {
+                Id = 3,
+                Name = "Rygge"
+            };
+
+            var TrondheimTorp = new Flight
+            {
+                Id = 6,
+                FromAirport = Trondheim,
+                ToAirport = Torp,
+                Departure = DateTime.Parse("04.11.2017 18:50"),
+                Arrival = DateTime.Parse("04.11.2017 19:40"),
+                Price = 299
+            };
+
+            Expected.Add(TrondheimTorp);
+
+            var ResultJson = Controller.getAllFlights(From, null, Departure);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<jsFlight> ResultList = jsonSerializer.Deserialize<List<jsFlight>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].id);
+                Assert.AreEqual(Expected[i].FromAirport.Name, ResultList[i].fromAirportName);
+                Assert.AreEqual(Expected[i].ToAirport.Name, ResultList[i].toAirportName);
+                Assert.AreEqual(Expected[i].Departure.ToString("dd.MM.yyyy HH:mm"), ResultList[i].departure);
+                Assert.AreEqual(Expected[i].Arrival.ToString("dd.MM.yyyy HH:mm"), ResultList[i].arrival);
+                Assert.AreEqual(Expected[i].Price, ResultList[i].price);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAllFlightsWithToAndDepartureFilters()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<Flight>();
+            var To = "Rygge";
+            var Departure = "03.11.2017 17:30";
+
+            var Torp = new Airport
+            {
+                Id = 1,
+                Name = "Torp"
+            };
+            var Trondheim = new Airport
+            {
+                Id = 2,
+                Name = "Trondheim"
+            };
+            var Rygge = new Airport
+            {
+                Id = 3,
+                Name = "Rygge"
+            };
+
+            var TrondheimRygge = new Flight
+            {
+                Id = 5,
+                FromAirport = Trondheim,
+                ToAirport = Rygge,
+                Departure = DateTime.Parse("03.11.2017 17:30"),
+                Arrival = DateTime.Parse("03.11.2017 17:20"),
+                Price = 399
+            };
+
+            Expected.Add(TrondheimRygge);
+
+            var ResultJson = Controller.getAllFlights(null, To, Departure);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<jsFlight> ResultList = jsonSerializer.Deserialize<List<jsFlight>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].id);
+                Assert.AreEqual(Expected[i].FromAirport.Name, ResultList[i].fromAirportName);
+                Assert.AreEqual(Expected[i].ToAirport.Name, ResultList[i].toAirportName);
+                Assert.AreEqual(Expected[i].Departure.ToString("dd.MM.yyyy HH:mm"), ResultList[i].departure);
+                Assert.AreEqual(Expected[i].Arrival.ToString("dd.MM.yyyy HH:mm"), ResultList[i].arrival);
+                Assert.AreEqual(Expected[i].Price, ResultList[i].price);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAllFlightsWithAllFilters()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<Flight>();
+            var From = "Rygge";
+            var To = "Torp";
+            var Departure = "02.11.2017 11:25";
+
+            var Torp = new Airport
+            {
+                Id = 1,
+                Name = "Torp"
+            };
+            var Trondheim = new Airport
+            {
+                Id = 2,
+                Name = "Trondheim"
+            };
+            var Rygge = new Airport
+            {
+                Id = 3,
+                Name = "Rygge"
+            };
+
+            var RyggeTorp = new Flight
+            {
+                Id = 2,
+                FromAirport = Rygge,
+                ToAirport = Torp,
+                Departure = DateTime.Parse("02.11.2017 11:25"),
+                Arrival = DateTime.Parse("02.11.2017 12:10"),
+                Price = 299
+            };
+
+            Expected.Add(RyggeTorp);
+
+            var ResultJson = Controller.getAllFlights(From, To, Departure);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<jsFlight> ResultList = jsonSerializer.Deserialize<List<jsFlight>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].id);
+                Assert.AreEqual(Expected[i].FromAirport.Name, ResultList[i].fromAirportName);
+                Assert.AreEqual(Expected[i].ToAirport.Name, ResultList[i].toAirportName);
+                Assert.AreEqual(Expected[i].Departure.ToString("dd.MM.yyyy HH:mm"), ResultList[i].departure);
+                Assert.AreEqual(Expected[i].Arrival.ToString("dd.MM.yyyy HH:mm"), ResultList[i].arrival);
+                Assert.AreEqual(Expected[i].Price, ResultList[i].price);
+            }
+        }
+
+        [TestMethod]
         public void TestGetAirport()
         {
             var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
