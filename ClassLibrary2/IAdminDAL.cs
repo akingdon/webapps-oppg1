@@ -16,10 +16,10 @@ namespace WebAppsOppgave1.DAL
         string editFlight(int id, int fromAirportId, int toAirportId, DateTime departure, DateTime arrival, int price);
         string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, byte[] passord);
         Airport getAirport(int id);
-        List<Airport> getAllAirports();
-        List<Booking> getAllBookings();
-        List<Flight> getAllFlights();
-        List<User> getAllUsers();
+        List<Airport> getAllAirports(string name);
+        List<Booking> getAllBookings(string user, string flight);
+        List<Flight> getAllFlights(string from, string to, string departure);
+        List<User> getAllUsers(string etternavn, string postnr);
         Booking getBooking(int id);
         Flight getFlight(int id);
         User getUser(int id);

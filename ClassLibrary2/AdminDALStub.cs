@@ -117,22 +117,22 @@ namespace WebAppsOppgave1.DAL
             return null;
         }
 
-        public List<Airport> getAllAirports()
+        public List<Airport> getAllAirports(string name)
         {
             throw new NotImplementedException();
         }
 
-        public List<Booking> getAllBookings()
+        public List<Booking> getAllBookings(string user, string flight)
         {
             throw new NotImplementedException();
         }
 
-        public List<Flight> getAllFlights()
+        public List<Flight> getAllFlights(string from, string to, string departure)
         {
             throw new NotImplementedException();
         }
 
-        public List<User> getAllUsers()
+        public List<User> getAllUsers(string etternavn, string postnr)
         {
             throw new NotImplementedException();
         }
