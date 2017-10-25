@@ -1006,6 +1006,241 @@ namespace UnitTest
         }
 
         [TestMethod]
+        public void TestGetAllUsersWithoutFilters()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<User>();
+            var Poststed1 = new PostSted
+            {
+                Postnr = "0987",
+                Poststed = "Oslo"
+            };
+            var Poststed2 = new PostSted
+            {
+                Postnr = "7693",
+                Poststed = "Syvtusenlia"
+            };
+            var Poststed3 = new PostSted
+            {
+                Postnr = "2341",
+                Poststed = "Utenbys"
+            };
+            var User1 = new User
+            {
+                Id = 1,
+                Fornavn = "Fornavn",
+                Etternavn = "Fornavnsen",
+                Adresse = "Fornavnveien 3",
+                Poststed = Poststed1,
+                Epost = "for@navn.no"
+            };
+            var User2 = new User
+            {
+                Id = 2,
+                Fornavn = "Etternavn",
+                Etternavn = "Etternavnsen",
+                Adresse = "Etternavnveien 24",
+                Poststed = Poststed2,
+                Epost = "etter@navn.et"
+            };
+            var User3 = new User
+            {
+                Id = 3,
+                Fornavn = "Steinar",
+                Etternavn = "Etternavnsen",
+                Adresse = "Storgata 86",
+                Poststed = Poststed3,
+                Epost = "steinar@storgata86.no"
+            };
+            var User4 = new User
+            {
+                Id = 4,
+                Fornavn = "Bob",
+                Etternavn = "Kåresen",
+                Adresse = "Lillegata 2",
+                Poststed = Poststed2,
+                Epost = "har@ikke.epost"
+            };
+
+            Expected.Add(User1);
+            Expected.Add(User2);
+            Expected.Add(User3);
+            Expected.Add(User4);
+
+            var ResultJson = Controller.getAllUsers(null, null);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<JsUser> ResultList = jsonSerializer.Deserialize<List<JsUser>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].Id);
+                Assert.AreEqual(Expected[i].Fornavn, ResultList[i].Fornavn);
+                Assert.AreEqual(Expected[i].Etternavn, ResultList[i].Etternavn);
+                Assert.AreEqual(Expected[i].Adresse, ResultList[i].Adresse);
+                Assert.AreEqual(Expected[i].Poststed.Postnr, ResultList[i].Postnummer);
+                Assert.AreEqual(Expected[i].Poststed.Poststed, ResultList[i].Poststed);
+                Assert.AreEqual(Expected[i].Epost, ResultList[i].Epost);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAllUsersWithLastNameFilter()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<User>();
+            var Etternavn = "Etternavnsen";
+
+            var Poststed2 = new PostSted
+            {
+                Postnr = "7693",
+                Poststed = "Syvtusenlia"
+            };
+            var Poststed3 = new PostSted
+            {
+                Postnr = "2341",
+                Poststed = "Utenbys"
+            };
+
+            var User2 = new User
+            {
+                Id = 2,
+                Fornavn = "Etternavn",
+                Etternavn = "Etternavnsen",
+                Adresse = "Etternavnveien 24",
+                Poststed = Poststed2,
+                Epost = "etter@navn.et"
+            };
+            var User3 = new User
+            {
+                Id = 3,
+                Fornavn = "Steinar",
+                Etternavn = "Etternavnsen",
+                Adresse = "Storgata 86",
+                Poststed = Poststed3,
+                Epost = "steinar@storgata86.no"
+            };
+
+            Expected.Add(User2);
+            Expected.Add(User3);
+
+            var ResultJson = Controller.getAllUsers(Etternavn, null);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<JsUser> ResultList = jsonSerializer.Deserialize<List<JsUser>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].Id);
+                Assert.AreEqual(Expected[i].Fornavn, ResultList[i].Fornavn);
+                Assert.AreEqual(Expected[i].Etternavn, ResultList[i].Etternavn);
+                Assert.AreEqual(Expected[i].Adresse, ResultList[i].Adresse);
+                Assert.AreEqual(Expected[i].Poststed.Postnr, ResultList[i].Postnummer);
+                Assert.AreEqual(Expected[i].Poststed.Poststed, ResultList[i].Poststed);
+                Assert.AreEqual(Expected[i].Epost, ResultList[i].Epost);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAllUsersWithPostalCodeFilter()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<User>();
+            var Postnr = "7693";
+
+            var Poststed2 = new PostSted
+            {
+                Postnr = "7693",
+                Poststed = "Syvtusenlia"
+            };
+
+            var User2 = new User
+            {
+                Id = 2,
+                Fornavn = "Etternavn",
+                Etternavn = "Etternavnsen",
+                Adresse = "Etternavnveien 24",
+                Poststed = Poststed2,
+                Epost = "etter@navn.et"
+            };
+            var User4 = new User
+            {
+                Id = 4,
+                Fornavn = "Bob",
+                Etternavn = "Kåresen",
+                Adresse = "Lillegata 2",
+                Poststed = Poststed2,
+                Epost = "har@ikke.epost"
+            };
+
+            Expected.Add(User2);
+            Expected.Add(User4);
+
+            var ResultJson = Controller.getAllUsers(null, Postnr);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<JsUser> ResultList = jsonSerializer.Deserialize<List<JsUser>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].Id);
+                Assert.AreEqual(Expected[i].Fornavn, ResultList[i].Fornavn);
+                Assert.AreEqual(Expected[i].Etternavn, ResultList[i].Etternavn);
+                Assert.AreEqual(Expected[i].Adresse, ResultList[i].Adresse);
+                Assert.AreEqual(Expected[i].Poststed.Postnr, ResultList[i].Postnummer);
+                Assert.AreEqual(Expected[i].Poststed.Poststed, ResultList[i].Poststed);
+                Assert.AreEqual(Expected[i].Epost, ResultList[i].Epost);
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAllUsersWithBothFilters()
+        {
+            var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
+            var Expected = new List<User>();
+            var Etternavn = "Kåresen";
+            var Postnr = "7693";
+
+            var Poststed2 = new PostSted
+            {
+                Postnr = "7693",
+                Poststed = "Syvtusenlia"
+            };
+
+            var User4 = new User
+            {
+                Id = 4,
+                Fornavn = "Bob",
+                Etternavn = "Kåresen",
+                Adresse = "Lillegata 2",
+                Poststed = Poststed2,
+                Epost = "har@ikke.epost"
+            };
+
+            Expected.Add(User4);
+
+            var ResultJson = Controller.getAllUsers(Etternavn, Postnr);
+            var jsonSerializer = new JavaScriptSerializer();
+            List<JsUser> ResultList = jsonSerializer.Deserialize<List<JsUser>>(ResultJson);
+
+            Assert.IsTrue(Expected.Count == ResultList.Count);
+
+            for (int i = 0; i < ResultList.Count; i++)
+            {
+                Assert.AreEqual(Expected[i].Id, ResultList[i].Id);
+                Assert.AreEqual(Expected[i].Fornavn, ResultList[i].Fornavn);
+                Assert.AreEqual(Expected[i].Etternavn, ResultList[i].Etternavn);
+                Assert.AreEqual(Expected[i].Adresse, ResultList[i].Adresse);
+                Assert.AreEqual(Expected[i].Poststed.Postnr, ResultList[i].Postnummer);
+                Assert.AreEqual(Expected[i].Poststed.Poststed, ResultList[i].Poststed);
+                Assert.AreEqual(Expected[i].Epost, ResultList[i].Epost);
+            }
+        }
+
+        [TestMethod]
         public void TestGetAirport()
         {
             var Controller = new AdminController(new AdminBLL(new AdminDALStub()));

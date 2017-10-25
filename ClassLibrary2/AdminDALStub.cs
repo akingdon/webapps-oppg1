@@ -388,8 +388,85 @@ namespace WebAppsOppgave1.DAL
 
         public List<User> getAllUsers(string etternavn, string postnr)
         {
-            throw new NotImplementedException();
+            var AllUsers = new List<User>();
+
+            var Poststed1 = new PostSted
+            {
+                Postnr = "0987",
+                Poststed = "Oslo"
+            };
+            var Poststed2 = new PostSted
+            {
+                Postnr = "7693",
+                Poststed = "Syvtusenlia"
+            };
+            var Poststed3 = new PostSted
+            {
+                Postnr = "2341",
+                Poststed = "Utenbys"
+            };
+            var User1 = new User
+            {
+                Id = 1,
+                Fornavn = "Fornavn",
+                Etternavn = "Fornavnsen",
+                Adresse = "Fornavnveien 3",
+                Poststed = Poststed1,
+                Epost = "for@navn.no"
+            };
+            var User2 = new User
+            {
+                Id = 2,
+                Fornavn = "Etternavn",
+                Etternavn = "Etternavnsen",
+                Adresse = "Etternavnveien 24",
+                Poststed = Poststed2,
+                Epost = "etter@navn.et"
+            };
+            var User3 = new User
+            {
+                Id = 3,
+                Fornavn = "Steinar",
+                Etternavn = "Etternavnsen",
+                Adresse = "Storgata 86",
+                Poststed = Poststed3,
+                Epost = "steinar@storgata86.no"
+            };
+            var User4 = new User
+            {
+                Id = 4,
+                Fornavn = "Bob",
+                Etternavn = "Kåresen",
+                Adresse = "Lillegata 2",
+                Poststed = Poststed2,
+                Epost = "har@ikke.epost"
+            };
+
+            if (!String.IsNullOrEmpty(etternavn) && String.IsNullOrEmpty(postnr))
+            {
+                AllUsers.Add(User2);
+                AllUsers.Add(User3);
+            }
+            else if (String.IsNullOrEmpty(etternavn) && !String.IsNullOrEmpty(postnr))
+            {
+                AllUsers.Add(User2);
+                AllUsers.Add(User4);
+            }
+            else if (!String.IsNullOrEmpty(etternavn) && !String.IsNullOrEmpty(postnr))
+            {
+                AllUsers.Add(User4);
+            }
+            else
+            {
+                AllUsers.Add(User1);
+                AllUsers.Add(User2);
+                AllUsers.Add(User3);
+                AllUsers.Add(User4);
+            }
+
+            return AllUsers;
         }
+        
 
         public Booking getBooking(int id)
         {
