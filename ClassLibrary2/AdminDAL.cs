@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.IO;
 using System.Linq;
@@ -118,7 +119,7 @@ namespace WebAppsOppgave1.DAL
             }
             else if (!fromSet && !toSet && departureSet)
             {
-                return Db.Flight.Where(f => EntityFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+                return Db.Flight.Where(f => DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
             }
             else if (fromSet && toSet && !departureSet)
             {
@@ -128,18 +129,18 @@ namespace WebAppsOppgave1.DAL
             else if (fromSet && !toSet && departureSet)
             {
                 return Db.Flight.Where(f => f.FromAirport.Id == fromId &&
-                                            EntityFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+                                            DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
             }
             else if (!fromSet && toSet && departureSet)
             {
                 return Db.Flight.Where(f => f.ToAirport.Id == toId &&
-                                            EntityFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+                                            DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
             }
             else if (fromSet && toSet && departureSet)
             {
                 return Db.Flight.Where(f => f.FromAirport.Id == fromId &&
                                             f.ToAirport.Id == toId &&
-                                            EntityFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+                                            DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
             }
             else
             {
