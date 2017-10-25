@@ -203,10 +203,10 @@ namespace WebAppsOppgave1.Controllers
         }
 
 
-        public string getAllBookings()
+        public string getAllBookings(string user, string flight)
         {
             var AdminBLL = new AdminBLL();
-            var bookings = AdminBLL.getAllBookings();
+            var bookings = AdminBLL.getAllBookings(user, flight);
             var jsBookings = new List<JsBooking>();
             foreach (Booking b in bookings)
             {

@@ -68,10 +68,10 @@ namespace WebAppsOppgave1.BLL
             return AdminDAL.deleteFlight(id);
         }
 
-        public List<Booking> getAllBookings()
+        public List<Booking> getAllBookings(string user, string flight)
         {
             var AdminDAL = new AdminDAL();
-            return AdminDAL.getAllBookings();
+            return AdminDAL.getAllBookings(user, flight);
         }
         public Booking getBooking(int id)
         {

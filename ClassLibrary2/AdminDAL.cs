@@ -192,10 +192,29 @@ namespace WebAppsOppgave1.DAL
             }
         }
 
-        public List<Booking> getAllBookings()
+        public List<Booking> getAllBookings(string user, string flight)
         {
             DB Db = new DB();
-            return Db.Booking.ToList();
+            var userSet = int.TryParse(user, out int userFilterId);
+            var flightSet = int.TryParse(flight, out int flightFilterId);
+            if (userSet && !flightSet)
+            {
+                return Db.Booking.Where(b => b.User.Id == userFilterId).ToList();
+            }
+            else if (!userSet && flightSet)
+            {
+                var intFlight = int.Parse(flight);
+                return Db.Booking.Where(b => b.Flight.Id == flightFilterId).ToList();
+            }
+            
+            else if (userSet && flightSet)
+            {
+                return Db.Booking.Where(b => b.User.Id == userFilterId && b.Flight.Id == flightFilterId).ToList();
+            }
+            else
+            {
+                return Db.Booking.ToList();
+            }
         }
         public Booking getBooking(int id)
         {

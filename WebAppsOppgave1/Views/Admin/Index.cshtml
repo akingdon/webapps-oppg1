@@ -358,6 +358,10 @@
         });
 
 
+        $("#filterBookings").click(function () {
+            GetAllBookings();
+        });
+
         $("#registerBooking").click(function () {
 
             var userId = $("#userReg").val();
@@ -804,10 +808,15 @@
             dataType: 'json',
             success: function (jsUsers) {
                 var result = "<option selected hidden value=\"\">Velg kunde</option>";
+                var filterResult = "<option selected value=\"\"></option>";
+                var loop = "";
                 for (var u in jsUsers) {
-                    result += "<option value=\"" + jsUsers[u].Id + "\">" +
+                    loop += "<option value=\"" + jsUsers[u].Id + "\">" +
                         jsUsers[u].Fornavn + " " + jsUsers[u].Etternavn + "</option>";
                 }
+                result += loop;
+                filterResult += loop;
+                $("#userFilter").html(filterResult);
                 $("#userReg").html(result);
                 $("#userEd").html(result);
             },
@@ -824,11 +833,16 @@
             dataType: 'json',
             success: function (jsFlights) {
                 var result = "<option selected hidden value=\"\">Velg flyvning</option>";
+                var filterResult = "<option selected value=\"\"></option>";
+                loop = "";
                 for (var f in jsFlights) {
-                    result += "<option value=\"" + jsFlights[f].id + "\">" +
+                    loop += "<option value=\"" + jsFlights[f].id + "\">" +
                         jsFlights[f].fromAirportName + " - " + jsFlights[f].toAirportName + ": " +
                         jsFlights[f].departure + "</option>";
                 }
+                result += loop;
+                filterResult += loop;
+                $("#flightFilter").html(filterResult);
                 $("#flightReg").html(result);
                 $("#flightEd").html(result);
             },
@@ -839,9 +853,15 @@
     }
 
     function GetAllBookings() {
+        var user = $("#userFilter").val();
+        var flight = $("#flightFilter").val();
+        alert(user + " " + flight);
+
         $.ajax({
             url: '/Admin/getAllBookings',
-            type: 'GET',
+            type: 'POST',
+            contentType: "application/json:charset=utf-8",
+            data: JSON.stringify({ user:user, flight:flight }),
             dataType: 'json',
             success: function (jsBookings) {
                 DisplayAllBookings(jsBookings);
@@ -1098,6 +1118,17 @@
                     <span id="registerBookingConfirmation"></span>
                 </div>
                 <h2>Registrerte bestillinger</h2>
+                <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-addon">Kunde</span>
+                        <select id="userFilter"></select>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Flyvning</span>
+                        <select id="flightFilter"></select>
+                    </div>
+                </div>
+                <button id="filterBookings" class="btn btn-primary">Avgrens søk</button><br />
                 <div id="bookingList">
                 </div>
                 <div>
