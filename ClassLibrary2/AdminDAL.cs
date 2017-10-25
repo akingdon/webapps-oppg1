@@ -112,17 +112,17 @@ namespace WebAppsOppgave1.DAL
             if (fromSet && !toSet && !departureSet)
             {
                 return Db.Flight.Where(f => f.FromAirport.Id == fromId).
-                                OrderBy(f => f.ToAirport.Name).ThenBy(f => f.Departure).ToList();
+                                OrderBy(f => f.Departure).ThenBy(f => f.ToAirport.Name).ToList();
             }
             else if (!fromSet && toSet && !departureSet)
             {
                 return Db.Flight.Where(f => f.ToAirport.Id == toId).
-                                OrderBy(f => f.FromAirport.Name).ThenBy(f => f.Departure).ToList();
+                                OrderBy(f => f.Departure).ThenBy(f => f.FromAirport.Name).ToList();
             }
             else if (!fromSet && !toSet && departureSet)
             {
                 return Db.Flight.Where(f => DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).
-                                OrderBy(f => f.FromAirport.Name).ThenBy(f => f.ToAirport.Name).ThenBy(f => f.Departure).ToList();
+                                OrderBy(f => f.Departure).ThenBy(f => f.FromAirport.Name).ThenBy(f => f.ToAirport.Name).ToList();
             }
             else if (fromSet && toSet && !departureSet)
             {
@@ -132,12 +132,12 @@ namespace WebAppsOppgave1.DAL
             else if (fromSet && !toSet && departureSet)
             {
                 return Db.Flight.Where(f => f.FromAirport.Id == fromId && DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).
-                    OrderBy(f => f.ToAirport.Name).ThenBy(f => f.Departure).ToList();
+                    OrderBy(f => f.Departure).ThenBy(f => f.ToAirport.Name).ToList();
             }
             else if (!fromSet && toSet && departureSet)
             {
                 return Db.Flight.Where(f => f.ToAirport.Id == toId && DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).
-                                OrderBy(f => f.FromAirport.Name). ThenBy(f => f.Departure).ToList();
+                                OrderBy(f => f.Departure).ThenBy(f => f.FromAirport.Name).ToList();
             }
             else if (fromSet && toSet && departureSet)
             {
@@ -146,7 +146,7 @@ namespace WebAppsOppgave1.DAL
             }
             else
             {
-                return Db.Flight.OrderBy(f => f.FromAirport.Name).ThenBy(f => f.ToAirport.Name).ThenBy(f => f.Departure).ToList();
+                return Db.Flight.OrderBy(f => f.Departure).ThenBy(f => f.FromAirport.Name).ThenBy(f => f.ToAirport.Name).ToList();
             }
         }
         public Flight getFlight(int id)
