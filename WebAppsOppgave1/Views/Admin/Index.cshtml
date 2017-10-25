@@ -840,7 +840,7 @@
                 var loop = "";
                 for (var u in jsUsers) {
                     loop += "<option value=\"" + jsUsers[u].Id + "\">" +
-                        jsUsers[u].Fornavn + " " + jsUsers[u].Etternavn + "</option>";
+                        jsUsers[u].Fornavn + " " + jsUsers[u].Etternavn + " (" + jsUsers[u].Id + ") </option>";
                 }
                 result += loop;
                 filterResult += loop;
@@ -907,6 +907,7 @@
             "<tr>" +
             "<th></th>" +
             "<th>Kunde</th>" +
+            "<th>KID</td>" +
             "<th>Fra</th>" +
             "<th>Til</th>" +
             "<th>Avgang</th>" +
@@ -918,6 +919,7 @@
                 "<tr>" +
                 "<td><input type=\"radio\" name =\"idBooking\" value=\"" + jsBookings[b].Id + "\"></td>" +
                 "<td>" + jsBookings[b].UserFirstname + " " + jsBookings[b].UserLastname + "</td>" +
+                "<td>" + jsBookings[b].UserId + "</td>" +
                 "<td>" + jsBookings[b].FlightFrom + "</td>" +
                 "<td>" + jsBookings[b].FlightTo + "</td>" +
                 "<td>" + jsBookings[b].FlightDeparture + "</td>" +
@@ -961,6 +963,7 @@
             "<th>Postnummer</th>" +
             "<th>Poststed</th>" +
             "<th>Epost</th>" +
+            "<th>KID</th>" +
             "</tr>" +
             "</thead>";
         for (var u in jsUsers) {
@@ -973,6 +976,7 @@
                 "<td>" + jsUsers[u].Postnummer + "</td>" +
                 "<td>" + jsUsers[u].Poststed + "</td>" +
                 "<td>" + jsUsers[u].Epost + "</td>" +
+                "<td>" + jsUsers[u].Id + "</td>" +
                 "</tr>";
         }
         result += "</table>";
