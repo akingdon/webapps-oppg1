@@ -367,6 +367,13 @@ namespace WebAppsOppgave1.Models
                 Poststed = "Snertingdal"
             };
 
+            var postSted3 = new PostSted
+            {
+                Postnr = "6962",
+                Poststed = "Hammerfest"
+            };
+
+
             var user1 = new User
             {
                 Fornavn = "Kurt",
@@ -379,13 +386,34 @@ namespace WebAppsOppgave1.Models
 
             var user2 = new User
             {
-                Fornavn = "Rolf",
+                Fornavn = "Arnulf",
                 Etternavn = "Paulsen",
                 Adresse = "Høgglinna 9",
                 Poststed = postSted2,
                 Epost = "nr9@talas.no",
                 PassordHash = Controllers.HomeController.HashPassword("knus")
             };
+
+            var user3 = new User
+            {
+                Fornavn = "Tore",
+                Etternavn = "Brattebakk",
+                Adresse = "Josefines gate 64 F",
+                Poststed = postSted1,
+                Epost = "tore@epost.no",
+                PassordHash = Controllers.HomeController.HashPassword("passord")
+            };
+
+            var user4 = new User
+            {
+                Fornavn = "Arnulf",
+                Etternavn = "Paulsen",
+                Adresse = "Doppelganger Allé 2",
+                Poststed = postSted3,
+                Epost = "imposter@email.com",
+                PassordHash = Controllers.HomeController.HashPassword("passord")
+            };
+
 
             var booking1 = new Booking
             {
@@ -452,8 +480,11 @@ namespace WebAppsOppgave1.Models
 
             db.Poststed.Add(postSted1);
             db.Poststed.Add(postSted2);
+            db.Poststed.Add(postSted3);
             db.Users.Add(user1);
             db.Users.Add(user2);
+            db.Users.Add(user3);
+            db.Users.Add(user4);
             db.Admins.Add(admin);
 
             db.Booking.Add(booking1);
