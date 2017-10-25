@@ -50,6 +50,11 @@
         });
 
 
+
+        $("#filterAirports").click(function () {
+            GetAllAirports();
+        });
+
         $("#registerAirport").click(function () {
             var name = $("#airportNameReg").val();
             if (name != "") {
@@ -197,6 +202,9 @@
 
 
         
+        $("#filterFlights").click(function () {
+            GetAllFlights();
+        });
 
         $("#registerFlight").click(function () {
             
@@ -514,6 +522,10 @@
         });
 
 
+        $("#filterUsers").click(function () {
+            GetAllUsers();
+        });
+
         $("#registerUser").click(function () {
             var fornavn = $("#fornavnReg").val();
             var etternavn = $("#etternavnReg").val();
@@ -680,9 +692,13 @@
 
 
     function GetAllAirports() {
+        var name = $("#airportNameFilter").val();
+
         $.ajax({
             url: '/Admin/getAllAirports',
-            type: 'GET',
+            type: 'POST',
+            contentType: "application/json:charset=utf-8",
+            data: JSON.stringify({ name: name }),
             dataType: 'json',
             success: function (jsAirports) {
                 DisplayAllAirports(jsAirports);
@@ -723,9 +739,15 @@
             dataType: 'json',
             success: function (jsAirports) {
                 var result = "<option selected hidden value=\"\">Velg flyplass</option>";
+                var filterResult = "<option selected value=\"\"></option>";
+                var loop = "";
                 for (var a in jsAirports) {
-                    result += "<option value=\"" + jsAirports[a].id + "\">" + jsAirports[a].name + "</option>";
+                    loop += "<option value=\"" + jsAirports[a].id + "\">" + jsAirports[a].name + "</option>";
                 }
+                result += loop;
+                filterResult += loop;
+                $("#fromAirportFilter").html(filterResult);
+                $("#toAirportFilter").html(filterResult);
                 $("#fromAirportReg").html(result);
                 $("#toAirportReg").html(result);
                 $("#fromAirportEd").html(result);
@@ -738,9 +760,15 @@
     }
 
     function GetAllFlights() {
+        var from = $("#fromAirportFilter").val();
+        var to = $("#toAirportFilter").val();
+        var departure = $("#departureFilter").val();
+
         $.ajax({
             url: '/Admin/getAllFlights',
-            type: 'GET',
+            type: 'POST',
+            contentType: "application/json:charset=utf-8",
+            data: JSON.stringify({ from:from, to:to, departure:departure }),
             dataType: 'json',
             success: function (jsFlights) {
                 DisplayAllFlights(jsFlights);
@@ -855,7 +883,6 @@
     function GetAllBookings() {
         var user = $("#userFilter").val();
         var flight = $("#flightFilter").val();
-        alert(user + " " + flight);
 
         $.ajax({
             url: '/Admin/getAllBookings',
@@ -903,9 +930,14 @@
 
 
     function GetAllUsers() {
+        var etternavn = $("#etternavnFilter").val();
+        var postnr = $("#postnrFilter").val();
+
         $.ajax({
             url: '/Admin/getAllUsers',
-            type: 'GET',
+            type: 'POST',
+            contentType: "application/json:charset=utf-8",
+            data: JSON.stringify({ etternavn:etternavn, postnr:postnr }),
             dataType: 'json',
             success: function (jsUsers) {
                 DisplayAllUsers(jsUsers);
@@ -972,6 +1004,13 @@
                     <span id="registerAirportConfirmation"></span>
                 </div>
                 <h2>Registrerte flyplasser</h2>
+                <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-addon">Flyplassnavn</span>
+                        <input id="airportNameFilter" type="text" class="form-control" />
+                    </div>
+                </div>
+                <button id="filterAirports" class="btn btn-primary">Avgrens søk</button><br />
                 <div id="airportList">
                 </div>
                 <div>
@@ -1033,6 +1072,21 @@
                     <span id="registerFlightConfirmation"></span>
                 </div>
                 <h2>Registrerte flyvninger</h2>
+                <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-addon">Fra flyplass</span>
+                        <select id="fromAirportFilter"></select>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Til flyplass</span>
+                        <select id="toAirportFilter"></select>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Avreisedato</span>
+                        <input id="departureFilter" type="datetime" class="form-control" />
+                    </div>
+                </div>
+                <button id="filterFlights" class="btn btn-primary">Avgrens søk</button><br />
                 <div id="flightList">
                 </div>
                 <div>
@@ -1214,6 +1268,17 @@
                     <span id="registerUserConfirmation"></span>
                 </div>
                 <h2>Registrerte kunder</h2>
+                <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-addon">Etternavn</span>
+                        <input id="etternavnFilter" type="text" class="form-control"/>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Postnummer</span>
+                        <input id="postnrFilter" type="text" class="form-control" />
+                    </div>
+                </div>
+                <button id="filterUsers" class="btn btn-primary">Avgrens søk</button><br />
                 <div id="userList">
                 </div>
                 <div>

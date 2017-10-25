@@ -16,10 +16,10 @@ namespace WebAppsOppgave1.BLL
             return AdminDAL.AdminInDb(UserName, HashedPassword);
         }
 
-        public List<Airport> getAllAirports()
+        public List<Airport> getAllAirports(string name)
         {
             var AdminDAL = new AdminDAL();
-            return AdminDAL.getAllAirports();
+            return AdminDAL.getAllAirports(name);
         }
         public Airport getAirport(int id)
         {
@@ -42,10 +42,10 @@ namespace WebAppsOppgave1.BLL
             return AdminDAL.deleteAirport(id);
         }
 
-        public List<Flight> getAllFlights()
+        public List<Flight> getAllFlights(string from, string to, string departure)
         {
             var AdminDAL = new AdminDAL();
-            return AdminDAL.getAllFlights();
+            return AdminDAL.getAllFlights(from, to, departure);
         }
         public Flight getFlight(int id)
         {
@@ -94,10 +94,10 @@ namespace WebAppsOppgave1.BLL
             return AdminDAL.deleteBooking(id);
         }
 
-        public List<User> getAllUsers()
+        public List<User> getAllUsers(string etternavn, string postnr)
         {
             var AdminDAL = new AdminDAL();
-            return AdminDAL.getAllUsers();
+            return AdminDAL.getAllUsers(etternavn, postnr);
         }
         public User getUser(int id)
         {
