@@ -75,7 +75,7 @@ namespace WebAppsOppgave1.Controllers
             ViewBag.Admin = false;
             Session["Admin"] = false;
 
-            return View();
+            return RedirectToAction("../Home/Index");
         }
 
         public bool AdminInDb(FormCollection form)
