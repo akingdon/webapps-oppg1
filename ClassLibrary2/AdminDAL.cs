@@ -32,7 +32,7 @@ namespace WebAppsOppgave1.DAL
                 return Db.Airport.Where(a => a.Name == name).ToList();
             }
             else{
-                return Db.Airport.ToList();
+                return Db.Airport.OrderBy(a => a.Name).ToList();
             }
         }
         public Airport getAirport(int id)
@@ -111,40 +111,42 @@ namespace WebAppsOppgave1.DAL
 
             if (fromSet && !toSet && !departureSet)
             {
-                return Db.Flight.Where(f => f.FromAirport.Id == fromId).ToList();
+                return Db.Flight.Where(f => f.FromAirport.Id == fromId).
+                                OrderBy(f => f.Departure).ThenBy(f => f.ToAirport.Name).ToList();
             }
             else if (!fromSet && toSet && !departureSet)
             {
-                return Db.Flight.Where(f => f.ToAirport.Id == toId).ToList();
+                return Db.Flight.Where(f => f.ToAirport.Id == toId).
+                                OrderBy(f => f.Departure).ThenBy(f => f.FromAirport.Name).ToList();
             }
             else if (!fromSet && !toSet && departureSet)
             {
-                return Db.Flight.Where(f => DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+                return Db.Flight.Where(f => DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).
+                                OrderBy(f => f.Departure).ThenBy(f => f.FromAirport.Name).ThenBy(f => f.ToAirport.Name).ToList();
             }
             else if (fromSet && toSet && !departureSet)
             {
-                return Db.Flight.Where(f => f.FromAirport.Id == fromId &&
-                                            f.ToAirport.Id == toId).ToList();
+                return Db.Flight.Where(f => f.FromAirport.Id == fromId && f.ToAirport.Id == toId).
+                                OrderBy(f => f.Departure).ToList();
             }
             else if (fromSet && !toSet && departureSet)
             {
-                return Db.Flight.Where(f => f.FromAirport.Id == fromId &&
-                                            DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+                return Db.Flight.Where(f => f.FromAirport.Id == fromId && DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).
+                    OrderBy(f => f.Departure).ThenBy(f => f.ToAirport.Name).ToList();
             }
             else if (!fromSet && toSet && departureSet)
             {
-                return Db.Flight.Where(f => f.ToAirport.Id == toId &&
-                                            DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+                return Db.Flight.Where(f => f.ToAirport.Id == toId && DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).
+                                OrderBy(f => f.Departure).ThenBy(f => f.FromAirport.Name).ToList();
             }
             else if (fromSet && toSet && departureSet)
             {
-                return Db.Flight.Where(f => f.FromAirport.Id == fromId &&
-                                            f.ToAirport.Id == toId &&
-                                            DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).ToList();
+                return Db.Flight.Where(f => f.FromAirport.Id == fromId && f.ToAirport.Id == toId && DbFunctions.TruncateTime(f.Departure) == departureFilter.Date).
+                                OrderBy(f => f.Departure).ToList();
             }
             else
             {
-                return Db.Flight.ToList();
+                return Db.Flight.OrderBy(f => f.Departure).ThenBy(f => f.FromAirport.Name).ThenBy(f => f.ToAirport.Name).ToList();
             }
         }
         public Flight getFlight(int id)
@@ -250,11 +252,13 @@ namespace WebAppsOppgave1.DAL
 
             if (userSet && !flightSet)
             {
-                return Db.Booking.Where(b => b.User.Id == userFilterId).ToList();
+                return Db.Booking.Where(b => b.User.Id == userFilterId).
+                                OrderBy(b => b.Flight.FromAirport.Name).ThenBy(b => b.Flight.ToAirport.Name).ThenBy(b => b.Flight.Departure).ToList();
             }
             else if (!userSet && flightSet)
             {
-                return Db.Booking.Where(b => b.Flight.Id == flightFilterId).ToList();
+                return Db.Booking.Where(b => b.Flight.Id == flightFilterId).
+                                OrderBy(b => b.User.Etternavn).ThenBy(b => b.User.Fornavn).ThenBy(b => b.User.Id).ToList();
             }
             else if (userSet && flightSet)
             {
@@ -262,7 +266,8 @@ namespace WebAppsOppgave1.DAL
             }
             else
             {
-                return Db.Booking.ToList();
+                return Db.Booking.OrderBy(b => b.User.Etternavn).ThenBy(b => b.User.Fornavn).ThenBy(b =>b.User.Id).
+                                ThenBy(b => b.Flight.FromAirport.Name).ThenBy(b => b.Flight.ToAirport.Name).ThenBy(b => b.Flight.Departure).ToList();
             }
         }
         public Booking getBooking(int id)
@@ -358,19 +363,19 @@ namespace WebAppsOppgave1.DAL
 
             if (etternavnSet && !postnrSet)
             {
-                return Db.Users.Where(u => u.Etternavn == etternavn).ToList();
+                return Db.Users.Where(u => u.Etternavn == etternavn).OrderBy(u => u.Fornavn).ToList();
             }
             else if (!etternavnSet && postnrSet)
             {
-                return Db.Users.Where(u => u.Poststed.Postnr == postnr).ToList();
+                return Db.Users.Where(u => u.Poststed.Postnr == postnr).OrderBy(u => u.Etternavn).ThenBy(u => u.Fornavn).ToList();
             }
             else if (etternavnSet && postnrSet)
             {
-                return Db.Users.Where(u => u.Etternavn == etternavn && u.Poststed.Postnr == postnr).ToList();
+                return Db.Users.Where(u => u.Etternavn == etternavn && u.Poststed.Postnr == postnr).OrderBy(u => u.Fornavn).ToList();
             }
             else
             {
-                return Db.Users.ToList();
+                return Db.Users.OrderBy(u => u.Etternavn).ThenBy(u => u.Fornavn).ToList();
             }
         }
         public User getUser(int id)

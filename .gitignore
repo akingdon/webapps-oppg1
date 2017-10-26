@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 WebAppsOppgave1/logs/log_events.txt
+WebAppsOppgave1/logs/log_errors.txt
