@@ -807,7 +807,7 @@
     function ShowEditBooking(id) {
         $("#registerBooking").hide();
         $("#deleteBooking").hide();
-        $("#editBookingConfirmation").html("");
+        $("#bookingConfirmation").html("");
         $("#editBooking").show();
 
         $.ajax({
@@ -836,7 +836,7 @@
     function ShowDeleteBooking(id) {
         $("#registerBooking").hide();
         $("#editBooking").hide();
-        $("#deleteBookingConfirmation").html("");
+        $("#bookingConfirmation").html("");
         $("#deleteBooking").show();
 
         $.ajax({
