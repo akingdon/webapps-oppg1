@@ -5,16 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="BookingDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="__MigrationHistory">
-          <Key>
-            <PropertyRef Name="MigrationId" />
-            <PropertyRef Name="ContextKey" />
-          </Key>
-          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
-          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
-          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
-          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
-        </EntityType>
         <EntityType Name="Airports">
           <Key>
             <PropertyRef Name="Id" />
@@ -27,9 +17,10 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="CustomerId" Type="int" Nullable="false" />
-          <Property Name="Amount" Type="tinyint" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Amount" Type="int" Nullable="false" />
+          <Property Name="Flight_Id" Type="int" />
+          <Property Name="User_Id" Type="int" />
         </EntityType>
         <EntityType Name="Flights">
           <Key>
@@ -37,8 +28,22 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Departure" Type="datetime" Nullable="false" />
+          <Property Name="Arrival" Type="datetime" Nullable="false" />
+          <Property Name="Price" Type="int" Nullable="false" />
           <Property Name="FromAirport_Id" Type="int" />
           <Property Name="ToAirport_Id" Type="int" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Fornavn" Type="nvarchar(max)" />
+          <Property Name="Etternavn" Type="nvarchar(max)" />
+          <Property Name="Adresse" Type="nvarchar(max)" />
+          <Property Name="Epost" Type="nvarchar(max)" />
+          <Property Name="PassordHash" Type="varbinary(max)" />
+          <Property Name="Poststed_Postnr" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <Association Name="FK_dbo_Airports_dbo_Flights_Flight_Id">
           <End Role="Flights" Type="Self.Flights" Multiplicity="0..1" />
@@ -52,15 +57,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_dbo_Bookings_dbo_Flights_Id">
-          <End Role="Flights" Type="Self.Flights" Multiplicity="1" />
-          <End Role="Bookings" Type="Self.Bookings" Multiplicity="0..1" />
+        <Association Name="FK_dbo_Bookings_dbo_Flights_Flight_Id">
+          <End Role="Flights" Type="Self.Flights" Multiplicity="0..1" />
+          <End Role="Bookings" Type="Self.Bookings" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Flights">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Bookings">
+              <PropertyRef Name="Flight_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Bookings_dbo_Users_User_Id">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Bookings" Type="Self.Bookings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
               <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Bookings">
+              <PropertyRef Name="User_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -89,16 +106,20 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="BookingDatabaseModelStoreContainer">
-          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Airports" EntityType="Self.Airports" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bookings" EntityType="Self.Bookings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Flights" EntityType="Self.Flights" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_dbo_Airports_dbo_Flights_Flight_Id" Association="Self.FK_dbo_Airports_dbo_Flights_Flight_Id">
             <End Role="Flights" EntitySet="Flights" />
             <End Role="Airports" EntitySet="Airports" />
           </AssociationSet>
-          <AssociationSet Name="FK_dbo_Bookings_dbo_Flights_Id" Association="Self.FK_dbo_Bookings_dbo_Flights_Id">
+          <AssociationSet Name="FK_dbo_Bookings_dbo_Flights_Flight_Id" Association="Self.FK_dbo_Bookings_dbo_Flights_Flight_Id">
             <End Role="Flights" EntitySet="Flights" />
+            <End Role="Bookings" EntitySet="Bookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Bookings_dbo_Users_User_Id" Association="Self.FK_dbo_Bookings_dbo_Users_User_Id">
+            <End Role="Users" EntitySet="Users" />
             <End Role="Bookings" EntitySet="Bookings" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_Flights_dbo_Airports_FromAirport_Id" Association="Self.FK_dbo_Flights_dbo_Airports_FromAirport_Id">
@@ -115,16 +136,6 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BookingDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="C__MigrationHistory">
-          <Key>
-            <PropertyRef Name="MigrationId" />
-            <PropertyRef Name="ContextKey" />
-          </Key>
-          <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
-          <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
         <EntityType Name="Airports">
           <Key>
             <PropertyRef Name="Id" />
@@ -140,10 +151,12 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="Amount" Type="Byte" Nullable="false" />
-          <NavigationProperty Name="Flights" Relationship="Self.FK_dbo_Bookings_dbo_Flights_Id" FromRole="Bookings" ToRole="Flights" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Amount" Type="Int32" Nullable="false" />
+          <Property Name="Flight_Id" Type="Int32" />
+          <Property Name="User_Id" Type="Int32" />
+          <NavigationProperty Name="Flights" Relationship="Self.FK_dbo_Bookings_dbo_Flights_Flight_Id" FromRole="Bookings" ToRole="Flights" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_dbo_Bookings_dbo_Users_User_Id" FromRole="Bookings" ToRole="Users" />
         </EntityType>
         <EntityType Name="Flights">
           <Key>
@@ -151,12 +164,27 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Departure" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Arrival" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Price" Type="Int32" Nullable="false" />
           <Property Name="FromAirport_Id" Type="Int32" />
           <Property Name="ToAirport_Id" Type="Int32" />
           <NavigationProperty Name="Airports" Relationship="Self.FK_dbo_Airports_dbo_Flights_Flight_Id" FromRole="Flights" ToRole="Airports" />
           <NavigationProperty Name="Airports1" Relationship="Self.FK_dbo_Flights_dbo_Airports_FromAirport_Id" FromRole="Flights" ToRole="Airports" />
           <NavigationProperty Name="Airports2" Relationship="Self.FK_dbo_Flights_dbo_Airports_ToAirport_Id" FromRole="Flights" ToRole="Airports" />
-          <NavigationProperty Name="Bookings" Relationship="Self.FK_dbo_Bookings_dbo_Flights_Id" FromRole="Flights" ToRole="Bookings" />
+          <NavigationProperty Name="Bookings" Relationship="Self.FK_dbo_Bookings_dbo_Flights_Flight_Id" FromRole="Flights" ToRole="Bookings" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fornavn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Etternavn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Adresse" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Epost" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PassordHash" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Poststed_Postnr" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Bookings" Relationship="Self.FK_dbo_Bookings_dbo_Users_User_Id" FromRole="Users" ToRole="Bookings" />
         </EntityType>
         <Association Name="FK_dbo_Airports_dbo_Flights_Flight_Id">
           <End Role="Flights" Type="Self.Flights" Multiplicity="0..1" />
@@ -194,23 +222,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_dbo_Bookings_dbo_Flights_Id">
-          <End Role="Flights" Type="Self.Flights" Multiplicity="1" />
-          <End Role="Bookings" Type="Self.Bookings" Multiplicity="0..1" />
+        <Association Name="FK_dbo_Bookings_dbo_Flights_Flight_Id">
+          <End Role="Flights" Type="Self.Flights" Multiplicity="0..1" />
+          <End Role="Bookings" Type="Self.Bookings" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Flights">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Bookings">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="Flight_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="BookingDatabaseEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
+        <Association Name="FK_dbo_Bookings_dbo_Users_User_Id">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Bookings" Type="Self.Bookings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Bookings">
+              <PropertyRef Name="User_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Airports" EntityType="Self.Airports" />
           <EntitySet Name="Bookings" EntityType="Self.Bookings" />
           <EntitySet Name="Flights" EntityType="Self.Flights" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
           <AssociationSet Name="FK_dbo_Airports_dbo_Flights_Flight_Id" Association="Self.FK_dbo_Airports_dbo_Flights_Flight_Id">
             <End Role="Flights" EntitySet="Flights" />
             <End Role="Airports" EntitySet="Airports" />
@@ -223,8 +263,12 @@
             <End Role="Airports" EntitySet="Airports" />
             <End Role="Flights" EntitySet="Flights" />
           </AssociationSet>
-          <AssociationSet Name="FK_dbo_Bookings_dbo_Flights_Id" Association="Self.FK_dbo_Bookings_dbo_Flights_Id">
+          <AssociationSet Name="FK_dbo_Bookings_dbo_Flights_Flight_Id" Association="Self.FK_dbo_Bookings_dbo_Flights_Flight_Id">
             <End Role="Flights" EntitySet="Flights" />
+            <End Role="Bookings" EntitySet="Bookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Bookings_dbo_Users_User_Id" Association="Self.FK_dbo_Bookings_dbo_Users_User_Id">
+            <End Role="Users" EntitySet="Users" />
             <End Role="Bookings" EntitySet="Bookings" />
           </AssociationSet>
         </EntityContainer>
@@ -233,17 +277,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BookingDatabaseModelStoreContainer" CdmEntityContainer="BookingDatabaseEntities">
-          <EntitySetMapping Name="C__MigrationHistory">
-            <EntityTypeMapping TypeName="BookingDatabaseModel.C__MigrationHistory">
-              <MappingFragment StoreEntitySet="__MigrationHistory">
-                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
-                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
-                <ScalarProperty Name="Model" ColumnName="Model" />
-                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+        <EntityContainerMapping StorageEntityContainer="BookingDatabaseModelStoreContainer" CdmEntityContainer="Entities">
           <EntitySetMapping Name="Airports">
             <EntityTypeMapping TypeName="BookingDatabaseModel.Airports">
               <MappingFragment StoreEntitySet="Airports">
@@ -257,8 +291,9 @@
             <EntityTypeMapping TypeName="BookingDatabaseModel.Bookings">
               <MappingFragment StoreEntitySet="Bookings">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Flight_Id" ColumnName="Flight_Id" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -267,8 +302,23 @@
               <MappingFragment StoreEntitySet="Flights">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Departure" ColumnName="Departure" />
+                <ScalarProperty Name="Arrival" ColumnName="Arrival" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="FromAirport_Id" ColumnName="FromAirport_Id" />
                 <ScalarProperty Name="ToAirport_Id" ColumnName="ToAirport_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="BookingDatabaseModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Fornavn" ColumnName="Fornavn" />
+                <ScalarProperty Name="Etternavn" ColumnName="Etternavn" />
+                <ScalarProperty Name="Adresse" ColumnName="Adresse" />
+                <ScalarProperty Name="Epost" ColumnName="Epost" />
+                <ScalarProperty Name="PassordHash" ColumnName="PassordHash" />
+                <ScalarProperty Name="Poststed_Postnr" ColumnName="Poststed_Postnr" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

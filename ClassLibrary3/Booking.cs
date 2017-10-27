@@ -11,7 +11,6 @@ namespace WebAppsOppgave1.Model
     {
         public int Id { get; set; }
         public virtual User User { get; set; }
-        [Required]
         public virtual Flight Flight { get; set; }
         public int Amount { get; set; }
     }

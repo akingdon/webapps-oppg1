@@ -12,26 +12,22 @@ namespace WebAppsOppgave1
     using System;
     using System.Collections.Generic;
     
-    public partial class Flights
+    public partial class Users
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Flights()
+        public Users()
         {
-            this.Airports = new HashSet<Airports>();
             this.Bookings = new HashSet<Bookings>();
         }
     
         public int Id { get; set; }
-        public System.DateTime Departure { get; set; }
-        public System.DateTime Arrival { get; set; }
-        public int Price { get; set; }
-        public Nullable<int> FromAirport_Id { get; set; }
-        public Nullable<int> ToAirport_Id { get; set; }
+        public string Fornavn { get; set; }
+        public string Etternavn { get; set; }
+        public string Adresse { get; set; }
+        public string Epost { get; set; }
+        public byte[] PassordHash { get; set; }
+        public string Poststed_Postnr { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Airports> Airports { get; set; }
-        public virtual Airports Airports1 { get; set; }
-        public virtual Airports Airports2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Bookings> Bookings { get; set; }
     }

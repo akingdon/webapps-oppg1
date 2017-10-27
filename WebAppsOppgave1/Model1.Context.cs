@@ -13,10 +13,10 @@ namespace WebAppsOppgave1
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class BookingDatabaseEntities : DbContext
+    public partial class Entities : DbContext
     {
-        public BookingDatabaseEntities()
-            : base("name=BookingDatabaseEntities")
+        public Entities()
+            : base("name=Entities")
         {
         }
     
@@ -25,9 +25,9 @@ namespace WebAppsOppgave1
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<Airports> Airports { get; set; }
         public virtual DbSet<Bookings> Bookings { get; set; }
         public virtual DbSet<Flights> Flights { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
     }
 }

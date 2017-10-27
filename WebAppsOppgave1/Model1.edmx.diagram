@@ -4,18 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a4f0213a97de42afbd9e1f634f1aba40" Name="Diagram1">
-        <EntityTypeShape EntityType="BookingDatabaseModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BookingDatabaseModel.Airports" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+      <Diagram DiagramId="4bdf5fe21c164d6d8c73d15e4a296584" Name="Diagram1">
+        <EntityTypeShape EntityType="BookingDatabaseModel.Airports" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="BookingDatabaseModel.Bookings" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="BookingDatabaseModel.Flights" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookingDatabaseModel.Users" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
         <AssociationConnector Association="BookingDatabaseModel.FK_dbo_Airports_dbo_Flights_Flight_Id" ManuallyRouted="false" />
         <AssociationConnector Association="BookingDatabaseModel.FK_dbo_Flights_dbo_Airports_FromAirport_Id" ManuallyRouted="false" />
-        <AssociationConnector Association="BookingDatabaseModel.FK_dbo_Flights_dbo_Airports_ToAirport_Id" ManuallyRouted="true" >
-          <ConnectorPoint PointX="2.25" PointY="2.8169409179687497" />
-          <ConnectorPoint PointX="3" PointY="2.8169409179687497" />
-        </AssociationConnector>
-        <AssociationConnector Association="BookingDatabaseModel.FK_dbo_Bookings_dbo_Flights_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="BookingDatabaseModel.FK_dbo_Flights_dbo_Airports_ToAirport_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="BookingDatabaseModel.FK_dbo_Bookings_dbo_Flights_Flight_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="BookingDatabaseModel.FK_dbo_Bookings_dbo_Users_User_Id" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
