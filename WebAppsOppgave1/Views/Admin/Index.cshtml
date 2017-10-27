@@ -764,17 +764,22 @@
     }
 
     function populateFlightDropDownAfterFiltering(jsFlights) {
-        var result = "<option selected hidden value=\"\">Velg flyvning</option>";
-        var filterResult = "<option selected value=\"\"></option>";
         loop = "";
         for (var f in jsFlights) {
             loop += "<option value=\"" + jsFlights[f].id + "\">" +
                 jsFlights[f].fromAirportName + " - " + jsFlights[f].toAirportName + ": " +
                 jsFlights[f].departure + "</option>";
         }
-        result += loop;
-        filterResult += loop;
-        $("#flightReg").html(filterResult);
+        $("#flightReg").html(loop);
+    }
+
+    function populateUserDropDownAfterFiltering(jsUsers) {
+        loop = "";
+        for (var u in jsUsers) {
+            loop += "<option value=\"" + jsUsers[u].Id + "\">" +
+                jsUsers[u].Fornavn + " " + jsUsers[u].Etternavn + " (" + jsUsers[u].Id + ") </option>";
+        }
+        $("#userReg").html(loop);
     }
 
     function GetAllBookings() {
@@ -908,6 +913,24 @@
             dataType: 'json',
             success: function (jsUsers) {
                 DisplayAllUsers(jsUsers);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
+    function getAllUsersForDropdownFiltering() {
+        var name = $("#userFilterBooking").val();
+
+        $.ajax({
+            url: '/Admin/getAllUsers',
+            type: 'POST',
+            contentType: 'application/json:charset=utf-8',
+            data: JSON.stringify({ etternavn: name, postnr: ''}),
+            dataType: 'json',
+            success: function (jsUsers) {
+                populateUserDropDownAfterFiltering(jsUsers);
             },
             error: function (x, y, z) {
                 alert(x + '\n' + y + '\n' + z);
@@ -1205,14 +1228,14 @@
                     </thead>
                     <tr>
                         <td>
-                            <input id="userFilterBooking" class="form-control" type="text" placeholder="Søk etter kunde" />
+                            <input id="userFilterBooking" class="form-control" type="text" placeholder="Søk på etternavn" />
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-primary">Søk</a>
+                            <a class="btn btn-sm btn-primary" onclick="getAllUsersForDropdownFiltering()">Søk</a>
                         </td>
                         <td>
-                            <input id="flightFilterBooking" class="form-control" type="text" placeholder="Søk etter flyplass"/>
-                            <input id="departureFilterBooking" type="date" class="form-control" placeholder="Søk etter avgang"/>
+                            <input id="flightFilterBooking" class="form-control" type="text" placeholder="Søk på flyplass"/>
+                            <input id="departureFilterBooking" type="date" class="form-control" placeholder="Søk på avgang"/>
                         </td>
                         <td>
                             <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering()">Søk</a>
