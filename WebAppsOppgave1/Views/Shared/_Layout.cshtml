@@ -26,8 +26,13 @@
                 else
                 {
                     @Html.ActionLink("Bestill flybilletter", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                    @Html.ActionLink("Registrer deg", "RegisterUser", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                    @Html.ActionLink("Logg inn", "LogIn", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+                    if (ViewBag.LoggedIn == null || ViewBag.LoggedIn == false)
+                    {
+                        @Html.ActionLink("Registrer deg", "RegisterUser", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Logg inn", "LogIn", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    }
+
                     @Html.ActionLink("Administrator", "LogIn", "Admin", new { area = "" }, new { @class = "navbar-brand" })
                 }
                 @if (ViewBag.LoggedIn != null && ViewBag.LoggedIn)
