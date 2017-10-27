@@ -1213,15 +1213,15 @@
                 <table class="table"> 
                     <thead class="">
                         <tr>
-                            <th>
+                            <th class="col-sm-3">
                                 Kunde
                             </th>
-                            <th></th>
-                            <th>
+                            <th class="col-sm-1"></th>
+                            <th class="col-sm-4">
                                 Flyvning
                             </th>
-                            <th></th>
-                            <th>
+                            <th class="col-sm-1"></th>
+                            <th class="col-sm-3">
                                 Antall reisende
                             </th>
                         </tr>
@@ -1241,7 +1241,7 @@
                             <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering()">Søk</a>
                         </td>
                         <td>
-                            <input id="amountReg" type="number" class="form-control" />
+                            
                         </td>
                     </tr>
                     <tr>
@@ -1254,8 +1254,15 @@
                         </td>
                         <td></td>
                         <td>
-                            <button id="confirmRegisterBooking" class="btn btn-success">Registrer bestilling</button>
+                            <input id="amountReg" type="number" class="form-control" placeholder="Skriv antall passasjerer" />
                         </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><button id="confirmRegisterBooking" class="btn btn-success">Registrer bestilling</button></td>
                     </tr>
                 </table>
                 </div>
