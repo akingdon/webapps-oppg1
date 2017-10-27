@@ -334,26 +334,28 @@
             var epost = $("#epostReg").val();
             var passord = $("#passordReg").val();
 
-            $.ajax({
-                url: '/Admin/registerUser',
-                type: 'POST',
-                contentType: "application/json:charset=utf-8",
-                data: JSON.stringify({ fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost, passord: passord }),
-                dataType: 'json',
-                success: function (success) {
-                    if (success == "ok") {
-                        $("#userConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
-                        $("#registerUser").hide();
-                        GetAllUsers();
+            if (ValidateUser(fornavn, etternavn, adresse, postnummer, poststed, epost, passord)) {
+                $.ajax({
+                    url: '/Admin/registerUser',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost, passord: passord }),
+                    dataType: 'json',
+                    success: function (success) {
+                        if (success == "ok") {
+                            $("#userConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
+                            $("#registerUser").hide();
+                            GetAllUsers();
+                        }
+                        else {
+                            $("#userConfirmation").html("<p style=\"color:indianred\">Feil ved registrering</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
                     }
-                    else {
-                        $("#userConfirmation").html("<p style=\"color:indianred\">Feil ved registrering</p>");
-                    }
-                },
-                error: function (x, y, z) {
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
+                });
+            }
         });
 
         $("#confirmEditUser").click(function () {
@@ -366,26 +368,28 @@
             var epost = $("#epostEd").val();
             var passord = $("#passordEd").val();
 
-            $.ajax({
-                url: '/Admin/editUser',
-                type: 'POST',
-                contentType: "application/json:charset=utf-8",
-                data: JSON.stringify({ id:id, fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost, passord: passord }),
-                dataType: 'json',
-                success: function (success) {
-                    if (success == "ok") {
-                        $("#userConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
-                        $("#editUser").hide();
-                        GetAllUsers();
+            if (ValidateUser(fornavn, etternavn, adresse, postnummer, poststed, epost, passord)) {
+                $.ajax({
+                    url: '/Admin/editUser',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ id: id, fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost, passord: passord }),
+                    dataType: 'json',
+                    success: function (success) {
+                        if (success == "ok") {
+                            $("#userConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
+                            $("#editUser").hide();
+                            GetAllUsers();
+                        }
+                        else {
+                            $("#userConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
                     }
-                    else {
-                        $("#userConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
-                    }
-                },
-                error: function (x, y, z) {
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
+                });
+            }
         });
 
         $("#confirmDeleteUser").click(function () {
@@ -1045,6 +1049,95 @@
         });
     }
 
+    function ValidateUser(fornavn, etternavn, adresse, postnummer, poststed, epost, passord) {
+        ClearInputLabels();
+        var valid = true;
+
+        var re = new RegExp("^[A-ZÆØÅÁÄÄÈÉËa-zæøåáäèéë .-]{2,40}$");
+        if (!re.test(fornavn)) {
+            $("#fornavnRegLbl").html("Ugyldig navn");
+            $("#fornavnEdLbl").html("Ugyldig navn");
+            $("#fornavnRegLbl").show();
+            $("#fornavnEdLbl").show();
+            valid = false;
+        }
+        if (!re.test(etternavn)) {
+            $("#etternavnRegLbl").html("Ugyldig navn");
+            $("#etternavnEdLbl").html("Ugyldig navn");
+            $("#etternavnRegLbl").show();
+            $("#etternavnEdLbl").show();
+            valid = false;
+        }
+        re = new RegExp("^[A-ZÆØÅÁÄÄÈÉËa-zæøåáäèéë .-]{2,40}[0-9]{0,4}[ A-ZÆØÅÁÄÄÈÉËa-zæøåáäèéë]{0,2}$");
+        if (!re.test(adresse)) {
+            $("#adresseRegLbl").html("Ugyldig adresse");
+            $("#adresseEdLbl").html("Ugyldig adresse");
+            $("#adresseRegLbl").show();
+            $("#adresseEdLbl").show();
+            valid = false;
+        }
+        re = new RegExp("^[0-9]{4}$");
+        if (!re.test(postnummer) || postnummer == "0000") {
+            $("#postnummerRegLbl").html("Ugyldig postnummer");
+            $("#postnummerEdLbl").html("Ugyldig postnummer");
+            $("#postnummerRegLbl").show();
+            $("#postnummerEdLbl").show();
+            valid = false;
+        }
+        re = new RegExp("^[A-ZÆØÅÁÄÄÈÉË]{1}[a-zæøåáäèéë -]{1,30}$");
+        if (!re.test(poststed)) {
+            $("#poststedRegLbl").html("Ugyldig navn på poststed");
+            $("#poststedEdLbl").html("Ugyldig navn på poststed");
+            $("#poststedRegLbl").show();
+            $("#poststedEdLbl").show();
+            valid = false;
+        }
+        re = new RegExp("^[A-ZÆØÅÁÄÄÈÉËa-zæøåáäèéë0-9]{1,30}@@{1}[A-ZÆØÅa-zæøåáäèéë .-]{1,30}.[A-ZÆØÅa-zæøåáäèéë -]{2,30}$");
+        if (!re.test(epost)) {
+            $("#epostRegLbl").html("Ugyldig format på epost-adresse");
+            $("#epostEdLbl").html("Ugyldig format på epost-adresse");
+            $("#epostRegLbl").show();
+            $("#epostEdLbl").show();
+            valid = false;
+        }
+        re = new RegExp("^[A-ZÆØÅÁÄÈÉËa-zæøåáäèéë0-9]{8,30}$");
+        if (!re.test(passord)) {
+            $("#passordRegLbl").html("Passord må være minst 8 tegn og bestå av bokstaver og siffer");
+            $("#passordEdLbl").html("Passord må være minst 8 tegn og bestå av bokstaver og siffer");
+            $("#passordRegLbl").show();
+            $("#passordEdLbl").show();
+            valid = false;
+        }
+        return valid;
+    }
+
+    function ClearInputFields() {
+        $("#fornavnReg").val("");
+        $("#etternavnReg").val("");
+        $("#adresseReg").val("");
+        $("#postnummerReg").val("");
+        $("#poststedReg").val("");
+        $("#epostReg").val("");
+        $("#passordReg").val("");
+    }
+
+    function ClearInputLabels() {
+        $("#fornavnRegLbl").hide();
+        $("#etternavnRegLbl").hide();
+        $("#adresseRegLbl").hide();
+        $("#postnummerRegLbl").hide();
+        $("#poststedRegLbl").hide();
+        $("#epostRegLbl").hide();
+        $("#passordRegLbl").hide();
+        $("#fornavnEdLbl").hide();
+        $("#etternavnEdLbl").hide();
+        $("#adresseEdLbl").hide();
+        $("#postnummerEdLbl").hide();
+        $("#poststedEdLbl").hide();
+        $("#epostEdLbl").hide();
+        $("#passordEdLbl").hide();
+    }
+
 </script>
 
 <div class="container">
@@ -1330,30 +1423,37 @@
                 <div class="input-group">
                     <span class="input-group-addon">Fornavn</span>
                     <input id="fornavnReg" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="fornavnRegLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Etternavn</span>
                     <input id="etternavnReg" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="etternavnRegLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Adressee</span>
                     <input id="adresseReg" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="adresseRegLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Postnummer</span>
                     <input id="postnummerReg" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="postnummerRegLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Poststed</span>
                     <input id="poststedReg" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="poststedRegLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Epost</span>
                     <input id="epostReg" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="epostRegLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Passord</span>
                     <input id="passordReg" type="password" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="passordRegLbl" style="display:none"></span>
                 </div>
                 <button id="confirmRegisterUser" class="btn btn-success">Registrer kunde</button>
             </div>
@@ -1366,30 +1466,37 @@
                 <div class="input-group">
                     <span class="input-group-addon">Fornavn</span>
                     <input id="fornavnEd" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="fornavnEdLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Etternavn</span>
                     <input id="etternavnEd" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="etternavnEdLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Adressee</span>
                     <input id="adresseEd" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="adresseEdLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Postnummer</span>
                     <input id="postnummerEd" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="postnummerEdLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Poststed</span>
                     <input id="poststedEd" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="poststedEdLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Epost</span>
                     <input id="epostEd" type="text" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="epostEdLbl" style="display:none"></span>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Passord</span>
                     <input id="passordEd" type="password" class="form-control" />
+                    &nbsp;<span class="label label-warning" id="passordEdLbl" style="display:none"></span>
                 </div>
                 <button id="confirmEditUser" class="btn btn-success">Bekreft endring</button>
             </div>
