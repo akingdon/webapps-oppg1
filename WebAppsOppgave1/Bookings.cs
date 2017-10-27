@@ -15,9 +15,11 @@ namespace WebAppsOppgave1
     public partial class Bookings
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
-        public byte Amount { get; set; }
+        public int Amount { get; set; }
+        public Nullable<int> Flight_Id { get; set; }
+        public Nullable<int> User_Id { get; set; }
     
         public virtual Flights Flights { get; set; }
+        public virtual Users Users { get; set; }
     }
 }
