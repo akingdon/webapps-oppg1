@@ -568,6 +568,25 @@
         });
     }
 
+    function getAllFlightsForDropdownFiltering() {
+        var name = $("#flightFilterBooking").val();
+        var departure = $("#departureFilterBooking").val();
+
+        $.ajax({
+            url: '/Admin/getAllFlights',
+            type: 'POST',
+            contentType: 'application/json:charset=utf-8',
+            data: JSON.stringify({ from: name, to: name, departure: departure }),
+            dataType: 'json',
+            success: function (jsFlights) {
+                populateFlightDropDownAfterFiltering(jsFlights);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
     function DisplayAllFlights(jsFlights) {
 
         var result =
@@ -742,6 +761,20 @@
                 alert(x + '\n' + y + '\n' + z);
             }
         });
+    }
+
+    function populateFlightDropDownAfterFiltering(jsFlights) {
+        var result = "<option selected hidden value=\"\">Velg flyvning</option>";
+        var filterResult = "<option selected value=\"\"></option>";
+        loop = "";
+        for (var f in jsFlights) {
+            loop += "<option value=\"" + jsFlights[f].id + "\">" +
+                jsFlights[f].fromAirportName + " - " + jsFlights[f].toAirportName + ": " +
+                jsFlights[f].departure + "</option>";
+        }
+        result += loop;
+        filterResult += loop;
+        $("#flightReg").html(filterResult);
     }
 
     function GetAllBookings() {
@@ -1153,19 +1186,56 @@
         <div id="bookings" style="display:none"><br/>
             <div id="registerBooking">
                 <h2>Registrer ny bestilling</h2>
-                <div class="input-group">
-                    <span class="input-group-addon">Kunde</span>
-                    <select id="userReg"></select>
+                <div class="input-group col-sm-12">
+                <table class="table"> 
+                    <thead class="">
+                        <tr>
+                            <th>
+                                Kunde
+                            </th>
+                            <th></th>
+                            <th>
+                                Flyvning
+                            </th>
+                            <th></th>
+                            <th>
+                                Antall reisende
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td>
+                            <input id="userFilterBooking" class="form-control" type="text" placeholder="Søk etter kunde" />
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-primary">Søk</a>
+                        </td>
+                        <td>
+                            <input id="flightFilterBooking" class="form-control" type="text" placeholder="Søk etter flyplass"/>
+                            <input id="departureFilterBooking" type="date" class="form-control" placeholder="Søk etter avgang"/>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering()">Søk</a>
+                        </td>
+                        <td>
+                            <input id="amountReg" type="number" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="userReg" class="form-control"></select>
+                        </td>
+                        <td></td>
+                        <td>
+                            <select id="flightReg" class="form-control"></select>
+                        </td>
+                        <td></td>
+                        <td>
+                            <button id="confirmRegisterBooking" class="btn btn-success">Registrer bestilling</button>
+                        </td>
+                    </tr>
+                </table>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Flyvning</span>
-                    <select id="flightReg"></select>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Antall reisende</span>
-                    <input id="amountReg" type="number" class="form-control" />
-                </div>
-                <button id="confirmRegisterBooking" class="btn btn-success">Registrer bestilling</button>
             </div>
             <div id="editBooking">
                 <h2>Endre følgende bestilling:</h2>
