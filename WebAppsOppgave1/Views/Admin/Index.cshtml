@@ -568,6 +568,25 @@
         });
     }
 
+    function getAllFlightsForDropdownFiltering() {
+        var name = $("#flightFilterBooking").val();
+        var departure = $("#departureFilterBooking").val();
+
+        $.ajax({
+            url: '/Admin/getAllFlights',
+            type: 'POST',
+            contentType: 'application/json:charset=utf-8',
+            data: JSON.stringify({ from: name, to: name, departure: departure }),
+            dataType: 'json',
+            success: function (jsFlights) {
+                populateFlightDropDownAfterFiltering(jsFlights);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
     function DisplayAllFlights(jsFlights) {
 
         var result =
@@ -744,6 +763,25 @@
         });
     }
 
+    function populateFlightDropDownAfterFiltering(jsFlights) {
+        loop = "";
+        for (var f in jsFlights) {
+            loop += "<option value=\"" + jsFlights[f].id + "\">" +
+                jsFlights[f].fromAirportName + " - " + jsFlights[f].toAirportName + ": " +
+                jsFlights[f].departure + "</option>";
+        }
+        $("#flightReg").html(loop);
+    }
+
+    function populateUserDropDownAfterFiltering(jsUsers) {
+        loop = "";
+        for (var u in jsUsers) {
+            loop += "<option value=\"" + jsUsers[u].Id + "\">" +
+                jsUsers[u].Fornavn + " " + jsUsers[u].Etternavn + " (" + jsUsers[u].Id + ") </option>";
+        }
+        $("#userReg").html(loop);
+    }
+
     function GetAllBookings() {
         var user = $("#userFilter").val();
         var flight = $("#flightFilter").val();
@@ -875,6 +913,24 @@
             dataType: 'json',
             success: function (jsUsers) {
                 DisplayAllUsers(jsUsers);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
+    function getAllUsersForDropdownFiltering() {
+        var name = $("#userFilterBooking").val();
+
+        $.ajax({
+            url: '/Admin/getAllUsers',
+            type: 'POST',
+            contentType: 'application/json:charset=utf-8',
+            data: JSON.stringify({ etternavn: name, postnr: ''}),
+            dataType: 'json',
+            success: function (jsUsers) {
+                populateUserDropDownAfterFiltering(jsUsers);
             },
             error: function (x, y, z) {
                 alert(x + '\n' + y + '\n' + z);
@@ -1153,19 +1209,56 @@
         <div id="bookings" style="display:none"><br/>
             <div id="registerBooking">
                 <h2>Registrer ny bestilling</h2>
-                <div class="input-group">
-                    <span class="input-group-addon">Kunde</span>
-                    <select id="userReg"></select>
+                <div class="input-group col-sm-12">
+                <table class="table"> 
+                    <thead class="">
+                        <tr>
+                            <th>
+                                Kunde
+                            </th>
+                            <th></th>
+                            <th>
+                                Flyvning
+                            </th>
+                            <th></th>
+                            <th>
+                                Antall reisende
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td>
+                            <input id="userFilterBooking" class="form-control" type="text" placeholder="Søk på etternavn" />
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" onclick="getAllUsersForDropdownFiltering()">Søk</a>
+                        </td>
+                        <td>
+                            <input id="flightFilterBooking" class="form-control" type="text" placeholder="Søk på flyplass"/>
+                            <input id="departureFilterBooking" type="date" class="form-control" placeholder="Søk på avgang"/>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering()">Søk</a>
+                        </td>
+                        <td>
+                            <input id="amountReg" type="number" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="userReg" class="form-control"></select>
+                        </td>
+                        <td></td>
+                        <td>
+                            <select id="flightReg" class="form-control"></select>
+                        </td>
+                        <td></td>
+                        <td>
+                            <button id="confirmRegisterBooking" class="btn btn-success">Registrer bestilling</button>
+                        </td>
+                    </tr>
+                </table>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Flyvning</span>
-                    <select id="flightReg"></select>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Antall reisende</span>
-                    <input id="amountReg" type="number" class="form-control" />
-                </div>
-                <button id="confirmRegisterBooking" class="btn btn-success">Registrer bestilling</button>
             </div>
             <div id="editBooking">
                 <h2>Endre følgende bestilling:</h2>
