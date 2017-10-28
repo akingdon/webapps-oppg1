@@ -1162,12 +1162,12 @@
             </div>
             <div id="editAirport">
                 <h2>Endre følgende flyplass:</h2>
-                <div class="input-group">
-                    <span class="input-group-addon">ID</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">ID</span>
                     <input id="airportIdEd" type="text" class="form-control" readonly />
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Navn</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">Navn</span>
                     <input id="airportNameEd" type="text" class="form-control" />
                 </div>
                 <button id="confirmEditAirport" class="btn btn-success">Bekreft endring</button>
@@ -1200,53 +1200,53 @@
         <div id="flights" style="display:none"><br/>
             <div id="registerFlight">
                 <h2>Registrer ny flyvning</h2>
-                <div class="input-group">
-                    <span class="input-group-addon">Fra flyplass</span>
-                    <select id="fromAirportReg"></select>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">Fra flyplass</span>
+                    <select id="fromAirportReg" class="form-control"></select>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Til flyplass</span>
-                    <select id="toAirportReg"></select>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">Til flyplass</span>
+                    <select id="toAirportReg" class="form-control"></select>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Avreise</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">Avreise</span>
                     <input id="departureReg" type="datetime" class="form-control" />
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Ankomst</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">Ankomst</span>
                     <input id="arrivalReg" type="datetime" class="form-control" />
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Pris</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">Pris</span>
                     <input id="priceReg" type="number" class="form-control" />
                 </div>
                 <button id="confirmRegisterFlight" class="btn btn-success">Registrer flyvning</button>
             </div>
             <div id="editFlight">
                 <h2>Endre følgende flyvning:</h2>
-                <div class="input-group">
-                    <span class="input-group-addon">ID</span>
-                    <input id="flightIdEd" type="text" class="form-control" readonly />
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">ID</span>
+                    <input id="flightIdEd" type="text" class="form-control" readonly"/>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Fra flyplass</span>
-                    <select id="fromAirportEd"></select>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">Fra flyplass</span>
+                    <select id="fromAirportEd" class="form-control"></select>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Til flyplass</span>
-                    <select id="toAirportEd"></select>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">Til flyplass</span>
+                    <select id="toAirportEd" class="form-control"></select>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Avreise</span>
-                    <input id="departureEd" type="datetime" class="form-control" />
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">Avreise</span>
+                    <input id="departureEd" type="datetime" class="form-control"/>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Ankomst</span>
-                    <input id="arrivalEd" type="datetime" class="form-control" />
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">Ankomst</span>
+                    <input id="arrivalEd" type="datetime" class="form-control"/>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Pris</span>
-                    <input id="priceEd" type="number" class="form-control" />
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">Pris</span>
+                    <input id="priceEd" type="number" class="form-control"/>
                 </div>
                 <button id="confirmEditFlight" class="btn btn-success">Bekreft endring</button>
             </div>
@@ -1283,11 +1283,11 @@
             <div class="form-inline">
                 <div class="input-group">
                     <span class="input-group-addon">Fra flyplass</span>
-                    <select id="fromAirportFilter"></select>
+                    <select id="fromAirportFilter" class="form-control"></select>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Til flyplass</span>
-                    <select id="toAirportFilter"></select>
+                    <select id="toAirportFilter" class="form-control"></select>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Avreisedato</span>
@@ -1362,20 +1362,20 @@
             </div>
             <div id="editBooking">
                 <h2>Endre følgende bestilling:</h2>
-                <div class="input-group">
-                    <span class="input-group-addon">ID</span>
+                <div class="input-group col-sm-5">
+                    <span class="input-group-addon" style="width:30%;">ID</span>
                     <input id="bookingIdEd" type="text" class="form-control" readonly />
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Kunde</span>
-                    <select id="userEd"></select>
+                <div class="input-group col-sm-5">
+                    <span class="input-group-addon" style="width:30%;">Kunde</span>
+                    <select id="userEd" class="form-control"></select>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Flyvning</span>
-                    <select id="flightEd"></select>
+                <div class="input-group col-sm-5">
+                    <span class="input-group-addon" style="width:30%;">Flyvning</span>
+                    <select id="flightEd" class="form-control"></select>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Antall reisende</span>
+                <div class="input-group col-sm-5">
+                    <span class="input-group-addon" style="width:30%;">Antall reisende</span>
                     <input id="amountEd" type="number" class="form-control" />
                 </div>
                 <button id="confirmEditBooking" class="btn btn-success">Bekreft endring</button>
@@ -1405,11 +1405,11 @@
             <div class="form-inline">
                 <div class="input-group">
                     <span class="input-group-addon">Kunde</span>
-                    <select id="userFilter"></select>
+                    <select id="userFilter" class="form-control"></select>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Flyvning</span>
-                    <select id="flightFilter"></select>
+                    <select id="flightFilter" class="form-control"></select>
                 </div>
                 <button id="filterBookings" class="btn btn-sm btn-info">Avgrens søk</button>
             </div>
@@ -1420,38 +1420,38 @@
         <div id="users" style="display:none"><br/>
             <div id="registerUser">
                 <h2>Registrer ny kunde</h2>
-                <div class="input-group">
-                    <span class="input-group-addon">Fornavn</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Fornavn</span>
                     <input id="fornavnReg" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="fornavnRegLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Etternavn</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Etternavn</span>
                     <input id="etternavnReg" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="etternavnRegLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Adressee</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Adresse</span>
                     <input id="adresseReg" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="adresseRegLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Postnummer</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Postnummer</span>
                     <input id="postnummerReg" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="postnummerRegLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Poststed</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Poststed</span>
                     <input id="poststedReg" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="poststedRegLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Epost</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Epost</span>
                     <input id="epostReg" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="epostRegLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Passord</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Passord</span>
                     <input id="passordReg" type="password" class="form-control" />
                     &nbsp;<span class="label label-warning" id="passordRegLbl" style="display:none"></span>
                 </div>
@@ -1459,42 +1459,42 @@
             </div>
             <div id="editUser">
                 <h2>Endre følgende kunde:</h2>
-                <div class="input-group">
-                    <span class="input-group-addon">ID</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">ID</span>
                     <input id="userIdEd" type="text" class="form-control" readonly />
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Fornavn</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Fornavn</span>
                     <input id="fornavnEd" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="fornavnEdLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Etternavn</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Etternavn</span>
                     <input id="etternavnEd" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="etternavnEdLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Adressee</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Adresse</span>
                     <input id="adresseEd" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="adresseEdLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Postnummer</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Postnummer</span>
                     <input id="postnummerEd" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="postnummerEdLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Poststed</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Poststed</span>
                     <input id="poststedEd" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="poststedEdLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Epost</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Epost</span>
                     <input id="epostEd" type="text" class="form-control" />
                     &nbsp;<span class="label label-warning" id="epostEdLbl" style="display:none"></span>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Passord</span>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:32%;">Passord</span>
                     <input id="passordEd" type="password" class="form-control" />
                     &nbsp;<span class="label label-warning" id="passordEdLbl" style="display:none"></span>
                 </div>
@@ -1515,7 +1515,7 @@
                     <input id="etternavnDel" type="text" class="form-control" readonly />
                 </div>
                 <div class="input-group">
-                    <span class="input-group-addon">Adressee</span>
+                    <span class="input-group-addon">Adresse</span>
                     <input id="adresseDel" type="text" class="form-control" readonly />
                 </div>
                 <div class="input-group">
