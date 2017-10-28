@@ -615,7 +615,12 @@
 
     function getAllFlightsForDropdownFiltering() {
         var name = $("#flightFilterBooking").val();
+        var nameEdit = $("#flightFilterBookingEdit").val();
         var departure = $("#departureFilterBooking").val();
+
+        if (name.length == 0) {
+            name = nameEdit;
+        }
 
         $.ajax({
             url: '/Admin/getAllFlights',
@@ -858,6 +863,7 @@
                 jsFlights[f].departure + "</option>";
         }
         $("#flightReg").html(loop);
+        $("#flightEd").html(loop);
     }
 
     function populateUserDropDownAfterFiltering(jsUsers) {
@@ -867,6 +873,7 @@
                 jsUsers[u].Fornavn + " " + jsUsers[u].Etternavn + " (" + jsUsers[u].Id + ") </option>";
         }
         $("#userReg").html(loop);
+        $("#userEd").html(loop);
     }
 
     function GetAllBookings() {
@@ -1056,6 +1063,11 @@
 
     function getAllUsersForDropdownFiltering() {
         var name = $("#userFilterBooking").val();
+        var nameEdit = $("#userFilterBookingEdit").val();
+
+        if (name.length == 0) {
+            name = nameEdit;
+        }
 
         $.ajax({
             url: '/Admin/getAllUsers',
@@ -1270,10 +1282,10 @@
     </div>
     <div class="jumbotron">
         <div class="row">
-                <button id="airportButton" class="btn btn-lg btn-info">Airports</button>
-                <button id="flightButton" class="btn btn-lg btn-info">Flights</button>
-                <button id="bookingButton" class="btn btn-lg btn-info">Bookings</button>
-                <button id="userButton" class="btn btn-lg btn-info">Users</button>
+            <button id="airportButton" class="btn btn-lg btn-info">Flyplasser</button>
+            <button id="flightButton" class="btn btn-lg btn-info">Flyvninger</button>
+            <button id="bookingButton" class="btn btn-lg btn-info">Bestillinger</button>
+            <button id="userButton" class="btn btn-lg btn-info">Kunder</button>
         </div>
         <div id="airports" style="display:none"><br/>
             <div id="registerAirport">
@@ -1501,63 +1513,119 @@
             </div>
             <div id="editBooking">
                 <h2>Endre følgende bestilling:</h2>
-                <div class="input-group col-sm-5">
-                    <span class="input-group-addon" style="width:30%;">ID</span>
-                    <input id="bookingIdEd" type="text" class="form-control" readonly />
+
+                <div class="input-group col-sm-12">
+                    <table class="table">
+                        <thead class="">
+                            <tr>
+                                <th class="col-sm-1">
+                                    ID
+                                </th>
+                                <th class="col-sm-2">
+                                    Kunde
+                                </th>
+                                <th class="col-sm-1"></th>
+                                <th class="col-sm-4">
+                                    Flyvning
+                                </th>
+                                <th class="col-sm-1"></th>
+                                <th class="col-sm-3">
+                                    Antall reisende
+                                </th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td>
+                                <input id="bookingIdEd" type="text" class="form-control" readonly />
+                            </td>
+                            <td>
+                                <input type="text" id="userFilterBookingEdit" placeholder="Søk på etternavn" />
+                            </td>
+                            <td>
+                                
+                                <a class="btn btn-sm btn-primary" onclick="getAllUsersForDropdownFiltering()">Søk</a>
+                            </td>
+                            <td>
+                                <input type="text" id="flightFilterBookingEdit" placeholder="Søk på flyplass" />
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering()">Søk</a>
+                            </td>
+                            <td>
+  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <span class="label label-warning" id="userEdLbl" style="display:none"></span>
+                                <select id="userEd" class="form-control"></select>
+                            </td>
+                            <td></td>
+                            <td>
+                                <span class="label label-warning" id="flightEdLbl" style="display:none"></span>
+                                <select id="flightEd" class="form-control"></select>
+                            </td>
+                            <td></td>
+                            <td>
+                            <span class="label label-warning" id="amountEdLbl" style="display:none"></span>
+                            <input id="amountEd" type="number" class="form-control" />
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <button id="confirmEditBooking" class="btn btn-success">Bekreft endring</button>
+                            </td>
+                        </tr>
+
+
+                        </table>
+                        </div>
+                        
                 </div>
-                <div class="input-group col-sm-5">
-                    <span class="input-group-addon" style="width:30%;">Kunde</span>
-                    <span class="label label-warning" id="userEdLbl" style="display:none"></span>
-                    <select id="userEd" class="form-control"></select>
+                        
+                <div id="deleteBooking">
+                    <h2>Slett følgende bestilling:</h2>
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        <input id="bookingIdDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Kunde</span>
+                        <input id="userDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Flyvning</span>
+                        <input id="flightDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Antall reisende</span>
+                        <input id="amountDel" type="number" class="form-control" readonly />
+                    </div>
+                    <button id="confirmDeleteBooking" class="btn btn-danger">Bekreft sletting</button>
                 </div>
-                <div class="input-group col-sm-5">
-                    <span class="input-group-addon" style="width:30%;">Flyvning</span>
-                    <span class="label label-warning" id="flightEdLbl" style="display:none"></span>
-                    <select id="flightEd" class="form-control"></select>
+                <div id="bookingConfirmation"></div><br />
+                <h2>Registrerte bestillinger</h2><br />
+                <div class="form-inline">
+                    <div class="input-group">
+                        <span class="input-group-addon">Kunde</span>
+                        <select id="userFilter" class="form-control"></select>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Flyvning</span>
+                        <select id="flightFilter" class="form-control"></select>
+                    </div>
+                    <button id="filterBookings" class="btn btn-sm btn-info">Avgrens søk</button>
                 </div>
-                <div class="input-group col-sm-5">
-                    <span class="input-group-addon" style="width:30%;">Antall reisende</span>
-                    <span class="label label-warning" id="amountEdLbl" style="display:none"></span>
-                    <input id="amountEd" type="number" class="form-control" />
-                </div>
-                <button id="confirmEditBooking" class="btn btn-success">Bekreft endring</button>
+                <br />
+                <div id="bookingList"></div>
             </div>
-            <div id="deleteBooking">
-                <h2>Slett følgende bestilling:</h2>
-                <div class="input-group">
-                    <span class="input-group-addon">ID</span>
-                    <input id="bookingIdDel" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Kunde</span>
-                    <input id="userDel" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Flyvning</span>
-                    <input id="flightDel" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Antall reisende</span>
-                    <input id="amountDel" type="number" class="form-control" readonly />
-                </div>
-                <button id="confirmDeleteBooking" class="btn btn-danger">Bekreft sletting</button>
-            </div>
-            <div id="bookingConfirmation"></div><br/>
-            <h2>Registrerte bestillinger</h2><br/>
-            <div class="form-inline">
-                <div class="input-group">
-                    <span class="input-group-addon">Kunde</span>
-                    <select id="userFilter" class="form-control"></select>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Flyvning</span>
-                    <select id="flightFilter" class="form-control"></select>
-                </div>
-                <button id="filterBookings" class="btn btn-sm btn-info">Avgrens søk</button>
-            </div>
-            <br/>
-            <div id="bookingList"></div>
-        </div>
 
         <div id="users" style="display:none"><br/>
             <div id="registerUser">
