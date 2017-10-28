@@ -64,8 +64,9 @@
         });
 
         $("#confirmRegisterAirport").click(function () {
+            var regOrEd = "Reg";
             var name = $("#airportNameReg").val();
-            if (name != "") {
+            if (ValidateAirport(regOrEd, name)) {
                 $.ajax({
                     url: '/Admin/registerAirport',
                     type: 'POST',
@@ -75,7 +76,7 @@
                     success: function (success) {
                         if (success == "ok") {
                             $("#airportConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
-                            $("#registerAirport").hide();
+                            ClearAirportRegInput();
                             GetAllAirports();
                         }
                         else {
@@ -87,35 +88,35 @@
                     }
                 });
             }
-            else {
-                $("#airportConfirmation").html("<p style=\"color:indianred\">Flyplassnavn må fylles ut</p>");
-            }
         });
 
         $("#confirmEditAirport").click(function () {
+            var regOrEd = "Ed";
             var id = $("#airportIdEd").val();
             var name = $("#airportNameEd").val();
 
-            $.ajax({
-                url: '/Admin/editAirport',
-                type: 'POST',
-                contentType: "application/json:charset=utf-8",
-                data: JSON.stringify({ id: id, name: name }),
-                dataType: 'json',
-                success: function (success) {
-                    if (success == "ok") {
-                        $("#airportConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
-                        $("#editAirport").hide();
-                        GetAllAirports();
+            if (ValidateAirport(regOrEd, name)) {
+                $.ajax({
+                    url: '/Admin/editAirport',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ id: id, name: name }),
+                    dataType: 'json',
+                    success: function (success) {
+                        if (success == "ok") {
+                            $("#airportConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
+                            $("#editAirport").hide();
+                            GetAllAirports();
+                        }
+                        else {
+                            $("#airportConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
                     }
-                    else {
-                        $("#airportConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
-                    }
-                },
-                error: function (x, y, z) {
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
+                });
+            }
         });
 
         $("#confirmDeleteAirport").click(function () {
@@ -150,62 +151,68 @@
         });
 
         $("#confirmRegisterFlight").click(function () {
+            var regOrEd = "Reg";
             var fromAirport = $("#fromAirportReg").val();
             var toAirport = $("#toAirportReg").val();
             var departure = $("#departureReg").val().toString("dd.MM.yyyy HH:mm");
             var arrival = $("#arrivalReg").val().toString("dd.MM.yyyy HH:mm");
             var price = $("#priceReg").val();
 
-            $.ajax({
-                url: '/Admin/registerFlight',
-                type: 'POST',
-                contentType: "application/json:charset=utf-8",
-                data: JSON.stringify({ fromAirportId: fromAirport, toAirportId: toAirport, departure: departure, arrival: arrival, price: price }),
-                dataType: 'json',
-                success: function (success) {
-                    if (success == "ok") {
-                        $("#flightConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
-                        $("#registerFlight").hide();
-                        GetAllFlights();
+            if (ValidateFlight(regOrEd, fromAirport, toAirport, departure, arrival, price)) {
+                $.ajax({
+                    url: '/Admin/registerFlight',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ fromAirportId: fromAirport, toAirportId: toAirport, departure: departure, arrival: arrival, price: price }),
+                    dataType: 'json',
+                    success: function (success) {
+                        if (success == "ok") {
+                            $("#flightConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
+                            ClearFlightRegInput();
+                            GetAllFlights();
+                        }
+                        else {
+                            $("#flightConfirmation").html("<p style=\"color:indianred\">Feil ved registrering</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
                     }
-                    else {
-                        $("#flightConfirmation").html("<p style=\"color:indianred\">Feil ved registrering</p>");
-                    }
-                },
-                error: function (x, y, z) {
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
+                });
+            }
         });
 
         $("#confirmEditFlight").click(function () {
+            var regOrEd = "Ed";
             var id = $("#flightIdEd").val();
             var fromAirport = $("#fromAirportEd").val();
             var toAirport = $("#toAirportEd").val();
             var departure = $("#departureEd").val().toString("dd.MM.yyyy HH:mm");
             var arrival = $("#arrivalEd").val().toString("dd.MM.yyyy HH:mm");
             var price = $("#priceEd").val();
-            
-            $.ajax({
-                url: '/Admin/editFlight',
-                type: 'POST',
-                contentType: "application/json:charset=utf-8",
-                data: JSON.stringify({ id: id, fromAirportId: fromAirport, toAirportId: toAirport, departure: departure, arrival: arrival, price: price }),
-                dataType: 'json',
-                success: function (success) {
-                    if (success == "ok") {
-                        $("#flightConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
-                        $("#editFlight").hide();
-                        GetAllFlights();
+
+            if (ValidateFlight(regOrEd, fromAirport, toAirport, departure, arrival, price)) {
+                $.ajax({
+                    url: '/Admin/editFlight',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ id: id, fromAirportId: fromAirport, toAirportId: toAirport, departure: departure, arrival: arrival, price: price }),
+                    dataType: 'json',
+                    success: function (success) {
+                        if (success == "ok") {
+                            $("#flightConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
+                            $("#editFlight").hide();
+                            GetAllFlights();
+                        }
+                        else {
+                            $("#flightConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
                     }
-                    else {
-                        $("#flightConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
-                    }
-                },
-                error: function (x, y, z) {
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
+                });
+            }
         });
 
         $("#confirmDeleteFlight").click(function () {
@@ -234,64 +241,70 @@
         });
 
 
+
         $("#filterBookings").click(function () {
             GetAllBookings();
         });
 
         $("#confirmRegisterBooking").click(function () {
-
+            var regOrEd = "Reg";
             var userId = $("#userReg").val();
             var flightId = $("#flightReg").val();
             var amount = $("#amountReg").val();
 
-            $.ajax({
-                url: '/Admin/registerBooking',
-                type: 'POST',
-                contentType: "application/json:charset=utf-8",
-                data: JSON.stringify({ userId:userId, flightId:flightId, amount:amount }),
-                dataType: 'json',
-                success: function (success) {
-                    if (success == "ok") {
-                        $("#bookingConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
-                        $("#registerBooking").hide();
-                        GetAllBookings();
+            if (ValidateBooking(regOrEd, userId, flightId, amount)) {
+                $.ajax({
+                    url: '/Admin/registerBooking',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ userId: userId, flightId: flightId, amount: amount }),
+                    dataType: 'json',
+                    success: function (success) {
+                        if (success == "ok") {
+                            $("#bookingConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
+                            ClearBookingRegInput();
+                            GetAllBookings();
+                        }
+                        else {
+                            $("#bookingConfirmation").html("<p style=\"color:indianred\">Feil ved registrering</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
                     }
-                    else {
-                        $("#bookingConfirmation").html("<p style=\"color:indianred\">Feil ved registrering</p>");
-                    }
-                },
-                error: function (x, y, z) {
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
+                });
+            }
         });
 
         $("#confirmEditBooking").click(function () {
+            var regOrEd = "Ed";
             var id = $("#bookingIdEd").val();
             var userId = $("#userEd").val();
             var flightId = $("#flightEd").val();
             var amount = $("#amountEd").val();
-            
-            $.ajax({
-                url: '/Admin/editBooking',
-                type: 'POST',
-                contentType: "application/json:charset=utf-8",
-                data: JSON.stringify({ id:id, userId:userId, flightId:flightId, amount:amount }),
-                dataType: 'json',
-                success: function (success) {
-                    if (success == "ok") {
-                        $("#bookingConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
-                        $("#editBooking").hide();
-                        GetAllBookings();
+
+            if (ValidateBooking(regOrEd, userId, flightId, amount)) {
+                $.ajax({
+                    url: '/Admin/editBooking',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ id: id, userId: userId, flightId: flightId, amount: amount }),
+                    dataType: 'json',
+                    success: function (success) {
+                        if (success == "ok") {
+                            $("#bookingConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
+                            $("#editBooking").hide();
+                            GetAllBookings();
+                        }
+                        else {
+                            $("#bookingConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
                     }
-                    else {
-                        $("#bookingConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
-                    }
-                },
-                error: function (x, y, z) {
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
+                });
+            }
         });
 
         $("#confirmDeleteBooking").click(function () {
@@ -326,6 +339,7 @@
         });
 
         $("#confirmRegisterUser").click(function () {
+            var regOrEd = "Reg";
             var fornavn = $("#fornavnReg").val();
             var etternavn = $("#etternavnReg").val();
             var adresse = $("#adresseReg").val();
@@ -334,29 +348,32 @@
             var epost = $("#epostReg").val();
             var passord = $("#passordReg").val();
 
-            $.ajax({
-                url: '/Admin/registerUser',
-                type: 'POST',
-                contentType: "application/json:charset=utf-8",
-                data: JSON.stringify({ fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost, passord: passord }),
-                dataType: 'json',
-                success: function (success) {
-                    if (success == "ok") {
-                        $("#userConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
-                        $("#registerUser").hide();
-                        GetAllUsers();
+            if (ValidateUser(regOrEd, fornavn, etternavn, adresse, postnummer, poststed, epost, passord)) {
+                $.ajax({
+                    url: '/Admin/registerUser',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost, passord: passord }),
+                    dataType: 'json',
+                    success: function (success) {
+                        if (success == "ok") {
+                            $("#userConfirmation").html("<p style=\"color:forestgreen\">Registrering gjennomført</p>");
+                            ClearUserRegInput();
+                            GetAllUsers();
+                        }
+                        else {
+                            $("#userConfirmation").html("<p style=\"color:indianred\">Feil ved registrering</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
                     }
-                    else {
-                        $("#userConfirmation").html("<p style=\"color:indianred\">Feil ved registrering</p>");
-                    }
-                },
-                error: function (x, y, z) {
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
+                });
+            }
         });
 
         $("#confirmEditUser").click(function () {
+            var labelIdentifier = "Ed";
             var id = $("#userIdEd").val();
             var fornavn = $("#fornavnEd").val();
             var etternavn = $("#etternavnEd").val();
@@ -366,26 +383,28 @@
             var epost = $("#epostEd").val();
             var passord = $("#passordEd").val();
 
-            $.ajax({
-                url: '/Admin/editUser',
-                type: 'POST',
-                contentType: "application/json:charset=utf-8",
-                data: JSON.stringify({ id:id, fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost, passord: passord }),
-                dataType: 'json',
-                success: function (success) {
-                    if (success == "ok") {
-                        $("#userConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
-                        $("#editUser").hide();
-                        GetAllUsers();
+            if (ValidateUser(labelIdentifier, fornavn, etternavn, adresse, postnummer, poststed, epost, passord)) {
+                $.ajax({
+                    url: '/Admin/editUser',
+                    type: 'POST',
+                    contentType: "application/json:charset=utf-8",
+                    data: JSON.stringify({ id: id, fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost, passord: passord }),
+                    dataType: 'json',
+                    success: function (success) {
+                        if (success == "ok") {
+                            $("#userConfirmation").html("<p style=\"color:forestgreen\">Endring gjennomført</p>");
+                            $("#editUser").hide();
+                            GetAllUsers();
+                        }
+                        else {
+                            $("#userConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
+                        }
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
                     }
-                    else {
-                        $("#userConfirmation").html("<p style=\"color:indianred\">Feil ved endring</p>");
-                    }
-                },
-                error: function (x, y, z) {
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
+                });
+            }
         });
 
         $("#confirmDeleteUser").click(function () {
@@ -462,6 +481,8 @@
     function ShowRegisterAirport() {
         $("#editAirport").hide();
         $("#deleteAirport").hide();
+        ClearAirportRegInput();
+        HideAirportWarningLabels();
         $("#airportConfirmation").html("");
         $("#registerAirport").show();
     }
@@ -469,6 +490,7 @@
     function ShowEditAirport(id) {
         $("#registerAirport").hide();
         $("#deleteAirport").hide();
+        HideAirportWarningLabels();
         $("#airportConfirmation").html("");
         $("#editAirport").show();
 
@@ -520,6 +542,29 @@
         });
     }
     
+    function ValidateAirport(regOrEd, name) {
+        HideAirportWarningLabels();
+        var valid = true;
+
+        var re = new RegExp("^[A-ZÆØÅÁÄÄÈÉË][A-ZÆØÅÁÄÄÈÉËa-zæøåáäèéë .-]{1,39}$");
+        if (!re.test(name)) {
+            $("#airportName" + regOrEd + "Lbl").html("Ugyldig navn");
+            $("#airportName" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        return valid;
+    }
+
+    function ClearAirportRegInput() {
+        $("#airportNameReg").val("");
+    }
+
+    function HideAirportWarningLabels() {
+        $("#airportNameRegLbl").hide();
+        $("#airportNameEdLbl").hide();
+    }
+
+
 
     function PopulateAirportDropDowns() {
         $.ajax({
@@ -623,6 +668,8 @@
     function ShowRegisterFlight() {
         $("#editFlight").hide();
         $("#deleteFlight").hide();
+        ClearFlightRegInput();
+        HideFlightWarningLabels();
         $("#flightConfirmation").html("");
         $("#registerFlight").show();
     }
@@ -630,6 +677,7 @@
     function ShowEditFlight(id) {
         $("#registerFlight").hide();
         $("#deleteFlight").hide();
+        HideFlightWarningLabels();
         $("#flightConfirmation").html("");
         $("#editFlight").show();
 
@@ -689,28 +737,67 @@
         });
     }
 
+    function ValidateFlight(regOrEd, fromAirport, toAirport, departure, arrival, price) {
+        HideFlightWarningLabels();
+        var valid = true;
 
+        if (fromAirport === "") {
+            $("#fromAirport" + regOrEd + "Lbl").html("Velg en flyplass å reise fra");
+            $("#fromAirport" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        if (toAirport === "") {
+            $("#toAirport" + regOrEd + "Lbl").html("Velg en flyplass å reise til");
+            $("#toAirport" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+ /*       if (!Date.parse(departure)) {
 
-  /*  function ValidateFlightReg(jsFlight) {
-        var validationOK = true;
-        if (jsFlight.fromAirport == null) {
-            nullVal = false;
+            $("#departure" + regOrEd + "Lbl").html("Avereise må skrives på formatet 25.01.17 18:00");
+            $("#departure" + regOrEd + "Lbl").show();
+            valid = false;
         }
-        if (jsFlight.toAirport == null) {
-            nullVal = false;
+        else if (Date.parse(departure) < Date.now()) {
+            $("#departure" + regOrEd + "Lbl").html("Avreise kan ikke være i fortiden");
+            $("#departure" + regOrEd + "Lbl").show();
+            valid = false;
+        }*/
+        if (!parseInt(price)) {
+            $("#price" + regOrEd + "Lbl").html("Pris må være et heltall");
+            $("#price" + regOrEd + "Lbl").show();
+            valid = false;
         }
-        if (jsFlight.departure == null) {
-            nullVal = false;
+        else if (parseInt(price) < 0 || parseInt(price) > 20000) {
+            $("#price" + regOrEd + "Lbl").html("Pris må være mellom kr 0 og 20 000");
+            $("#price" + regOrEd + "Lbl").show();
+            valid = false;
         }
-        if (jsFlight.arrival == null) {
-            nullVal = false;
-        }
-        if (jsFlight.price == null) {
-            nullVal = false;
-        }
-        return validationOK;
+        return valid;
     }
-*/
+
+    function ClearFlightRegInput() {
+        $("#fromAirportReg").val("");
+        $("#toAirportReg").val("");
+        $("#departureReg").val("");
+        $("#arrivalReg").val("");
+        $("#priceReg").val("");
+    }
+
+    function HideFlightWarningLabels() {
+        $("#fromAirportRegLbl").hide();
+        $("#toAirportRegLbl").hide();
+        $("#departureRegLbl").hide();
+        $("#arrivalRegLbl").hide();
+        $("#priceRegLbl").hide();
+        $("#fromAirportEdLbl").hide();
+        $("#toAirportEdLbl").hide();
+        $("#departureEdLbl").hide();
+        $("#arrivalEdLbl").hide();
+        $("#priceEdLbl").hide();
+    }
+
+
+
 
     function PopulateUserDropDowns() {
         $.ajax({
@@ -838,6 +925,8 @@
     function ShowRegisterBooking() {
         $("#editBooking").hide();
         $("#deleteBooking").hide();
+        ClearBookingRegInput();
+        HideBookingWarningLabels();
         $("#bookingConfirmation").html("");
         $("#registerBooking").show();
     }
@@ -845,6 +934,7 @@
     function ShowEditBooking(id) {
         $("#registerBooking").hide();
         $("#deleteBooking").hide();
+        HideBookingWarningLabels();
         $("#bookingConfirmation").html("");
         $("#editBooking").show();
 
@@ -899,6 +989,50 @@
             }
         });
     }
+
+    function ValidateBooking(regOrEd, userId, flightId, amount) {
+        HideBookingWarningLabels();
+        var valid = true;
+
+        if (userId === "") {
+            $("#user" + regOrEd + "Lbl").html("Velg en kunde");
+            $("#user" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        if (flightId === "") {
+            $("#flight" + regOrEd + "Lbl").html("Velg en flyvning");
+            $("#flight" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+
+        if (!parseInt(amount)) {
+            $("#amount" + regOrEd + "Lbl").html("Antall må være et heltall fra 1 til 10");
+            $("#amount" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        else if (parseInt(amount) > 10) {
+            $("#amount" + regOrEd + "Lbl").html("Du kan ikke bestille flere enn 10 billetter");
+            $("#amount" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        return valid;
+    }
+
+    function ClearBookingRegInput() {
+        $("#userReg").val("");
+        $("#flight").val("");
+        $("#amount").val("");
+    }
+
+    function HideBookingWarningLabels() {
+        $("#userRegLbl").hide();
+        $("#flightRegLbl").hide();
+        $("#amountRegLbl").hide();
+        $("#userEdLbl").hide();
+        $("#flightEdLbl").hide();
+        $("#amoundEdLbl").hide();
+    }
+
 
 
     function GetAllUsers() {
@@ -977,6 +1111,8 @@
     function ShowRegisterUser() {
         $("#editUser").hide();
         $("#deleteUser").hide();
+        ClearUserRegInput();
+        HideUserWarningLabels();
         $("#userConfirmation").html("");
         $("#registerUser").show();
     }
@@ -984,6 +1120,7 @@
     function ShowEditUser(id) {
         $("#registerUser").hide();
         $("#deleteUser").hide();
+        HideUserWarningLabels();
         $("#userConfirmation").html("");
         $("#editUser").show();
 
@@ -1045,6 +1182,86 @@
         });
     }
 
+    function ValidateUser(regOrEd, fornavn, etternavn, adresse, postnummer, poststed, epost, passord) {
+        HideUserWarningLabels();
+        var valid = true;
+
+        var re = new RegExp("^[A-ZÆØÅÁÄÄÈÉËa-zæøåáäèéë .-]{2,40}$");
+        if (!re.test(fornavn)) {
+            $("#fornavn" + regOrEd + "Lbl").html("Ugyldig navn");
+            $("#fornavn" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        if (!re.test(etternavn)) {
+            $("#etternavn" + regOrEd + "Lbl").html("Ugyldig navn");
+            $("#etternavn" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        re = new RegExp("^[A-ZÆØÅÁÄÄÈÉËa-zæøåáäèéë .-]{2,40}[0-9]{0,4}[ A-ZÆØÅÁÄÄÈÉËa-zæøåáäèéë]{0,2}$");
+        if (!re.test(adresse)) {
+            $("#adresse" + regOrEd + "Lbl").html("Ugyldig adresse");
+            $("#adresse" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        re = new RegExp("^[0-9]{4}$");
+        if (!re.test(postnummer) || postnummer == "0000") {
+            $("#postnummer" + regOrEd + "Lbl").html("Ugyldig postnummer");
+            $("#postnummer" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        re = new RegExp("^[A-ZÆØÅÁÄÄÈÉË]{1}[a-zæøåáäèéë -]{1,30}$");
+        if (!re.test(poststed)) {
+            $("#poststed" + regOrEd + "Lbl").html("Ugyldig navn på poststed");
+            $("#poststed" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        re = new RegExp("^[A-ZÆØÅÁÄÄÈÉËa-zæøåáäèéë0-9]{1,30}@@{1}[A-ZÆØÅa-zæøåáäèéë .-]{1,30}.[A-ZÆØÅa-zæøåáäèéë -]{2,30}$");
+        if (!re.test(epost)) {
+            $("#epost" + regOrEd + "Lbl").html("Ugyldig format på epost-adresse");
+            $("#epost" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        re = new RegExp("^[A-ZÆØÅÁÄÈÉËa-zæøåáäèéë0-9]{8,30}$");
+        if (passord.length < 8 || passord.length > 30) {
+            $("#passord" + regOrEd + "Lbl").html("Passord må være mellom 8 og 30 tegn");
+            $("#passord" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        else if (!re.test(passord)) {
+            $("#passord" + regOrEd + "Lbl").html("Passord må bestå av bokstaver og siffer");
+            $("#passord" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        return valid;
+    }
+
+    function ClearUserRegInput() {
+        $("#fornavnReg").val("");
+        $("#etternavnReg").val("");
+        $("#adresseReg").val("");
+        $("#postnummerReg").val("");
+        $("#poststedReg").val("");
+        $("#epostReg").val("");
+        $("#passordReg").val("");
+    }
+
+    function HideUserWarningLabels() {
+        $("#fornavnRegLbl").hide();
+        $("#etternavnRegLbl").hide();
+        $("#adresseRegLbl").hide();
+        $("#postnummerRegLbl").hide();
+        $("#poststedRegLbl").hide();
+        $("#epostRegLbl").hide();
+        $("#passordRegLbl").hide();
+        $("#fornavnEdLbl").hide();
+        $("#etternavnEdLbl").hide();
+        $("#adresseEdbl").hide();
+        $("#postnummerEdLbl").hide();
+        $("#poststedEdLbl").hide();
+        $("#epostEdLbl").hide();
+        $("#passordEdLbl").hide();
+    }
+
 </script>
 
 <div class="container">
@@ -1063,6 +1280,7 @@
                 <h2>Registrer ny flyplass</h2><br/>
                 <div class="input-group">
                     <span class="input-group-addon">Flyplassnavn</span>
+                    <span class="label label-warning" id="airportNameRegLbl" style="display:none"></span>
                     <input id="airportNameReg" type="text" class="form-control" />
                 </div>
                 <button id="confirmRegisterAirport" class="btn btn-success">Registrer flyplass</button>
@@ -1075,6 +1293,7 @@
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Navn</span>
+                    <span class="label label-warning" id="airportNameEdLbl" style="display:none"></span>
                     <input id="airportNameEd" type="text" class="form-control" />
                 </div>
                 <button id="confirmEditAirport" class="btn btn-success">Bekreft endring</button>
@@ -1109,22 +1328,27 @@
                 <h2>Registrer ny flyvning</h2>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Fra flyplass</span>
+                    <span class="label label-warning" id="fromAirportRegLbl" style="display:none"></span>
                     <select id="fromAirportReg" class="form-control"></select>
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Til flyplass</span>
+                    <span class="label label-warning" id="toAirportRegLbl" style="display:none"></span>
                     <select id="toAirportReg" class="form-control"></select>
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Avreise</span>
-                    <input id="departureReg" type="datetime" class="form-control" />
+                    <span class="label label-warning" id="departureRegLbl" style="display:none"></span>
+                    <input id="departureReg" type="datetime-local" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Ankomst</span>
-                    <input id="arrivalReg" type="datetime" class="form-control" />
+                    <span class="label label-warning" id="arrivalRegLbl" style="display:none"></span>
+                    <input id="arrivalReg" type="datetime-local" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Pris</span>
+                    <span class="label label-warning" id="priceRegLbl" style="display:none"></span>
                     <input id="priceReg" type="number" class="form-control" />
                 </div>
                 <button id="confirmRegisterFlight" class="btn btn-success">Registrer flyvning</button>
@@ -1137,22 +1361,27 @@
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Fra flyplass</span>
+                    <span class="label label-warning" id="fromAirportEdLbl" style="display:none"></span>
                     <select id="fromAirportEd" class="form-control"></select>
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Til flyplass</span>
+                    <span class="label label-warning" id="toAirportEdLbl" style="display:none"></span>
                     <select id="toAirportEd" class="form-control"></select>
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Avreise</span>
-                    <input id="departureEd" type="datetime" class="form-control"/>
+                    <span class="label label-warning" id="departureEdLbl" style="display:none"></span>
+                    <input id="departureEd" type="datetime-local" class="form-control"/>
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Ankomst</span>
+                    <span class="label label-warning" id="arrivalEdLbl" style="display:none"></span>
                     <input id="arrivalEd" type="datetime" class="form-control"/>
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Pris</span>
+                    <span class="label label-warning" id="priceEdLbl" style="display:none"></span>
                     <input id="priceEd" type="number" class="form-control"/>
                 </div>
                 <button id="confirmEditFlight" class="btn btn-success">Bekreft endring</button>
@@ -1246,14 +1475,17 @@
                     </tr>
                     <tr>
                         <td>
+                            <span class="label label-warning" id="userRegLbl" style="display:none"></span>
                             <select id="userReg" class="form-control"></select>
                         </td>
                         <td></td>
                         <td>
+                            <span class="label label-warning" id="flightRegLbl" style="display:none"></span>
                             <select id="flightReg" class="form-control"></select>
                         </td>
                         <td></td>
                         <td>
+                            <span class="label label-warning" id="amountRegLbl" style="display:none"></span>
                             <input id="amountReg" type="number" class="form-control" placeholder="Skriv antall passasjerer" />
                         </td>
                     </tr>
@@ -1275,14 +1507,17 @@
                 </div>
                 <div class="input-group col-sm-5">
                     <span class="input-group-addon" style="width:30%;">Kunde</span>
+                    <span class="label label-warning" id="userEdLbl" style="display:none"></span>
                     <select id="userEd" class="form-control"></select>
                 </div>
                 <div class="input-group col-sm-5">
                     <span class="input-group-addon" style="width:30%;">Flyvning</span>
+                    <span class="label label-warning" id="flightEdLbl" style="display:none"></span>
                     <select id="flightEd" class="form-control"></select>
                 </div>
                 <div class="input-group col-sm-5">
                     <span class="input-group-addon" style="width:30%;">Antall reisende</span>
+                    <span class="label label-warning" id="amountEdLbl" style="display:none"></span>
                     <input id="amountEd" type="number" class="form-control" />
                 </div>
                 <button id="confirmEditBooking" class="btn btn-success">Bekreft endring</button>
@@ -1329,30 +1564,37 @@
                 <h2>Registrer ny kunde</h2>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Fornavn</span>
+                    <span class="label label-warning" id="fornavnRegLbl" style="display:none"></span>
                     <input id="fornavnReg" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Etternavn</span>
+                    <span class="label label-warning" id="etternavnRegLbl" style="display:none"></span>
                     <input id="etternavnReg" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Adresse</span>
+                    <span class="label label-warning" id="adresseRegLbl" style="display:none"></span>
                     <input id="adresseReg" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Postnummer</span>
+                    <span class="label label-warning" id="postnummerRegLbl" style="display:none"></span>
                     <input id="postnummerReg" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Poststed</span>
+                    <span class="label label-warning" id="poststedRegLbl" style="display:none"></span>
                     <input id="poststedReg" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Epost</span>
+                    <span class="label label-warning" id="epostRegLbl" style="display:none"></span>
                     <input id="epostReg" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Passord</span>
+                    <span class="label label-warning" id="passordRegLbl" style="display:none"></span>
                     <input id="passordReg" type="password" class="form-control" />
                 </div>
                 <button id="confirmRegisterUser" class="btn btn-success">Registrer kunde</button>
@@ -1365,30 +1607,37 @@
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Fornavn</span>
+                    <span class="label label-warning" id="fornavnEdLbl" style="display:none"></span>
                     <input id="fornavnEd" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Etternavn</span>
+                    <span class="label label-warning" id="etternavnEdLbl" style="display:none"></span>
                     <input id="etternavnEd" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Adresse</span>
+                    <span class="label label-warning" id="adresseEdLbl" style="display:none"></span>
                     <input id="adresseEd" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Postnummer</span>
+                    <span class="label label-warning" id="postnummerEdLbl" style="display:none"></span>
                     <input id="postnummerEd" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Poststed</span>
+                    <span class="label label-warning" id="poststedEdLbl" style="display:none"></span>
                     <input id="poststedEd" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Epost</span>
+                    <span class="label label-warning" id="epostEdLbl" style="display:none"></span>
                     <input id="epostEd" type="text" class="form-control" />
                 </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:32%;">Passord</span>
+                    <span class="label label-warning" id="passordEdLbl" style="display:none"></span>
                     <input id="passordEd" type="password" class="form-control" />
                 </div>
                 <button id="confirmEditUser" class="btn btn-success">Bekreft endring</button>
