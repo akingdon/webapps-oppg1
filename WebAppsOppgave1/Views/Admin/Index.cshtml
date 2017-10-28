@@ -637,8 +637,10 @@
         });
     }
 
-    function getAllAirportsForDropdownFilteringFrom() {
+    function getAllAirportsForDropdownFilteringFrom_Reg() {
         var name = $("#airportFilterFlightsFrom").val();
+        var nameEdit = $("#airportFilterFlightsEditFrom").val();
+
 
         $.ajax({
             url: '/Admin/getAllAirports',
@@ -647,7 +649,7 @@
             data: JSON.stringify({ name: name }),
             dataType: 'json',
             success: function (jsAirports) {
-                populateAirportDropDownAfterFilteringFrom(jsAirports);
+                populateAirportDropDownAfterFilteringFrom_Reg(jsAirports);
             },
             error: function (x, y, z) {
                 alert(x + '\n' + y + '\n' + z);
@@ -655,7 +657,25 @@
         });
     }
 
-    function getAllAirportsForDropdownFilteringTo() {
+    function getAllAirportsForDropdownFilteringFrom_Edit() {
+        var name = $("#airportFilterFlightsEditFrom").val();
+
+        $.ajax({
+            url: '/Admin/getAllAirports',
+            type: 'POST',
+            contentType: 'application/json:charset=utf-8',
+            data: JSON.stringify({ name: name }),
+            dataType: 'json',
+            success: function (jsAirports) {
+                populateAirportDropDownAfterFilteringFrom_Edit(jsAirports);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
+    function getAllAirportsForDropdownFilteringTo_Reg() {
         var name = $("#airportFilterFlightsTo").val();
 
         $.ajax({
@@ -665,7 +685,25 @@
             data: JSON.stringify({ name: name }),
             dataType: 'json',
             success: function (jsAirports) {
-                populateAirportDropDownAfterFilteringTo(jsAirports);
+                populateAirportDropDownAfterFilteringTo_Reg(jsAirports);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
+    function getAllAirportsForDropdownFilteringTo_Edit() {
+        var name = $("#airportFilterFlightsEditTo").val();
+
+        $.ajax({
+            url: '/Admin/getAllAirports',
+            type: 'POST',
+            contentType: 'application/json:charset=utf-8',
+            data: JSON.stringify({ name: name }),
+            dataType: 'json',
+            success: function (jsAirports) {
+                populateAirportDropDownAfterFilteringTo_Edit(jsAirports);
             },
             error: function (x, y, z) {
                 alert(x + '\n' + y + '\n' + z);
@@ -912,7 +950,7 @@
         $("#userEd").html(loop);
     }
 
-    function populateAirportDropDownAfterFilteringFrom(jsAirports) {
+    function populateAirportDropDownAfterFilteringFrom_Reg(jsAirports) {
         loop = "";
         for (var a in jsAirports) {
             loop += "<option value=\"" + jsAirports[a].id + "\">" + jsAirports[a].name + "</option>";
@@ -920,12 +958,28 @@
         $("#fromAirportReg").html(loop);
     }
 
-    function populateAirportDropDownAfterFilteringTo(jsAirports) {
+    function populateAirportDropDownAfterFilteringFrom_Edit(jsAirports) {
+        loop = "";
+        for (var a in jsAirports) {
+            loop += "<option value=\"" + jsAirports[a].id + "\">" + jsAirports[a].name + "</option>";
+        }
+        $("#fromAirportEd").html(loop);
+    }
+
+    function populateAirportDropDownAfterFilteringTo_Reg(jsAirports) {
         loop = "";
         for (var a in jsAirports) {
             loop += "<option value=\"" + jsAirports[a].id + "\">" + jsAirports[a].name + "</option>";
         }
         $("#toAirportReg").html(loop);
+    }
+
+    function populateAirportDropDownAfterFilteringTo_Edit(jsAirports) {
+        loop = "";
+        for (var a in jsAirports) {
+            loop += "<option value=\"" + jsAirports[a].id + "\">" + jsAirports[a].name + "</option>";
+        }
+        $("#toAirportEd").html(loop);
     }
 
     function GetAllBookings() {
@@ -1419,21 +1473,19 @@
                                 <input id="airportFilterFlightsFrom" class="form-control" type="text" placeholder="Søk" />
                             </td>
                             <td>
-                                <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringFrom()">Søk</a>
+                                <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringFrom_Reg()">Søk</a>
                             </td>
                             <td>
                                 <input id="airportFilterFlightsTo" class="form-control" type="text" placeholder="Søk" />
                             </td>
                             <td>
-                                <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringTo()">Søk</a>
+                                <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringTo_Reg()">Søk</a>
                             </td>
                             <td>
-                                <span class="label label-warning" id="departureRegLbl" style="display:none"></span>
-                                <input id="departureReg" type="datetime-local" class="form-control" style="width:75%;" />
+
                             </td>
                             <td>
-                                <span class="label label-warning" id="arrivalRegLbl" style="display:none"></span>
-                                <input id="arrivalReg" type="datetime-local" class="form-control" style="width:75%;" />
+
                             </td>
                             <td>
 
@@ -1450,8 +1502,14 @@
                                 <select id="toAirportReg" class="form-control"></select>
                             </td>
                             <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>
+                                <span class="label label-warning" id="departureRegLbl" style="display:none"></span>
+                                <input id="departureReg" type="datetime-local" class="form-control" style="width:75%;" />
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="arrivalRegLbl" style="display:none"></span>
+                                <input id="arrivalReg" type="datetime-local" class="form-control" style="width:75%;" />
+                            </td>
                             <td>
                                 <span class="label label-warning" id="priceRegLbl" style="display:none"></span>
                                 <input id="priceReg" type="number" class="form-control" />
@@ -1460,7 +1518,91 @@
                         </table>
                     <button id="confirmRegisterFlight" class="btn btn-success" >Registrer flyvning</button>
                     </div>
+                        
+                </div>
+            <div id="editFlight">
+                <h2>Endre følgende flyvning:</h2>
+
+                <div class="input-group col-sm-12">
+                    <table class="table">
+                        <thead class="">
+                            <tr>
+                                <th class="col-sm-1">
+                                    ID
+                                </th>
+                                <th class="col-sm-3">
+                                    Fra
+                                </th>
+                                <th class="col-sm-1"></th>
+                                <th class="col-sm-3">
+                                    Til
+                                </th>
+                                <th class="col-sm-1"></th>
+                                <th>
+                                    Avreise
+                                </th>
+                                <th>
+                                    Ankomst
+                                </th>
+                                <th class="col-sm-2">
+                                    Pris
+                                </th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td>
+                                <input id="flightIdEd" type="text" class="form-control" readonly />
+                            </td>
+                            <td>
+                                <input id="airportFilterFlightsEditFrom" class="form-control" type="text" placeholder="Søk" />
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringFrom_Edit()">Søk</a>
+                            </td>
+                            <td>
+                                <input id="airportFilterFlightsEditTo" class="form-control" type="text" placeholder="Søk" />
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringTo_Edit()">Søk</a>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <span class="label label-warning" id="fromAirportEdLbl" style="display:none"></span>
+                                <select id="fromAirportEd" class="form-control"></select>
+                            </td>
+                            <td></td>
+                            <td>
+                                <span class="label label-warning" id="toAirportEdLbl" style="display:none"></span>
+                                <select id="toAirportEd" class="form-control"></select>
+                            </td>
+                            <td></td>
+                            <td>
+                                <span class="label label-warning" id="departureEdLbl" style="display:none"></span>
+                                <input id="departureEd" type="datetime-local" class="form-control" style="width:75%;" />
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="arrivalEdLbl" style="display:none"></span>
+                                <input id="arrivalEd" type="datetime-local" class="form-control" style="width:75%;" />
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="priceEdLbl" style="display:none"></span>
+                                <input id="priceEd" type="number" class="form-control" />
+                            </td>
+                        </tr>
+
+
+                        </table>
+                    </div>
                         <!--
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" style="width:30%;">ID</span>
+                    
+                </div>
                 <div class="input-group col-sm-4">
                     <span class="input-group-addon" style="width:30%;">Fra flyplass</span>
 
@@ -1482,40 +1624,7 @@
 
                 </div>
                     -->
-                        
-                </div>
-                <div id="editFlight">
-                    <h2>Endre følgende flyvning:</h2>
-                    <div class="input-group col-sm-4">
-                        <span class="input-group-addon" style="width:30%;">ID</span>
-                        <input id="flightIdEd" type="text" class="form-control" readonly" />
-                    </div>
-                    <div class="input-group col-sm-4">
-                        <span class="input-group-addon" style="width:30%;">Fra flyplass</span>
-                        <span class="label label-warning" id="fromAirportEdLbl" style="display:none"></span>
-                        <select id="fromAirportEd" class="form-control"></select>
-                    </div>
-                    <div class="input-group col-sm-4">
-                        <span class="input-group-addon" style="width:30%;">Til flyplass</span>
-                        <span class="label label-warning" id="toAirportEdLbl" style="display:none"></span>
-                        <select id="toAirportEd" class="form-control"></select>
-                    </div>
-                    <div class="input-group col-sm-4">
-                        <span class="input-group-addon" style="width:30%;">Avreise</span>
-                        <span class="label label-warning" id="departureEdLbl" style="display:none"></span>
-                        <input id="departureEd" type="datetime-local" class="form-control" />
-                    </div>
-                    <div class="input-group col-sm-4">
-                        <span class="input-group-addon" style="width:30%;">Ankomst</span>
-                        <span class="label label-warning" id="arrivalEdLbl" style="display:none"></span>
-                        <input id="arrivalEd" type="datetime" class="form-control" />
-                    </div>
-                    <div class="input-group col-sm-4">
-                        <span class="input-group-addon" style="width:30%;">Pris</span>
-                        <span class="label label-warning" id="priceEdLbl" style="display:none"></span>
-                        <input id="priceEd" type="number" class="form-control" />
-                    </div>
-                    <button id="confirmEditFlight" class="btn btn-success">Bekreft endring</button>
+                        <button id="confirmEditFlight" class="btn btn-success">Bekreft endring</button>
                 </div>
                 <div id="deleteFlight">
                     <h2>Slett følgende flyvning:</h2>
