@@ -1713,33 +1713,28 @@
 
                 <div class="input-group col-sm-12">
                     <table class="table">
-                        <thead class="">
-                            <tr>
-                                <th>
-                                    Fra
-                                </th>
-                                <th class="col-sm-1"></th>
-                                <th>
-                                    Til
-                                </th>
-                                <th class="col-sm-1"></th>
-                                <th>
-                                    Avreise
-                                </th>
-                                <th>
-                                    Ankomst
-                                </th>
-                                <th class="col-sm-1">
-                                    Pris
-                                </th>
-                            </tr>
-                        </thead>
                         <tr>
+                            <td>
+                                <strong>Fra</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="fromAirportRegLbl" style="display:none"></span><br/>
+                                <select id="fromAirportReg" class="form-control"></select>
+                            </td>
                             <td>
                                 <input id="airportFilterFlightsFrom" class="form-control" type="text" placeholder="Søk" />
                             </td>
                             <td>
                                 <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringFrom_Reg()">Søk</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>TIl</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="toAirportRegLbl" style="display:none"></span><br/>
+                                <select id="toAirportReg" class="form-control"></select>
                             </td>
                             <td>
                                 <input id="airportFilterFlightsTo" class="form-control" type="text" placeholder="Søk" />
@@ -1747,39 +1742,39 @@
                             <td>
                                 <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringTo_Reg()">Søk</a>
                             </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-
-                            </td>
-                            <td>
-
-                            </td>
                         </tr>
                         <tr>
                             <td>
-                                <span class="label label-warning" id="fromAirportRegLbl" style="display:none"></span>
-                                <select id="fromAirportReg" class="form-control"></select>
+                                <strong>Avreise</strong>
                             </td>
-                            <td></td>
                             <td>
-                                <span class="label label-warning" id="toAirportRegLbl" style="display:none"></span>
-                                <select id="toAirportReg" class="form-control"></select>
-                            </td>
-                            <td></td>
-                            <td>
-                                <span class="label label-warning" id="departureRegLbl" style="display:none"></span>
+                                <span class="label label-warning" id="departureRegLbl" style="display:none"></span><br />
                                 <input id="departureReg" type="text" class="form-control" style="width:75%;" />
                             </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <td>
-                                <span class="label label-warning" id="arrivalRegLbl" style="display:none"></span>
+                                <strong>Ankomst</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="arrivalRegLbl" style="display:none"></span><br />
                                 <input id="arrivalReg" type="text" class="form-control" style="width:75%;" />
                             </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <td>
-                                <span class="label label-warning" id="priceRegLbl" style="display:none"></span>
+                                <strong>Pris</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="priceRegLbl" style="display:none"></span><br />
                                 <input id="priceReg" type="number" class="form-control" />
                             </td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         </table>
                     <button id="confirmationModalRegFlight" class="btn btn-success" >Registrer flyvning</button>
@@ -1791,33 +1786,23 @@
 
                 <div class="input-group col-sm-12">
                     <table class="table">
-                        <thead class="">
-                            <tr>
-                                <th class="col-sm-1">
-                                    ID
-                                </th>
-                                <th class="col-sm-3">
-                                    Fra
-                                </th>
-                                <th class="col-sm-1"></th>
-                                <th class="col-sm-3">
-                                    Til
-                                </th>
-                                <th class="col-sm-1"></th>
-                                <th>
-                                    Avreise
-                                </th>
-                                <th>
-                                    Ankomst
-                                </th>
-                                <th class="col-sm-2">
-                                    Pris
-                                </th>
-                            </tr>
-                        </thead>
                         <tr>
                             <td>
+                                <strong>ID</strong>
+                            </td>
+                            <td>
                                 <input id="flightIdEd" type="text" class="form-control" readonly />
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Fra</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="fromAirportEdLbl" style="display:none"></span><br />
+                                <select id="fromAirportEd" class="form-control"></select>
                             </td>
                             <td>
                                 <input id="airportFilterFlightsEditFrom" class="form-control" type="text" placeholder="Søk" />
@@ -1825,40 +1810,54 @@
                             <td>
                                 <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringFrom_Edit()">Søk</a>
                             </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Til</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="toAirportEdLbl" style="display:none"></span><br />
+                                <select id="toAirportEd" class="form-control"></select>
+                            </td>
                             <td>
                                 <input id="airportFilterFlightsEditTo" class="form-control" type="text" placeholder="Søk" />
                             </td>
                             <td>
                                 <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringTo_Edit()">Søk</a>
                             </td>
-                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Avreise</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="departureEdLbl" style="display:none"></span><br />
+                                <input id="departureEd" type="text" class="form-control" style="width:75%;" />
+                            </td>
                             <td></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td></td>
                             <td>
-                                <span class="label label-warning" id="fromAirportEdLbl" style="display:none"></span>
-                                <select id="fromAirportEd" class="form-control"></select>
-                            </td>
-                            <td></td>
-                            <td>
-                                <span class="label label-warning" id="toAirportEdLbl" style="display:none"></span>
-                                <select id="toAirportEd" class="form-control"></select>
-                            </td>
-                            <td></td>
-                            <td>
-                                <span class="label label-warning" id="departureEdLbl" style="display:none"></span>
-                                <input id="departureEd" type="text" class="form-control" style="width:75%;" />
+                                <strong>Ankomst</strong>
                             </td>
                             <td>
-                                <span class="label label-warning" id="arrivalEdLbl" style="display:none"></span>
+                                <span class="label label-warning" id="arrivalEdLbl" style="display:none"></span><br />
                                 <input id="arrivalEd" type="text" class="form-control" style="width:75%;" />
                             </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <td>
-                                <span class="label label-warning" id="priceEdLbl" style="display:none"></span>
+                                <strong>Pris</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="priceEdLbl" style="display:none"></span><br />
                                 <input id="priceEd" type="number" class="form-control" />
                             </td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         </table>
                     </div>

@@ -1265,7 +1265,7 @@ namespace UnitTest
             var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
             var id = 1;
             var Result = Controller.getBooking(id);
-            Assert.AreEqual("{\"Id\":1,\"UserId\":1,\"UserFirstname\":\"fornavn\",\"UserLastname\":\"etternavn\",\"FlightId\":1,\"FlightFrom\":\"Torp\",\"FlightTo\":\"Rygge\",\"FlightDeparture\":\"01.11.2017 12.00\",\"Amount\":7}", Result);
+            Assert.AreEqual("{\"Id\":1,\"UserId\":1,\"UserFirstname\":\"fornavn\",\"UserLastname\":\"etternavn\",\"FlightId\":1,\"FlightFrom\":\"Torp\",\"FlightTo\":\"Rygge\",\"FlightDeparture\":\"01.11.2017 12:00\",\"Amount\":7}", Result);
         }
 
         [TestMethod]
@@ -1301,7 +1301,7 @@ namespace UnitTest
             var Controller = new AdminController(new AdminBLL(new AdminDALStub()));
             var id = 1;
             var Result = Controller.getFlight(id);
-            Assert.AreEqual("{\"id\":1,\"fromAirportId\":1,\"fromAirportName\":\"Torp\",\"toAirportId\":2,\"toAirportName\":\"Ikke Torp\",\"departure\":\"01.11.2017 12.00\",\"arrival\":\"01.11.2017 12.50\",\"price\":300}", Result);
+            Assert.AreEqual("{\"id\":1,\"fromAirportId\":1,\"fromAirportName\":\"Torp\",\"toAirportId\":2,\"toAirportName\":\"Ikke Torp\",\"departure\":\"01.11.2017 12:00\",\"arrival\":\"01.11.2017 12:50\",\"price\":300}", Result);
         }
 
         [TestMethod]
