@@ -55,18 +55,32 @@ namespace WebAppsOppgave1.Controllers
             {
                 Session["Admin"] = true;
                 ViewBag.Admin = true;
+                Session["WrongAdminCredentials"] = false;
+                ViewBag.WrongAdminCredentials = false;
                 return View();
             }
             else
             {
                 Session["Admin"] = false;
                 ViewBag.Admin = false;
+                Session["WrongAdminCredentials"] = true;
                 return RedirectToAction("LogIn");
             }
         }
 
         public ActionResult LogIn()
         {
+            if (Session["WrongAdminCredentials"] != null)
+            {
+                if ((bool)Session["WrongAdminCredentials"])
+                {
+                    ViewBag.WrongAdminCredentials = true;
+                }
+                else
+                {
+                    ViewBag.WrongAdminCredentials = false;
+                }
+            }
             return View();
         }
 

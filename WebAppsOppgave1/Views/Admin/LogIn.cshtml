@@ -21,6 +21,13 @@
                     <input name="password" type="password" class="form-control" />
                 </div>
                 <input type="submit" name="login" value="Logg inn" class="btn btn-primary"/>
+                 @if (ViewBag.WrongAdminCredentials != null)
+                 {
+                     if (ViewBag.WrongAdminCredentials == true)
+                     {
+                        <p style="color:indianred">Ugyldig admin-innlogging</p>
+                     }
+                 }
             </fieldset>
         </form>
     </div>
