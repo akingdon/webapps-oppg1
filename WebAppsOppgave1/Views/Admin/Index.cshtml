@@ -171,7 +171,7 @@
                         GetAllAirports();
                     }
                     else {
-                        $("#airportConfirmation").html("<p style=\"color:indianred\">Feil ved sletting</p>");
+                        $("#airportConfirmation").html("<p style=\"color:indianred\">Feil ved sletting. Sjekk at ingen flyvninger bruker denne flyplassen.</p>");
                     }
                 },
                 error: function (x, y, z) {
@@ -331,7 +331,7 @@
                         GetAllFlights();
                     }
                     else {
-                        $("#flightConfirmation").html("<p style=\"color:indianred\">Feil ved sletting</p>");
+                        $("#flightConfirmation").html("<p style=\"color:indianred\">Feil ved sletting. Sjekk at flyvning ikke er i registrerte bestillinger.</p>");
                     }
                 },
                 error: function (x, y, z) {
@@ -649,7 +649,7 @@
                         GetAllUsers();
                     }
                     else {
-                        $("#userConfirmation").html("<p style=\"color:indianred\">Feil ved sletting</p>");
+                        $("#userConfirmation").html("<p style=\"color:indianred\">Feil ved sletting. Sjekk at kunde ikke har registrerte bookinger.</p>");
                     }
                 },
                 error: function (x, y, z) {
