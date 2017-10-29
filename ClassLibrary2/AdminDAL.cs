@@ -431,7 +431,7 @@ namespace WebAppsOppgave1.DAL
                 return "Adding to DB failed";
             }
         }
-        public string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, byte[] passord)
+        public string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost)
         {
             try
             {
@@ -460,7 +460,6 @@ namespace WebAppsOppgave1.DAL
                 userToEdit.Adresse = adresse;
                 userToEdit.Poststed = poststedToInsert;
                 userToEdit.Epost = epost;
-                userToEdit.PassordHash = passord;
                 Db.SaveChanges();
 
                 WriteLogEvent("Edited user id " + id + ": Fornavn from " + Fornavn + " to " + userToEdit.Fornavn + 

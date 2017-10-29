@@ -136,9 +136,9 @@ namespace WebAppsOppgave1.BLL
             return RegisteredUser;
         }
 
-        public string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, byte[] passord)
+        public string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost)
         {
-            var EditedUser = _repository.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost, passord);
+            var EditedUser = _repository.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost);
             return EditedUser;
         }
 

@@ -1438,8 +1438,7 @@ namespace UnitTest
             var postnummer = "0123";
             var poststed = "Oslo";
             var epost = "e@post.no";
-            var passord = "passord";
-            var Result = Controller.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost, passord);
+            var Result = Controller.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost);
             Assert.AreEqual("\"ok\"", Result);
         }
 
@@ -1454,8 +1453,7 @@ namespace UnitTest
             var postnummer = "0123";
             var poststed = "Oslo";
             var epost = "e@post.no";
-            var passord = "passord";
-            var Result = Controller.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost, passord);
+            var Result = Controller.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost);
             Assert.AreEqual("\"Editing in DB failed\"", Result);
         }
 

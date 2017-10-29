@@ -561,7 +561,7 @@
             var postnummer = $("#postnummerEd").val();
             var poststed = $("#poststedEd").val();
             var epost = $("#epostEd").val();
-            var passord = $("#passordEd").val();
+            var passord = "";
 
             if (ValidateUser(regOrEd, fornavn, etternavn, adresse, postnummer, poststed, epost, passord)) {
                 var titleText = "Endre følgende bruker:";
@@ -586,13 +586,12 @@
             var postnummer = $("#postnummerEd").val();
             var poststed = $("#poststedEd").val();
             var epost = $("#epostEd").val();
-            var passord = $("#passordEd").val();
 
             $.ajax({
                 url: '/Admin/editUser',
                 type: 'POST',
                 contentType: "application/json:charset=utf-8",
-                data: JSON.stringify({ id: id, fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost, passord: passord }),
+                data: JSON.stringify({ id: id, fornavn: fornavn, etternavn: etternavn, adresse: adresse, postnummer: postnummer, poststed: poststed, epost: epost}),
                 dataType: 'json',
                 success: function (success) {
                     if (success == "ok") {
@@ -1385,8 +1384,8 @@
 
     function ClearBookingRegInput() {
         $("#userReg").val("");
-        $("#flight").val("");
-        $("#amount").val("");
+        $("#flightReg").val("");
+        $("#amountReg").val("");
     }
 
     function HideBookingWarningLabels() {
@@ -1591,16 +1590,18 @@
             $("#epost" + regOrEd + "Lbl").show();
             valid = false;
         }
-        re = new RegExp("^[A-ZÆØÅÁÄÈÉËa-zæøåáäèéë0-9]{8,30}$");
-        if (passord.length < 8 || passord.length > 30) {
-            $("#passord" + regOrEd + "Lbl").html("Passord må være mellom 8 og 30 tegn");
-            $("#passord" + regOrEd + "Lbl").show();
-            valid = false;
-        }
-        else if (!re.test(passord)) {
-            $("#passord" + regOrEd + "Lbl").html("Passord må bestå av bokstaver og siffer");
-            $("#passord" + regOrEd + "Lbl").show();
-            valid = false;
+        if (regOrEd === "Reg") {
+            re = new RegExp("^[A-ZÆØÅÁÄÈÉËa-zæøåáäèéë0-9]{8,30}$");
+            if (passord.length < 8 || passord.length > 30) {
+                $("#passord" + regOrEd + "Lbl").html("Passord må være mellom 8 og 30 tegn");
+                $("#passord" + regOrEd + "Lbl").show();
+                valid = false;
+            }
+            else if (!re.test(passord)) {
+                $("#passord" + regOrEd + "Lbl").html("Passord må bestå av bokstaver og siffer");
+                $("#passord" + regOrEd + "Lbl").show();
+                valid = false;
+            }
         }
         return valid;
     }
@@ -1629,7 +1630,6 @@
         $("#postnummerEdLbl").hide();
         $("#poststedEdLbl").hide();
         $("#epostEdLbl").hide();
-        $("#passordEdLbl").hide();
     }
 
     function HideAllModalButtons() {
@@ -2168,11 +2168,6 @@
                     <span class="input-group-addon" style="width:32%;">Epost</span>
                     <span class="label label-warning" id="epostEdLbl" style="display:none"></span>
                     <input id="epostEd" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Passord</span>
-                    <span class="label label-warning" id="passordEdLbl" style="display:none"></span>
-                    <input id="passordEd" type="password" class="form-control" />
                 </div>
                 <button id="confirmationModalEdUser" class="btn btn-success">Bekreft endring</button>
             </div>
