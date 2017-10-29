@@ -146,17 +146,15 @@ namespace WebAppsOppgave1.DAL
             }
             else
             {
-                if ((!String.IsNullOrEmpty(from) || (!String.IsNullOrEmpty(to))) && (!departureSet))
+                if (!String.IsNullOrEmpty(from) && String.IsNullOrEmpty(to))
                 {
-                    return Db.Flight.Where(f => f.FromAirport.Name == from || f.ToAirport.Name == to).OrderBy(f => f.Departure).ToList();
+                    return Db.Flight.Where(f => f.FromAirport.Name == from).ToList();
                 }
-                if ((!String.IsNullOrEmpty(from) || (!String.IsNullOrEmpty(to)) && departureSet))
+                if (!String.IsNullOrEmpty(to) && String.IsNullOrEmpty(from))
                 {
-                    return Db.Flight.Where(f => (f.FromAirport.Name == from || f.ToAirport.Name == to) && 
-                    DbFunctions.TruncateTime(f.Departure) == departureFilter.Date)
-                    .OrderBy(f => f.Departure)
-                    .ToList();
+                    return Db.Flight.Where(f => f.ToAirport.Name == to).ToList();
                 }
+
 
                 return Db.Flight.OrderBy(f => f.Departure).ThenBy(f => f.FromAirport.Name).ThenBy(f => f.ToAirport.Name).ToList();
             }
