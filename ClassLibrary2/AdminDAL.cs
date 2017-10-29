@@ -154,6 +154,10 @@ namespace WebAppsOppgave1.DAL
                 {
                     return Db.Flight.Where(f => f.ToAirport.Name == to).ToList();
                 }
+                if (!String.IsNullOrEmpty(from) && !String.IsNullOrEmpty(to))
+                {
+                    return Db.Flight.Where(f => f.FromAirport.Name == from && f.ToAirport.Name == to).ToList();
+                }
 
 
                 return Db.Flight.OrderBy(f => f.Departure).ThenBy(f => f.FromAirport.Name).ThenBy(f => f.ToAirport.Name).ToList();
