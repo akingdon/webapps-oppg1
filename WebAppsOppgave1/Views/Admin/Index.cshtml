@@ -841,19 +841,16 @@
     }
 
     function getAllFlightsForDropdownFiltering() {
-        var name = $("#flightFilterBooking").val();
-        var nameEdit = $("#flightFilterBookingEdit").val();
+        var name = $("#flightFilterBookingFrom_Reg").val();
+        var to = '';
         var departure = $("#departureFilterBooking").val();
 
-        if (name.length == 0) {
-            name = nameEdit;
-        }
 
         $.ajax({
             url: '/Admin/getAllFlights',
             type: 'POST',
             contentType: 'application/json:charset=utf-8',
-            data: JSON.stringify({ from: name, to: name, departure: departure }),
+            data: JSON.stringify({ from: name, to: to, departure: departure }),
             dataType: 'json',
             success: function (jsFlights) {
                 populateFlightDropDownAfterFiltering(jsFlights);
@@ -864,19 +861,81 @@
         });
     }
 
-    function getAllAirportsForDropdownFilteringFrom_Reg() {
-        var name = $("#airportFilterFlightsFrom").val();
-        var nameEdit = $("#airportFilterFlightsEditFrom").val();
+    function getAllFlightsForDropdownFilteringFrom_Reg() {
+        var from = $("#flightFilterBookingFrom_Reg").val();
+        var to = '';
+        var departure = $("#departureFilterBooking").val();
+
+        $.ajax({
+            url: '/Admin/getAllFlights',
+            type: 'POST',
+            contentType: 'application/json:charset=utf-8',
+            data: JSON.stringify({ from: from, to: to, departure: departure }),
+            dataType: 'json',
+            success: function (jsFlights) {
+                populateFlightDropDownAfterFiltering_Reg(jsFlights);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
+    function getAllFlightsForDropdownFilteringTo_Reg() {
+        var from = '';
+        var to = $("#flightFilterBookingTo_Reg").val();
+        var departure = $("#departureFilterBooking").val();
 
 
         $.ajax({
-            url: '/Admin/getAllAirports',
+            url: '/Admin/getAllFlights',
             type: 'POST',
             contentType: 'application/json:charset=utf-8',
-            data: JSON.stringify({ name: name }),
+            data: JSON.stringify({ from: from, to: to, departure: departure }),
             dataType: 'json',
-            success: function (jsAirports) {
-                populateAirportDropDownAfterFilteringFrom_Reg(jsAirports);
+            success: function (jsFlights) {
+                populateFlightDropDownAfterFiltering_Reg(jsFlights);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
+    function getAllFlightsForDropdownFilteringFrom_Edit() {
+        var from = $("#flightFilterBookingFrom_Edit").val();
+        var to = '';
+        var departure = $("#departureFilterBooking").val();
+
+        $.ajax({
+            url: '/Admin/getAllFlights',
+            type: 'POST',
+            contentType: 'application/json:charset=utf-8',
+            data: JSON.stringify({ from: from, to: to, departure: departure }),
+            dataType: 'json',
+            success: function (jsFlights) {
+                populateFlightDropDownAfterFiltering_Edit(jsFlights);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
+    function getAllFlightsForDropdownFilteringTo_Edit() {
+        var from = '';
+        var to = $("#flightFilterBookingTo_Edit").val();
+        var departure = $("#departureFilterBooking").val();
+
+
+        $.ajax({
+            url: '/Admin/getAllFlights',
+            type: 'POST',
+            contentType: 'application/json:charset=utf-8',
+            data: JSON.stringify({ from: from, to: to, departure: departure }),
+            dataType: 'json',
+            success: function (jsFlights) {
+                populateFlightDropDownAfterFiltering_Edit(jsFlights);
             },
             error: function (x, y, z) {
                 alert(x + '\n' + y + '\n' + z);
@@ -1180,7 +1239,7 @@
         });
     }
 
-    function populateFlightDropDownAfterFiltering(jsFlights) {
+    function populateFlightDropDownAfterFiltering_Reg(jsFlights) {
         loop = "";
         for (var f in jsFlights) {
             loop += "<option value=\"" + jsFlights[f].id + "\">" +
@@ -1188,6 +1247,15 @@
                 jsFlights[f].departure + "</option>";
         }
         $("#flightReg").html(loop);
+    }
+
+    function populateFlightDropDownAfterFiltering_Edit(jsFlights) {
+        loop = "";
+        for (var f in jsFlights) {
+            loop += "<option value=\"" + jsFlights[f].id + "\">" +
+                jsFlights[f].fromAirportName + " - " + jsFlights[f].toAirportName + ": " +
+                jsFlights[f].departure + "</option>";
+        }
         $("#flightEd").html(loop);
     }
 
@@ -1935,7 +2003,9 @@
             <div id="registerBooking">
                 <h2>Registrer ny bestilling</h2>
                 <div class="input-group col-sm-12">
+
                 <table class="table">
+
                     <tr>
                         <td>
                             <strong>Kunde</strong>
@@ -1960,11 +2030,12 @@
                             <select id="flightReg" class="form-control"></select>
                         </td>
                         <td>
-                            <input id="flightFilterBooking" class="form-control" type="text" placeholder="Søk på flyplass" />
-                            <input id="departureFilterBooking" type="date" class="form-control" placeholder="Søk på avgang" />
+                            <input id="flightFilterBookingfrom_Reg" class="form-control" type="text" placeholder="Avgang fra" /><br/>
+                            <input id="flightFilterBookingto_Reg" type="date" class="form-control" placeholder="Ankomst til" />
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering()">Søk</a>
+                            <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFilteringFrom_Reg()">Søk</a><br/>
+                            <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFilteringTo_Reg()">Søk</a>
                         </td>
                     </tr>
                     <tr>
@@ -1984,63 +2055,64 @@
             </div>
             <div id="editBooking">
                 <h2>Endre følgende bestilling:</h2>
-
-                <div class="input-group col-sm-12">
-                    <table class="table">
-                        <tr>
-                            <td>
-                                <strong>ID</strong>
-                            </td>
-                            <td>
-                                <input id="bookingIdEd" type="text" class="form-control" readonly />
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Kunde</strong>
-                            </td>
-                            <td>
-                                <span class="label label-warning" id="userEdLbl" style="display:none"></span>
-                                <select id="userEd" class="form-control"></select>
-                            </td>
-                            <td>
-                                <input type="text" id="userFilterBookingEdit" placeholder="Søk på etternavn" />
-                            </td>
-                            <td>
-                                <a class="btn btn-sm btn-primary" onclick="getAllUsersForDropdownFiltering()">Søk</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Flyvning</strong>
-                            </td>
-                            <td>
-                                <span class="label label-warning" id="flightEdLbl" style="display:none"></span>
-                                <select id="flightEd" class="form-control"></select>
-                            </td>
-                            <td>
-                                <input type="text" id="flightFilterBookingEdit" placeholder="Søk på flyplass" />
-                            </td>
-                            <td>
-                                <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering()">Søk</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Antall reisende</strong>
-                            </td>
-                            <td>
-                                <span class="label label-warning" id="amountEdLbl" style="display:none"></span>
-                                <input id="amountEd" type="number" class="form-control" />
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </table>
-                </div>
-                <button id="confirmationModalEdBooking" class="btn btn-success">Bekreft endring</button>
+                    <div class="input-group col-sm-12">
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <strong>ID</strong>
+                                </td>
+                                <td>
+                                    <input id="bookingIdEd" type="text" class="form-control" readonly />
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Kunde</strong>
+                                </td>
+                                <td>
+                                    <span class="label label-warning" id="userEdLbl" style="display:none"></span><br/>
+                                    <select id="userEd" class="form-control"></select>
+                                </td>
+                                <td>
+                                    <input type="text" id="userFilterBookingEdit" placeholder="Søk på etternavn" />
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" onclick="getAllUsersForDropdownFiltering()">Søk</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Flyvning</strong>
+                                </td>
+                                <td>
+                                    <span class="label label-warning" id="flightEdLbl" style="display:none"></span><br/>
+                                    <select id="flightEd" class="form-control"></select>
+                                </td>
+                                <td>
+                                    <input type="text" id="flightFilterBookingFrom_Edit" placeholder="Avgang fra" /><br/>
+                                    <input type="text" id="flightFilterBookingTo_Edit" placeholder="Ankomst til" />
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFilteringFrom_Edit()">Søk</a><br/>
+                                    <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFilteringTo_Edit()">Søk</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Antall reisende</strong>
+                                </td>
+                                <td>
+                                    <span class="label label-warning" id="amountEdLbl" style="display:none"></span><br/>
+                                    <input id="amountEd" type="number" class="form-control" />
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <button id="confirmationModalEdBooking" class="btn btn-success">Bekreft endring</button>
                 </div>
                         
                 <div id="deleteBooking">
