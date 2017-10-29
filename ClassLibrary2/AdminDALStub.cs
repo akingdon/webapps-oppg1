@@ -94,7 +94,7 @@ namespace WebAppsOppgave1.DAL
             return "Editing in DB failed";
         }
 
-        public string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, byte[] passord)
+        public string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost)
         {
             if (id >= 0)
             {

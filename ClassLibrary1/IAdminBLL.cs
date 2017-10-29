@@ -14,7 +14,7 @@ namespace WebAppsOppgave1.BLL
         string editAirport(int id, string name);
         string editBooking(int id, int userId, int flightId, int amount);
         string editFlight(int id, int fromAirportId, int toAirportId, DateTime departure, DateTime arrival, int price);
-        string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, byte[] passord);
+        string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost);
         Airport getAirport(int id);
         List<Airport> getAllAirports(string name);
         List<Booking> getAllBookings(string user, string flight);
