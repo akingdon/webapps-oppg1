@@ -861,32 +861,11 @@
         });
     }
 
-    function getAllFlightsForDropdownFilteringFrom_Reg() {
+    function getAllFlightsForDropdownFiltering_Reg() {
         var from = $("#flightFilterBookingFrom_Reg").val();
-        var to = '';
-        var departure = $("#departureFilterBooking").val();
-
-        $.ajax({
-            url: '/Admin/getAllFlights',
-            type: 'POST',
-            contentType: 'application/json:charset=utf-8',
-            data: JSON.stringify({ from: from, to: to, departure: departure }),
-            dataType: 'json',
-            success: function (jsFlights) {
-                populateFlightDropDownAfterFiltering_Reg(jsFlights);
-            },
-            error: function (x, y, z) {
-                alert(x + '\n' + y + '\n' + z);
-            }
-        });
-    }
-
-    function getAllFlightsForDropdownFilteringTo_Reg() {
-        var from = '';
         var to = $("#flightFilterBookingTo_Reg").val();
         var departure = $("#departureFilterBooking").val();
 
-
         $.ajax({
             url: '/Admin/getAllFlights',
             type: 'POST',
@@ -902,31 +881,10 @@
         });
     }
 
-    function getAllFlightsForDropdownFilteringFrom_Edit() {
+    function getAllFlightsForDropdownFiltering_Edit() {
         var from = $("#flightFilterBookingFrom_Edit").val();
-        var to = '';
-        var departure = $("#departureFilterBooking").val();
-
-        $.ajax({
-            url: '/Admin/getAllFlights',
-            type: 'POST',
-            contentType: 'application/json:charset=utf-8',
-            data: JSON.stringify({ from: from, to: to, departure: departure }),
-            dataType: 'json',
-            success: function (jsFlights) {
-                populateFlightDropDownAfterFiltering_Edit(jsFlights);
-            },
-            error: function (x, y, z) {
-                alert(x + '\n' + y + '\n' + z);
-            }
-        });
-    }
-
-    function getAllFlightsForDropdownFilteringTo_Edit() {
-        var from = '';
         var to = $("#flightFilterBookingTo_Edit").val();
         var departure = $("#departureFilterBooking").val();
-
 
         $.ajax({
             url: '/Admin/getAllFlights',
@@ -2030,12 +1988,11 @@
                             <select id="flightReg" class="form-control"></select>
                         </td>
                         <td>
-                            <input id="flightFilterBookingfrom_Reg" class="form-control" type="text" placeholder="Avgang fra" /><br/>
-                            <input id="flightFilterBookingto_Reg" type="date" class="form-control" placeholder="Ankomst til" />
+                            <input id="flightFilterBookingFrom_Reg" class="form-control" type="text" placeholder="Avgang fra" /><br/>
+                            <input id="flightFilterBookingTo_Reg" type="text" class="form-control" placeholder="Ankomst til" />
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFilteringFrom_Reg()">Søk</a><br/>
-                            <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFilteringTo_Reg()">Søk</a>
+                            <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering_Reg()">Søk</a>
                         </td>
                     </tr>
                     <tr>
@@ -2076,7 +2033,7 @@
                                     <select id="userEd" class="form-control"></select>
                                 </td>
                                 <td>
-                                    <input type="text" id="userFilterBookingEdit" placeholder="Søk på etternavn" />
+                                    <input type="text" id="userFilterBookingEdit" placeholder="Søk på etternavn" class="form-control" />
                                 </td>
                                 <td>
                                     <a class="btn btn-sm btn-primary" onclick="getAllUsersForDropdownFiltering()">Søk</a>
@@ -2091,12 +2048,11 @@
                                     <select id="flightEd" class="form-control"></select>
                                 </td>
                                 <td>
-                                    <input type="text" id="flightFilterBookingFrom_Edit" placeholder="Avgang fra" /><br/>
-                                    <input type="text" id="flightFilterBookingTo_Edit" placeholder="Ankomst til" />
+                                    <input type="text" id="flightFilterBookingFrom_Edit" placeholder="Avgang fra" class="form-control" /><br/>
+                                    <input type="text" id="flightFilterBookingTo_Edit" placeholder="Ankomst til" class="form-control" />
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFilteringFrom_Edit()">Søk</a><br/>
-                                    <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFilteringTo_Edit()">Søk</a>
+                                    <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering_Edit()">Søk</a>
                                 </td>
                             </tr>
                             <tr>
