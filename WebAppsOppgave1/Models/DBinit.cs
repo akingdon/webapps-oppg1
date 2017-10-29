@@ -380,8 +380,8 @@ namespace WebAppsOppgave1.Models
                 Etternavn = "Johansen",
                 Adresse = "Brandts gate 2b",
                 Poststed = postSted1,
-                Epost = "test",
-                PassordHash = Controllers.HomeController.HashPassword("test")
+                Epost = "test@epost.no",
+                PassordHash = Controllers.HomeController.HashPassword("testbruker")
             };
 
             var user2 = new User
@@ -391,7 +391,7 @@ namespace WebAppsOppgave1.Models
                 Adresse = "Høgglinna 9",
                 Poststed = postSted2,
                 Epost = "nr9@talas.no",
-                PassordHash = Controllers.HomeController.HashPassword("knus")
+                PassordHash = Controllers.HomeController.HashPassword("knusebil")
             };
 
             var user3 = new User
@@ -401,7 +401,7 @@ namespace WebAppsOppgave1.Models
                 Adresse = "Josefines gate 64 F",
                 Poststed = postSted1,
                 Epost = "tore@epost.no",
-                PassordHash = Controllers.HomeController.HashPassword("passord")
+                PassordHash = Controllers.HomeController.HashPassword("passord12")
             };
 
             var user4 = new User
@@ -411,7 +411,7 @@ namespace WebAppsOppgave1.Models
                 Adresse = "Doppelganger Allé 2",
                 Poststed = postSted3,
                 Epost = "imposter@email.com",
-                PassordHash = Controllers.HomeController.HashPassword("passord")
+                PassordHash = Controllers.HomeController.HashPassword("passord23")
             };
 
 
