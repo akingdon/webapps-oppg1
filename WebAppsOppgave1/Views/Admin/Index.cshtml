@@ -351,8 +351,8 @@
             var regOrEd = "Reg";
             var userId = $("#userReg").val();
             var userString = $("#userReg option:selected").text();
-            var flightId = $("#flightRegFrom").val();
-            var flightString = $("#flightRegFrom option:selected").text();
+            var flightId = $("#flightReg").val();
+            var flightString = $("#flightReg option:selected").text();
             var amount = $("#amountReg").val();
 
             if (ValidateBooking(regOrEd, userId, flightId, amount)) {
@@ -370,7 +370,7 @@
 
         $("#confirmRegisterBooking").click(function () {
             var userId = $("#userReg").val();
-            var flightId = $("#flightRegFrom").val();
+            var flightId = $("#flightReg").val();
             var amount = $("#amountReg").val();
 
             $.ajax({
@@ -401,8 +401,8 @@
             var id = $("#bookingIdEd").val();
             var userId = $("#userEd").val();
             var userString = $("#userEd option:selected").text();
-            var flightId = $("#flightEdFrom").val();
-            var flightString = $("#flightEdFrom option:selected").text();
+            var flightId = $("#flightEd").val();
+            var flightString = $("#flightEd option:selected").text();
             var amount = $("#amountEd").val();
 
             if (ValidateBooking(regOrEd, userId, flightId, amount)) {
@@ -421,7 +421,7 @@
         $("#confirmEditBooking").click(function () {
             var id = $("#bookingIdEd").val();
             var userId = $("#userEd").val();
-            var flightId = $("#flightEdFrom").val();
+            var flightId = $("#flightEd").val();
             var amount = $("#amountEd").val();
 
             $.ajax({
@@ -873,7 +873,7 @@
             data: JSON.stringify({ from: from, to: to, departure: departure }),
             dataType: 'json',
             success: function (jsFlights) {
-                populateFlightDropDownAfterFilteringFrom_Reg(jsFlights);
+                populateFlightDropDownAfterFiltering_Reg(jsFlights);
             },
             error: function (x, y, z) {
                 alert(x + '\n' + y + '\n' + z);
@@ -894,7 +894,7 @@
             data: JSON.stringify({ from: from, to: to, departure: departure }),
             dataType: 'json',
             success: function (jsFlights) {
-                populateFlightDropDownAfterFilteringTo_Reg(jsFlights);
+                populateFlightDropDownAfterFiltering_Reg(jsFlights);
             },
             error: function (x, y, z) {
                 alert(x + '\n' + y + '\n' + z);
@@ -914,7 +914,7 @@
             data: JSON.stringify({ from: from, to: to, departure: departure }),
             dataType: 'json',
             success: function (jsFlights) {
-                populateFlightDropDownAfterFilteringFrom_Edit(jsFlights);
+                populateFlightDropDownAfterFiltering_Edit(jsFlights);
             },
             error: function (x, y, z) {
                 alert(x + '\n' + y + '\n' + z);
@@ -935,7 +935,7 @@
             data: JSON.stringify({ from: from, to: to, departure: departure }),
             dataType: 'json',
             success: function (jsFlights) {
-                populateFlightDropDownAfterFilteringTo_Edit(jsFlights);
+                populateFlightDropDownAfterFiltering_Edit(jsFlights);
             },
             error: function (x, y, z) {
                 alert(x + '\n' + y + '\n' + z);
@@ -1230,10 +1230,8 @@
                 result += loop;
                 filterResult += loop;
                 $("#flightFilter").html(filterResult);
-                $("#flightRegFrom").html(result);
-                $("#flightRegTo").html(result);
-                $("#flightEdFrom").html(result);
-                $("#flightEdTo").html(result);
+                $("#flightReg").html(result);
+                $("#flightEd").html(result);
             },
             error: function (x, y, z) {
                 alert(x + '\n' + y + '\n' + z);
@@ -1241,44 +1239,24 @@
         });
     }
 
-    function populateFlightDropDownAfterFilteringFrom_Reg(jsFlights) {
+    function populateFlightDropDownAfterFiltering_Reg(jsFlights) {
         loop = "";
         for (var f in jsFlights) {
             loop += "<option value=\"" + jsFlights[f].id + "\">" +
                 jsFlights[f].fromAirportName + " - " + jsFlights[f].toAirportName + ": " +
                 jsFlights[f].departure + "</option>";
         }
-        $("#flightRegFrom").html(loop);
+        $("#flightReg").html(loop);
     }
 
-    function populateFlightDropDownAfterFilteringTo_Reg(jsFlights) {
+    function populateFlightDropDownAfterFiltering_Edit(jsFlights) {
         loop = "";
         for (var f in jsFlights) {
             loop += "<option value=\"" + jsFlights[f].id + "\">" +
                 jsFlights[f].fromAirportName + " - " + jsFlights[f].toAirportName + ": " +
                 jsFlights[f].departure + "</option>";
         }
-        $("#flightRegTo").html(loop);
-    }
-
-    function populateFlightDropDownAfterFilteringFrom_Edit(jsFlights) {
-        loop = "";
-        for (var f in jsFlights) {
-            loop += "<option value=\"" + jsFlights[f].id + "\">" +
-                jsFlights[f].fromAirportName + " - " + jsFlights[f].toAirportName + ": " +
-                jsFlights[f].departure + "</option>";
-        }
-        $("#flightEdFrom").html(loop);
-    }
-
-    function populateFlightDropDownAfterFilteringTo_Edit(jsFlights) {
-        loop = "";
-        for (var f in jsFlights) {
-            loop += "<option value=\"" + jsFlights[f].id + "\">" +
-                jsFlights[f].fromAirportName + " - " + jsFlights[f].toAirportName + ": " +
-                jsFlights[f].departure + "</option>";
-        }
-        $("#flightEdTo").html(loop);
+        $("#flightEd").html(loop);
     }
 
     function populateUserDropDownAfterFiltering(jsUsers) {
@@ -1402,7 +1380,7 @@
                 if (jsBooking != null) {
                     $("#bookingIdEd").val(jsBooking.Id);
                     $("#userEd").val(jsBooking.UserId);
-                    $("#flightEdFrom").val(jsBooking.FlightId);
+                    $("#flightEd").val(jsBooking.FlightId);
                     $("#amountEd").val(jsBooking.Amount);
                 }
                 else {
@@ -1474,7 +1452,7 @@
 
     function ClearBookingRegInput() {
         $("#userReg").val("");
-        $("#flightRegFrom").val("");
+        $("#flightReg").val("");
         $("#amountReg").val("");
     }
 
@@ -2023,6 +2001,9 @@
                             </th>
                             <th class="col-sm-1"></th>
                             <th>
+                                Flyvning
+                            </th>
+                            <th>
                                 Antall reisende
                             </th>
                         </tr>
@@ -2046,6 +2027,8 @@
                         <td>
                             <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFilteringTo_Reg()">Søk</a>
                         </td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>
@@ -2054,14 +2037,17 @@
                         </td>
                         <td></td>
                         <td>
-                            <span class="label label-warning" id="flightRegLbl" style="display:none"></span>
-                            <select id="flightRegFrom" class="form-control"></select>
+
                         </td>
                         <td></td>
                         <td>
-                            <select id="flightRegTo" class="form-control"></select>
+
                         </td>
                         <td></td>
+                        <td>
+                            <span class="label label-warning" id="flightRegLbl" style="display:none"></span>
+                            <select id="flightReg" class="form-control"></select>
+                        </td>
                         <td>
                             <span class="label label-warning" id="amountRegLbl" style="display:none"></span>
                             <input id="amountReg" type="number" class="form-control" placeholder="Antall reisende" />
@@ -2102,6 +2088,9 @@
                                 </th>
                                 <th class="col-sm-1"></th>
                                 <th>
+                                    Flyvning
+                                </th>
+                                <th>
                                     Antall reisende
                                 </th>
                             </tr>
@@ -2130,6 +2119,7 @@
                                 <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFilteringTo_Edit()">Søk</a>
                             </td>
                             <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td></td>
@@ -2139,14 +2129,16 @@
                             </td>
                             <td></td>
                             <td>
-                                <span class="label label-warning" id="flightEdLbl" style="display:none"></span>
-                                <select id="flightEdFrom" class="form-control"></select>
+
                             </td>
                             <td></td>
                             <td>
-                                <select id="flightEdTo" class="form-control"></select>
+
                             </td>
                             <td></td>
+                            <td>
+                            <span class="label label-warning" id="flightEdLbl" style="display:none"></span>
+                            <select id="flightEd" class="form-control"></select></td>
                             <td>
                             <span class="label label-warning" id="amountEdLbl" style="display:none"></span>
                             <input id="amountEd" type="number" class="form-control" />
