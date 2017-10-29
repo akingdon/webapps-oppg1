@@ -1777,9 +1777,8 @@
                             <td></td>
                         </tr>
                         </table>
-                    <button id="confirmationModalRegFlight" class="btn btn-success" >Registrer flyvning</button>
                     </div>
-                        
+                <button id="confirmationModalRegFlight" class="btn btn-success">Registrer flyvning</button>    
                 </div>
             <div id="editFlight">
                 <h2>Endre følgende flyvning:</h2>
@@ -1805,7 +1804,7 @@
                                 <select id="fromAirportEd" class="form-control"></select>
                             </td>
                             <td>
-                                <input id="airportFilterFlightsEditFrom" class="form-control" type="text" placeholder="Søk" />
+                                <input id="airportFilterFlightsEditFrom" class="form-control" type="text" placeholder="Søk på flyplassnavn" />
                             </td>
                             <td>
                                 <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringFrom_Edit()">Søk</a>
@@ -1820,7 +1819,7 @@
                                 <select id="toAirportEd" class="form-control"></select>
                             </td>
                             <td>
-                                <input id="airportFilterFlightsEditTo" class="form-control" type="text" placeholder="Søk" />
+                                <input id="airportFilterFlightsEditTo" class="form-control" type="text" placeholder="Søk på flyplassnavn" />
                             </td>
                             <td>
                                 <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringTo_Edit()">Søk</a>
@@ -1861,7 +1860,7 @@
                         </tr>
                         </table>
                     </div>
-                        <button id="confirmationModalEdFlight" class="btn btn-success">Bekreft endring</button>
+                    <button id="confirmationModalEdFlight" class="btn btn-success">Bekreft endring</button>
                 </div>
                 <div id="deleteFlight">
                     <h2>Slett følgende flyvning:</h2>
@@ -1916,65 +1915,54 @@
             <div id="registerBooking">
                 <h2>Registrer ny bestilling</h2>
                 <div class="input-group col-sm-12">
-                <table class="table"> 
-                    <thead class="">
-                        <tr>
-                            <th class="col-sm-3">
-                                Kunde
-                            </th>
-                            <th class="col-sm-1"></th>
-                            <th class="col-sm-4">
-                                Flyvning
-                            </th>
-                            <th class="col-sm-1"></th>
-                            <th class="col-sm-3">
-                                Antall reisende
-                            </th>
-                        </tr>
-                    </thead>
+                <table class="table">
                     <tr>
+                        <td>
+                            <strong>Kunde</strong>
+                            
+                        </td>
+                        <td>
+                            <span class="label label-warning" id="userRegLbl" style="display:none"></span>
+                            <select id="userReg" class="form-control"></select>
+                            
+                        </td>
                         <td>
                             <input id="userFilterBooking" class="form-control" type="text" placeholder="Søk på etternavn" />
                         </td>
                         <td>
                             <a class="btn btn-sm btn-primary" onclick="getAllUsersForDropdownFiltering()">Søk</a>
                         </td>
-                        <td>
-                            <input id="flightFilterBooking" class="form-control" type="text" placeholder="Søk på flyplass"/>
-                            <input id="departureFilterBooking" type="date" class="form-control" placeholder="Søk på avgang"/>
-                        </td>
-                        <td>
-                            <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering()">Søk</a>
-                        </td>
-                        <td>
-                            
-                        </td>
                     </tr>
                     <tr>
                         <td>
-                            <span class="label label-warning" id="userRegLbl" style="display:none"></span>
-                            <select id="userReg" class="form-control"></select>
+                            <strong>Flyvning</strong>
                         </td>
-                        <td></td>
                         <td>
                             <span class="label label-warning" id="flightRegLbl" style="display:none"></span>
                             <select id="flightReg" class="form-control"></select>
                         </td>
-                        <td></td>
+                        <td>
+                            <input id="flightFilterBooking" class="form-control" type="text" placeholder="Søk på flyplass" />
+                            <input id="departureFilterBooking" type="date" class="form-control" placeholder="Søk på avgang" />
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering()">Søk</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Antall reisende</strong>
+                        </td>
                         <td>
                             <span class="label label-warning" id="amountRegLbl" style="display:none"></span>
                             <input id="amountReg" type="number" class="form-control" placeholder="Skriv antall passasjerer" />
                         </td>
-                    </tr>
-                    <tr>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><button id="confirmationModalRegBooking" class="btn btn-success">Registrer bestilling</button></td>
                     </tr>
                 </table>
                 </div>
+                <td><button id="confirmationModalRegBooking" class="btn btn-success">Registrer bestilling</button></td>
             </div>
             <div id="editBooking">
                 <h2>Endre følgende bestilling:</h2>
