@@ -3,6 +3,7 @@
 }
 <script src="~/Scripts/jquery-3.2.1.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script src="~/Scripts/moment-with-locales.js"></script>
 <script type="text/javascript">
     $(function () {
 
@@ -818,6 +819,10 @@
 
     function ValidateFlight(regOrEd, fromAirport, toAirport, departure, arrival, price) {
         HideFlightWarningLabels();
+        moment.locale("nb");
+        var momDeparture = moment(departure, "DD.MM.YY HH:mm");
+        var momArrival = moment(arrival, "DD.MM.YY HH:mm");
+        var re;
         var valid = true;
 
         if (fromAirport === "") {
@@ -830,17 +835,35 @@
             $("#toAirport" + regOrEd + "Lbl").show();
             valid = false;
         }
- /*       if (!Date.parse(departure)) {
-
-            $("#departure" + regOrEd + "Lbl").html("Avereise må skrives på formatet 25.01.17 18:00");
+        re = new RegExp("^[0-9]{2}.[0-9]{2}.[0-9]{2} [0-9]{2}:[0-9]{2}$");
+        if (!momDeparture.isValid()) {
+            $("#departure" + regOrEd + "Lbl").html("Må skrives på formatet 25.01.17 18:00");
             $("#departure" + regOrEd + "Lbl").show();
             valid = false;
         }
-        else if (Date.parse(departure) < Date.now()) {
-            $("#departure" + regOrEd + "Lbl").html("Avreise kan ikke være i fortiden");
+        else if (!re.test(departure)) {
+            $("#departure" + regOrEd + "Lbl").html("Må skrives på formatet 25.01.17 18:00");
+            $("#departure" + regOrEd + "Lbl").show();
+        }
+        else if (momDeparture < moment()) {
+            $("#departure" + regOrEd + "Lbl").html("Avreise satt i fortiden");
             $("#departure" + regOrEd + "Lbl").show();
             valid = false;
-        }*/
+        }
+        if (!momArrival.isValid()) {
+            $("#arrival" + regOrEd + "Lbl").html("Må skrives på formatet 25.01.17 18:00");
+            $("#arrival" + regOrEd + "Lbl").show();
+            valid = false;
+        }
+        else if (!re.test(arrival)) {
+            $("#arrival" + regOrEd + "Lbl").html("Må skrives på formatet 25.01.17 18:00");
+            $("#arrival" + regOrEd + "Lbl").show();
+        }
+        else if (momArrival <= momDeparture) {
+            $("#arrival" + regOrEd + "Lbl").html("Ankomst må være etter avreise");
+            $("#arrival" + regOrEd + "Lbl").show();
+            valid = false;
+        }
         if (!parseInt(price)) {
             $("#price" + regOrEd + "Lbl").html("Pris må være et heltall");
             $("#price" + regOrEd + "Lbl").show();
@@ -1482,7 +1505,7 @@
                                 <a class="btn btn-sm btn-primary" onclick="getAllAirportsForDropdownFilteringTo_Reg()">Søk</a>
                             </td>
                             <td>
-
+                                
                             </td>
                             <td>
 
@@ -1504,7 +1527,7 @@
                             <td></td>
                             <td>
                                 <span class="label label-warning" id="departureRegLbl" style="display:none"></span>
-                                <input id="departureReg" type="datetime-local" class="form-control" style="width:75%;" />
+                                <input id="departureReg" type="text" class="form-control" style="width:75%;" />
                             </td>
                             <td>
                                 <span class="label label-warning" id="arrivalRegLbl" style="display:none"></span>
@@ -1583,11 +1606,11 @@
                             <td></td>
                             <td>
                                 <span class="label label-warning" id="departureEdLbl" style="display:none"></span>
-                                <input id="departureEd" type="datetime-local" class="form-control" style="width:75%;" />
+                                <input id="departureEd" type="text" class="form-control" style="width:75%;" />
                             </td>
                             <td>
                                 <span class="label label-warning" id="arrivalEdLbl" style="display:none"></span>
-                                <input id="arrivalEd" type="datetime-local" class="form-control" style="width:75%;" />
+                                <input id="arrivalEd" type="text" class="form-control" style="width:75%;" />
                             </td>
                             <td>
                                 <span class="label label-warning" id="priceEdLbl" style="display:none"></span>
