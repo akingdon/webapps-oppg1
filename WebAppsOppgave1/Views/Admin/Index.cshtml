@@ -1661,51 +1661,71 @@
         </div>
         <div id="airports" style="display:none"><br/>
             <div id="registerAirport">
-                <h2>Registrer ny flyplass</h2><br/>
-                <div class="input-group">
-                    <span class="input-group-addon">Flyplassnavn</span>
-                    <span class="label label-warning" id="airportNameRegLbl" style="display:none"></span>
-                    <input id="airportNameReg" type="text" class="form-control" />
+                <h2>Registrer ny flyplass</h2><br />
+                <div class="input-group col-sm-12">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                <strong>Flyplassnavn</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="airportNameRegLbl" style="display:none"></span>
+                                <input id="airportNameReg" type="text" class="form-control" />
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <button id="confirmationModalRegAirport" class="btn btn-success">Registrer flyplass</button>
+                </div>
+                <div id="editAirport">
+                    <h2>Endre følgende flyplass:</h2>
+                    <div class="input-group col-sm-12">
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <strong>ID</strong>
+                                </td>
+                                <td>
+                                    <input id="airportIdEd" type="text" class="form-control" readonly />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Flyplassnavn</strong>
+                                </td>
+                                <td>
+                                    <span class="label label-warning" id="airportNameEdLbl" style="display:none"></span><br/>
+                                    <input id="airportNameEd" type="text" class="form-control" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <button id="confirmationModalEdAirport" class="btn btn-success">Bekreft endring</button>
+                </div>
+                <div id="deleteAirport">
+                    <h2>Slett følgende flyplass:</h2>
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        <input id="airportIdDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Navn</span>
+                        <input id="airportNameDel" type="text" class="form-control" readonly />
+                    </div>
+                    <button id="confirmationModalDelAirport" class="btn btn-danger">Bekreft sletting</button>
+                </div>
+                <div id="airportConfirmation"></div><br />
+                <h2>Registrerte flyplasser</h2><br />
+                <div class="form-inline">
+                    <div class="input-group">
+                        <span class="input-group-addon">Flyplassnavn</span>
+                        <input id="airportNameFilter" type="text" class="form-control" />
+                    </div>
+                    <button id="filterAirports" class="btn btn-sm btn-info">Avgrens søk</button>
+                </div>
+                <br />
+                <div id="airportList"></div>
             </div>
-            <div id="editAirport">
-                <h2>Endre følgende flyplass:</h2>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:30%;">ID</span>
-                    <input id="airportIdEd" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:30%;">Navn</span>
-                    <span class="label label-warning" id="airportNameEdLbl" style="display:none"></span>
-                    <input id="airportNameEd" type="text" class="form-control" />
-                </div>
-                <button id="confirmationModalEdAirport" class="btn btn-success">Bekreft endring</button>
-            </div>
-            <div id="deleteAirport">
-                <h2>Slett følgende flyplass:</h2>
-                <div class="input-group">
-                    <span class="input-group-addon">ID</span>
-                    <input id="airportIdDel" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Navn</span>
-                    <input id="airportNameDel" type="text" class="form-control" readonly />
-                </div>
-                <button id="confirmationModalDelAirport" class="btn btn-danger">Bekreft sletting</button>
-            </div>
-            <div id="airportConfirmation"></div><br/>
-            <h2>Registrerte flyplasser</h2><br/>
-            <div class="form-inline">
-                <div class="input-group">
-                    <span class="input-group-addon">Flyplassnavn</span>
-                    <input id="airportNameFilter" type="text" class="form-control" />
-                </div>
-                <button id="filterAirports" class="btn btn-sm btn-info">Avgrens søk</button>
-            </div>
-        <br/>
-            <div id="airportList"></div>
-        </div>
 
         <div id="flights" style="display:none"><br/>
             <div id="registerFlight">
@@ -1919,12 +1939,10 @@
                     <tr>
                         <td>
                             <strong>Kunde</strong>
-                            
                         </td>
                         <td>
-                            <span class="label label-warning" id="userRegLbl" style="display:none"></span>
+                            <span class="label label-warning" id="userRegLbl" style="display:none"></span><br />
                             <select id="userReg" class="form-control"></select>
-                            
                         </td>
                         <td>
                             <input id="userFilterBooking" class="form-control" type="text" placeholder="Søk på etternavn" />
@@ -1938,7 +1956,7 @@
                             <strong>Flyvning</strong>
                         </td>
                         <td>
-                            <span class="label label-warning" id="flightRegLbl" style="display:none"></span>
+                            <span class="label label-warning" id="flightRegLbl" style="display:none"></span><br />
                             <select id="flightReg" class="form-control"></select>
                         </td>
                         <td>
@@ -1954,7 +1972,7 @@
                             <strong>Antall reisende</strong>
                         </td>
                         <td>
-                            <span class="label label-warning" id="amountRegLbl" style="display:none"></span>
+                            <span class="label label-warning" id="amountRegLbl" style="display:none"></span><br />
                             <input id="amountReg" type="number" class="form-control" placeholder="Skriv antall passasjerer" />
                         </td>
                         <td></td>
@@ -1962,41 +1980,45 @@
                     </tr>
                 </table>
                 </div>
-                <td><button id="confirmationModalRegBooking" class="btn btn-success">Registrer bestilling</button></td>
+                <button id="confirmationModalRegBooking" class="btn btn-success">Registrer bestilling</button>
             </div>
             <div id="editBooking">
                 <h2>Endre følgende bestilling:</h2>
 
                 <div class="input-group col-sm-12">
                     <table class="table">
-                        <thead class="">
-                            <tr>
-                                <th class="col-sm-1">
-                                    ID
-                                </th>
-                                <th class="col-sm-2">
-                                    Kunde
-                                </th>
-                                <th class="col-sm-1"></th>
-                                <th class="col-sm-4">
-                                    Flyvning
-                                </th>
-                                <th class="col-sm-1"></th>
-                                <th class="col-sm-3">
-                                    Antall reisende
-                                </th>
-                            </tr>
-                        </thead>
                         <tr>
                             <td>
+                                <strong>ID</strong>
+                            </td>
+                            <td>
                                 <input id="bookingIdEd" type="text" class="form-control" readonly />
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Kunde</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="userEdLbl" style="display:none"></span>
+                                <select id="userEd" class="form-control"></select>
                             </td>
                             <td>
                                 <input type="text" id="userFilterBookingEdit" placeholder="Søk på etternavn" />
                             </td>
                             <td>
-                                
                                 <a class="btn btn-sm btn-primary" onclick="getAllUsersForDropdownFiltering()">Søk</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Flyvning</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="flightEdLbl" style="display:none"></span>
+                                <select id="flightEd" class="form-control"></select>
                             </td>
                             <td>
                                 <input type="text" id="flightFilterBookingEdit" placeholder="Søk på flyplass" />
@@ -2004,43 +2026,21 @@
                             <td>
                                 <a class="btn btn-sm btn-primary" onclick="getAllFlightsForDropdownFiltering()">Søk</a>
                             </td>
-                            <td>
-  
-                            </td>
                         </tr>
                         <tr>
-                            <td></td>
                             <td>
-                                <span class="label label-warning" id="userEdLbl" style="display:none"></span>
-                                <select id="userEd" class="form-control"></select>
+                                <strong>Antall reisende</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="amountEdLbl" style="display:none"></span>
+                                <input id="amountEd" type="number" class="form-control" />
                             </td>
                             <td></td>
-                            <td>
-                                <span class="label label-warning" id="flightEdLbl" style="display:none"></span>
-                                <select id="flightEd" class="form-control"></select>
-                            </td>
                             <td></td>
-                            <td>
-                            <span class="label label-warning" id="amountEdLbl" style="display:none"></span>
-                            <input id="amountEd" type="number" class="form-control" />
-                            </td>
-
                         </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button id="confirmationModalEdBooking" class="btn btn-success">Bekreft endring</button>
-                            </td>
-                        </tr>
-
-
-                        </table>
-                        </div>
-                        
+                    </table>
+                </div>
+                <button id="confirmationModalEdBooking" class="btn btn-success">Bekreft endring</button>
                 </div>
                         
                 <div id="deleteBooking">
@@ -2083,129 +2083,193 @@
         <div id="users" style="display:none"><br/>
             <div id="registerUser">
                 <h2>Registrer ny kunde</h2>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Fornavn</span>
-                    <span class="label label-warning" id="fornavnRegLbl" style="display:none"></span>
-                    <input id="fornavnReg" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Etternavn</span>
-                    <span class="label label-warning" id="etternavnRegLbl" style="display:none"></span>
-                    <input id="etternavnReg" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Adresse</span>
-                    <span class="label label-warning" id="adresseRegLbl" style="display:none"></span>
-                    <input id="adresseReg" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Postnummer</span>
-                    <span class="label label-warning" id="postnummerRegLbl" style="display:none"></span>
-                    <input id="postnummerReg" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Poststed</span>
-                    <span class="label label-warning" id="poststedRegLbl" style="display:none"></span>
-                    <input id="poststedReg" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Epost</span>
-                    <span class="label label-warning" id="epostRegLbl" style="display:none"></span>
-                    <input id="epostReg" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Passord</span>
-                    <span class="label label-warning" id="passordRegLbl" style="display:none"></span>
-                    <input id="passordReg" type="password" class="form-control" />
+                <div class="input-group col-sm-12">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                <strong>Fornavn</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="fornavnRegLbl" style="display:none"></span><br/>
+                                <input id="fornavnReg" type="text" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Etternavn</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="etternavnRegLbl" style="display:none"></span>
+                                <input id="etternavnReg" type="text" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                 <strong>Adresse</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="adresseRegLbl" style="display:none"></span>
+                                <input id="adresseReg" type="text" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Postnummer</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="postnummerRegLbl" style="display:none"></span>
+                                <input id="postnummerReg" type="text" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Poststed</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="poststedRegLbl" style="display:none"></span>
+                                <input id="poststedReg" type="text" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Epost</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="epostRegLbl" style="display:none"></span>
+                                <input id="epostReg" type="text" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Passord</strong>
+                            </td>
+                            <td>
+                                <span class="label label-warning" id="passordRegLbl" style="display:none"></span>
+                                <input id="passordReg" type="password" class="form-control" />
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <button id="confirmationModalRegUser" class="btn btn-success">Registrer kunde</button>
+                </div>
+                <div id="editUser">
+                    <h2>Endre følgende kunde:</h2>
+                    <div class="input-group col-sm-12">
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <strong>ID</strong>
+                                </td>
+                                <td>
+                                    <input id="userIdEd" type="text" class="form-control" readonly />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Fornavn</strong>
+                                </td>
+                                <td>
+                                    <span class="label label-warning" id="fornavnEdLbl" style="display:none"></span><br />
+                                    <input id="fornavnEd" type="text" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Etternavn</strong>
+                                </td>
+                                <td>
+                                    <span class="label label-warning" id="etternavnEdLbl" style="display:none"></span>
+                                    <input id="etternavnEd" type="text" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Adresse</strong>
+                                </td>
+                                <td>
+                                    <span class="label label-warning" id="adresseEdLbl" style="display:none"></span>
+                                    <input id="adresseEd" type="text" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Postnummer</strong>
+                                </td>
+                                <td>
+                                    <span class="label label-warning" id="postnummerEdLbl" style="display:none"></span>
+                                    <input id="postnummerEd" type="text" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Poststed</strong>
+                                </td>
+                                <td>
+                                    <span class="label label-warning" id="poststedEdLbl" style="display:none"></span>
+                                    <input id="poststedEd" type="text" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Epost</strong>
+                                </td>
+                                <td>
+                                    <span class="label label-warning" id="epostEdLbl" style="display:none"></span>
+                                    <input id="epostEd" type="text" class="form-control" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <button id="confirmationModalEdUser" class="btn btn-success">Bekreft endring</button>
+                </div>
+                <div id="deleteUser">
+                    <h2>Slett følgende kunde:</h2>
+                    <div class="input-group">
+                        <span class="input-group-addon">ID</span>
+                        <input id="userIdDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Fornavn</span>
+                        <input id="fornavnDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Etternavn</span>
+                        <input id="etternavnDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Adresse</span>
+                        <input id="adresseDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Postnummer</span>
+                        <input id="postnummerDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Poststed</span>
+                        <input id="poststedDel" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Epost</span>
+                        <input id="epostDel" type="text" class="form-control" readonly />
+                    </div>
+                    <button id="confirmationModalDelUser" class="btn btn-danger">Bekreft sletting</button>
+                </div>
+                <div id="userConfirmation"></div><br />
+                <h2>Registrerte kunder</h2><br />
+                <div class="form-inline">
+                    <div class="input-group">
+                        <span class="input-group-addon">Etternavn</span>
+                        <input id="etternavnFilter" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">Postnummer</span>
+                        <input id="postnrFilter" type="text" class="form-control" />
+                    </div>
+                    <button id="filterUsers" class="btn btn-sm btn-info">Avgrens søk</button>
+                </div>
+                <br />
+                <div id="userList"></div>
             </div>
-            <div id="editUser">
-                <h2>Endre følgende kunde:</h2>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">ID</span>
-                    <input id="userIdEd" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Fornavn</span>
-                    <span class="label label-warning" id="fornavnEdLbl" style="display:none"></span>
-                    <input id="fornavnEd" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Etternavn</span>
-                    <span class="label label-warning" id="etternavnEdLbl" style="display:none"></span>
-                    <input id="etternavnEd" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Adresse</span>
-                    <span class="label label-warning" id="adresseEdLbl" style="display:none"></span>
-                    <input id="adresseEd" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Postnummer</span>
-                    <span class="label label-warning" id="postnummerEdLbl" style="display:none"></span>
-                    <input id="postnummerEd" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Poststed</span>
-                    <span class="label label-warning" id="poststedEdLbl" style="display:none"></span>
-                    <input id="poststedEd" type="text" class="form-control" />
-                </div>
-                <div class="input-group col-sm-4">
-                    <span class="input-group-addon" style="width:32%;">Epost</span>
-                    <span class="label label-warning" id="epostEdLbl" style="display:none"></span>
-                    <input id="epostEd" type="text" class="form-control" />
-                </div>
-                <button id="confirmationModalEdUser" class="btn btn-success">Bekreft endring</button>
-            </div>
-            <div id="deleteUser">
-                <h2>Slett følgende kunde:</h2>
-                <div class="input-group">
-                    <span class="input-group-addon">ID</span>
-                    <input id="userIdDel" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Fornavn</span>
-                    <input id="fornavnDel" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Etternavn</span>
-                    <input id="etternavnDel" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Adresse</span>
-                    <input id="adresseDel" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Postnummer</span>
-                    <input id="postnummerDel" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Poststed</span>
-                    <input id="poststedDel" type="text" class="form-control" readonly />
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Epost</span>
-                    <input id="epostDel" type="text" class="form-control" readonly />
-                </div>
-                <button id="confirmationModalDelUser" class="btn btn-danger">Bekreft sletting</button>
-            </div>
-            <div id="userConfirmation"></div><br/>
-            <h2>Registrerte kunder</h2><br/>
-            <div class="form-inline">
-                <div class="input-group">
-                    <span class="input-group-addon">Etternavn</span>
-                    <input id="etternavnFilter" type="text" class="form-control"/>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Postnummer</span>
-                    <input id="postnrFilter" type="text" class="form-control" />
-                </div>
-                <button id="filterUsers" class="btn btn-sm btn-info">Avgrens søk</button>
-            </div>
-            <br/>
-            <div id="userList"></div>
-        </div>
     </div>
 </div>
 <div class="modal fade" id="confirmationModal">
