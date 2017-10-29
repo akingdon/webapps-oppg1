@@ -901,6 +901,24 @@
         });
     }
 
+    function getAllAirportsForDropdownFilteringFrom_Reg() {
+        var name = $("#airportFilterFlightsFrom").val();
+
+        $.ajax({
+            url: '/Admin/getAllAirports',
+            type: 'POST',
+            contentType: 'application/json:charset=utf-8',
+            data: JSON.stringify({ name: name }),
+            dataType: 'json',
+            success: function (jsAirports) {
+                populateAirportDropDownAfterFilteringFrom_Reg(jsAirports);
+            },
+            error: function (x, y, z) {
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    }
+
     function getAllAirportsForDropdownFilteringFrom_Edit() {
         var name = $("#airportFilterFlightsEditFrom").val();
 
