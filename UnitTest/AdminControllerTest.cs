@@ -67,8 +67,9 @@ namespace UnitTest
             var Controller = new AdminController();
             SessionMock.InitializeController(Controller);
             Controller.Session["Admin"] = true;
-            var Result = (ViewResult)Controller.LogOut();
-            Assert.AreEqual(Result.ViewName, "");
+            var Result = (RedirectToRouteResult)Controller.LogOut();
+            Assert.AreEqual(Result.RouteName, "");
+            Assert.AreEqual("../Home/Index", Result.RouteValues.Values.First());
             Assert.IsFalse((bool)Controller.Session["Admin"]);
             Assert.IsFalse((bool)Controller.ViewData["Admin"]);
         }
@@ -1438,8 +1439,7 @@ namespace UnitTest
             var postnummer = "0123";
             var poststed = "Oslo";
             var epost = "e@post.no";
-            var passord = "passord";
-            var Result = Controller.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost, passord);
+            var Result = Controller.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost);
             Assert.AreEqual("\"ok\"", Result);
         }
 
@@ -1454,8 +1454,7 @@ namespace UnitTest
             var postnummer = "0123";
             var poststed = "Oslo";
             var epost = "e@post.no";
-            var passord = "passord";
-            var Result = Controller.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost, passord);
+            var Result = Controller.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost);
             Assert.AreEqual("\"Editing in DB failed\"", Result);
         }
 

@@ -327,11 +327,10 @@ namespace WebAppsOppgave1.Controllers
             var jsonSerializer = new JavaScriptSerializer();
             return jsonSerializer.Serialize(_adminBLL.registerUser(fornavn, etternavn, adresse, postnummer, poststed, epost, hashedPassword));
         }
-        public string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost, string passord)
+        public string editUser(int id, string fornavn, string etternavn, string adresse, string postnummer, string poststed, string epost)
         {
-            var hashedPassword = HashPassword(passord);
             var jsonSerializer = new JavaScriptSerializer();
-            return jsonSerializer.Serialize(_adminBLL.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost, hashedPassword));
+            return jsonSerializer.Serialize(_adminBLL.editUser(id, fornavn, etternavn, adresse, postnummer, poststed, epost));
         }
         public string deleteUser(int id)
         {
