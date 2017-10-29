@@ -67,8 +67,9 @@ namespace UnitTest
             var Controller = new AdminController();
             SessionMock.InitializeController(Controller);
             Controller.Session["Admin"] = true;
-            var Result = (ViewResult)Controller.LogOut();
-            Assert.AreEqual(Result.ViewName, "");
+            var Result = (RedirectToRouteResult)Controller.LogOut();
+            Assert.AreEqual(Result.RouteName, "");
+            Assert.AreEqual("../Home/Index", Result.RouteValues.Values.First());
             Assert.IsFalse((bool)Controller.Session["Admin"]);
             Assert.IsFalse((bool)Controller.ViewData["Admin"]);
         }
