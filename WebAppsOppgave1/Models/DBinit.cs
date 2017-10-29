@@ -431,8 +431,8 @@ namespace WebAppsOppgave1.Models
 
             var admin = new Model.AdminUser
             {
-                Epost = "admin",
-                PassordHash = Controllers.AdminController.HashPassword("admin")
+                Epost = "admin@epost.no",
+                PassordHash = Controllers.AdminController.HashPassword("adminpassord")
             };
 
 
