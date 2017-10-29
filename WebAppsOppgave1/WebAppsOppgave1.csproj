@@ -133,6 +133,7 @@
     </Content>
     <None Include="Properties\PublishProfiles\WebAppsOppgave120171003073336 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\WebAppsOppgave120171008094735 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\website20171029063102 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
